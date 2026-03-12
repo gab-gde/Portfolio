@@ -22,8 +22,8 @@ const PreviewCard = (() => {
   (function tick() {
     pcx += (mx - pcx) * 0.11;
     pcy += (my - pcy) * 0.11;
-    card.style.left = (pcx - 190) + 'px';
-    card.style.top  = (pcy - 130) + 'px';
+    card.style.left = (pcx - 210) + 'px';
+    card.style.top  = (pcy - 160) + 'px';
     requestAnimationFrame(tick);
   })();
 
