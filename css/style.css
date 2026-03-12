@@ -529,15 +529,15 @@ body.c-proj  #curR { opacity: 0; }
 #previewCard {
   position: fixed;
   top: 0; left: 0;
-  width: 320px;
-  height: 220px;
-  border-radius: 6px;
+  width: 380px;
+  height: 260px;
+  border-radius: 8px;
   overflow: hidden;
   pointer-events: none;
   z-index: 600;
   opacity: 0;
   transform: scale(.86) rotate(-2deg);
-  transition: opacity .2s ease, transform .28s cubic-bezier(.34,1.56,.64,1);
+  transition: opacity .25s ease, transform .3s cubic-bezier(.34,1.56,.64,1);
 }
 
 #previewCard.show {
@@ -548,30 +548,34 @@ body.c-proj  #curR { opacity: 0; }
 .preview-bg {
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
   transition: background .3s;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .preview-view {
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 66px;
-  height: 66px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   background: #3d5af1;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: .04em;
   z-index: 2;
-  box-shadow: 0 10px 28px rgba(61,90,241,.45);
+  box-shadow: 0 10px 30px rgba(61,90,241,.5);
 }
 
 .preview-lbl {
@@ -580,7 +584,7 @@ body.c-proj  #curR { opacity: 0; }
   font-size: 10px;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: rgba(255,255,255,.3);
+  color: rgba(255,255,255,.4);
 }
 
 /* ═══════════════════════════════════════

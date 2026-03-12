@@ -1,12 +1,13 @@
 /**
  * preview-card.js
- * Dark card with "View" button — follows cursor on project hover
+ * Image preview card — follows cursor on project hover (like Dennis Snellenberg)
  */
 
 const PreviewCard = (() => {
   const card = document.getElementById('previewCard');
   const pBg  = document.getElementById('pBg');
   const pLbl = document.getElementById('pLbl');
+  const pImg = document.getElementById('pImg');
 
   let mx = 0, my = 0;
   let pcx = 0, pcy = 0;
@@ -21,8 +22,8 @@ const PreviewCard = (() => {
   (function tick() {
     pcx += (mx - pcx) * 0.11;
     pcy += (my - pcy) * 0.11;
-    card.style.left = (pcx - 160) + 'px';
-    card.style.top  = (pcy - 110) + 'px';
+    card.style.left = (pcx - 190) + 'px';
+    card.style.top  = (pcy - 130) + 'px';
     requestAnimationFrame(tick);
   })();
 
@@ -31,6 +32,12 @@ const PreviewCard = (() => {
     item.addEventListener('mouseenter', () => {
       pBg.style.background = item.dataset.color || '#111';
       pLbl.textContent     = item.dataset.label  || '';
+      if (item.dataset.img) {
+        pImg.src = item.dataset.img;
+        pImg.style.display = 'block';
+      } else {
+        pImg.style.display = 'none';
+      }
       card.classList.add('show');
       document.body.classList.add('c-proj');
     });
