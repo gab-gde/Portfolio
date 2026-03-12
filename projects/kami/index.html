@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ŌKAMI — Cuisine Fusion Paris</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:         #0e0e0e;
+      --cream:      #FAF3E0;
+      --vermillion: #E63946;
+      --terracotta: #D4623C;
+      --sage:       #7D8B69;
+      --navy:       #1A1A2E;
+      --sand:       #E8DCC8;
+      --olive:      #3D4A2F;
+      --text-dark:  #1a1a1a;
+      --text-light: #faf3e0;
+      --display:    'Syne', sans-serif;
+      --body:       'Space Grotesk', sans-serif;
+      --accent:     'Instrument Serif', serif;
+    }
+    html { overflow-x: hidden; scroll-behavior: smooth; }
+    body {
+      font-family: var(--body);
+      background: var(--bg);
+      color: var(--text-light);
+      overflow-x: hidden;
+      overflow-y: hidden;
+      line-height: 1.6;
+    }
+
+    /* ══ PRELOADER — counter style ══ */
+    .preloader {
+      position: fixed; inset: 0;
+      background: var(--vermillion);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .preloader-count {
+      font-family: var(--display);
+      font-size: clamp(80px, 15vw, 200px);
+      font-weight: 800;
+      color: var(--cream);
+      line-height: 1;
+      opacity: 0;
+    }
+    .preloader-word {
+      font-family: var(--accent);
+      font-size: 18px;
+      font-style: italic;
+      color: rgba(250,243,224,.6);
+      letter-spacing: .1em;
+      margin-top: 8px;
+      opacity: 0;
+    }
+
+    /* ══ NAV ══ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 24px 48px;
+      z-index: 100;
+      mix-blend-mode: difference;
+    }
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 12px;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 400;
+      transition: opacity .3s;
+    }
+    .nav-links a:hover { opacity: .5; }
+
+    /* ══ HERO — split layout ══ */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      background: var(--cream);
+    }
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 48px 48px 64px 48px;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--vermillion);
+      font-weight: 500;
+      margin-bottom: 20px;
+      opacity: 0;
+    }
+    .hero-title {
+      font-family: var(--display);
+      font-size: clamp(64px, 8vw, 130px);
+      font-weight: 800;
+      line-height: .9;
+      letter-spacing: -.03em;
+      text-transform: uppercase;
+      color: var(--text-dark);
+      margin-bottom: 24px;
+      opacity: 0;
+    }
+    .hero-title .colored { color: var(--vermillion); }
+    .hero-title .italic-word {
+      font-family: var(--accent);
+      font-style: italic;
+      text-transform: none;
+      font-weight: 400;
+      color: var(--sage);
+    }
+    .hero-sub {
+      font-size: 15px;
+      font-weight: 300;
+      color: #666;
+      max-width: 360px;
+      line-height: 1.8;
+      opacity: 0;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 36px;
+      padding: 16px 40px;
+      background: var(--vermillion);
+      color: var(--cream);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 60px;
+      transition: background .4s, transform .3s;
+      opacity: 0;
+    }
+    .hero-cta:hover { background: #c7303c; transform: scale(1.03); }
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transform: scale(1.15);
+      will-change: transform;
+    }
+    .hero-right::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 30%;
+      background: linear-gradient(to top, var(--cream), transparent);
+      z-index: 1;
+    }
+    .hero-tag {
+      position: absolute;
+      top: 50%; right: -44px;
+      transform: translateY(-50%) rotate(90deg);
+      font-size: 10px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--text-dark);
+      opacity: .3;
+      z-index: 2;
+      white-space: nowrap;
+    }
+
+    /* ══ MARQUEE ══ */
+    .marquee-band {
+      padding: 24px 0;
+      overflow: hidden;
+      background: var(--vermillion);
+    }
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marq 25s linear infinite;
+    }
+    .marquee-track span {
+      font-family: var(--display);
+      font-size: clamp(18px, 2.5vw, 32px);
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--cream);
+      padding: 0 32px;
+      letter-spacing: .08em;
+      flex-shrink: 0;
+    }
+    .marquee-track .dot { font-weight: 400; opacity: .5; }
+    @keyframes marq { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* ══ SECTION COMMON ══ */
+    .section-label {
+      font-size: 10px;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .section-label::before { content: ''; width: 28px; height: 2px; background: currentColor; }
+    .section-heading {
+      font-family: var(--display);
+      font-size: clamp(36px, 5vw, 72px);
+      font-weight: 800;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: -.02em;
+      margin-bottom: 24px;
+    }
+    .section-heading .serif {
+      font-family: var(--accent);
+      font-style: italic;
+      text-transform: none;
+      font-weight: 400;
+    }
+
+    /* ══ PHILOSOPHY — cream bg ══ */
+    .philosophy {
+      background: var(--cream);
+      color: var(--text-dark);
+      padding: 160px 48px;
+    }
+    .philo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 100px;
+      align-items: center;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .philo-grid .section-label { color: var(--vermillion); }
+    .philo-text p {
+      font-size: 15px; font-weight: 300;
+      color: #555; line-height: 2;
+      margin-bottom: 20px;
+    }
+    .philo-big {
+      font-family: var(--accent);
+      font-size: clamp(32px, 4vw, 56px);
+      font-style: italic;
+      color: var(--sage);
+      line-height: 1.25;
+    }
+    .philo-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      margin-top: 60px;
+      border-top: 1px solid rgba(0,0,0,.08);
+      padding-top: 48px;
+    }
+    .philo-stat-num {
+      font-family: var(--display);
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--vermillion);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .philo-stat-label {
+      font-size: 12px;
+      color: #888;
+      letter-spacing: .05em;
+    }
+
+    /* ══ MENU — dark bg, colorful cards ══ */
+    .menu-section {
+      background: var(--navy);
+      color: var(--cream);
+      padding: 160px 48px;
+    }
+    .menu-section .section-label { color: var(--terracotta); }
+    .menu-header { max-width: 600px; margin-bottom: 80px; }
+    .menu-header p {
+      font-size: 14px; font-weight: 300;
+      color: rgba(250,243,224,.45); line-height: 1.9;
+    }
+    .menu-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1200px;
+    }
+    .menu-card {
+      padding: 48px 36px;
+      border: 1px solid rgba(250,243,224,.06);
+      position: relative;
+      overflow: hidden;
+      transition: border-color .4s, transform .4s;
+    }
+    .menu-card:hover { border-color: rgba(250,243,224,.15); transform: translateY(-4px); }
+    .menu-card-num {
+      font-family: var(--display);
+      font-size: 80px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 24px;
+      opacity: .08;
+      position: absolute;
+      top: 20px; right: 24px;
+    }
+    .menu-card:nth-child(1) .menu-card-accent { color: var(--vermillion); }
+    .menu-card:nth-child(2) .menu-card-accent { color: var(--terracotta); }
+    .menu-card:nth-child(3) .menu-card-accent { color: var(--sage); }
+    .menu-card-cat {
+      font-size: 10px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      opacity: .5;
+    }
+    .menu-card-item {
+      margin-bottom: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid rgba(250,243,224,.04);
+    }
+    .menu-card-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .menu-card-item-head {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .menu-card-item-name {
+      font-family: var(--display);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--cream);
+      transition: color .3s;
+    }
+    .menu-card-item:hover .menu-card-item-name { color: inherit; }
+    .menu-card:nth-child(1) .menu-card-item:hover .menu-card-item-name { color: var(--vermillion); }
+    .menu-card:nth-child(2) .menu-card-item:hover .menu-card-item-name { color: var(--terracotta); }
+    .menu-card:nth-child(3) .menu-card-item:hover .menu-card-item-name { color: var(--sage); }
+    .menu-card-item-price {
+      font-family: var(--accent);
+      font-style: italic;
+      font-size: 16px;
+    }
+    .menu-card:nth-child(1) .menu-card-item-price { color: var(--vermillion); }
+    .menu-card:nth-child(2) .menu-card-item-price { color: var(--terracotta); }
+    .menu-card:nth-child(3) .menu-card-item-price { color: var(--sage); }
+    .menu-card-item-desc {
+      font-size: 12px; font-weight: 300;
+      color: rgba(250,243,224,.35);
+      line-height: 1.6;
+    }
+
+    /* ══ GALLERY — horizontal ══ */
+    .gallery-section {
+      background: var(--bg);
+      padding: 160px 0 100px;
+      overflow: hidden;
+    }
+    .gallery-header {
+      padding: 0 48px;
+      margin-bottom: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .gallery-header .section-label { color: var(--vermillion); }
+    .gallery-count {
+      font-family: var(--display);
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,.25);
+      letter-spacing: .1em;
+    }
+    .gallery-track {
+      display: flex;
+      gap: 24px;
+      padding: 0 48px;
+      will-change: transform;
+    }
+    .gallery-card {
+      flex-shrink: 0;
+      width: 420px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+    .gallery-card img {
+      width: 100%; height: 520px;
+      object-fit: cover;
+      display: block;
+      transition: transform 1.2s cubic-bezier(.16,1,.3,1);
+    }
+    .gallery-card:hover img { transform: scale(1.06); }
+    .gallery-card-label {
+      position: absolute;
+      bottom: 20px; left: 20px;
+      background: rgba(0,0,0,.6);
+      backdrop-filter: blur(10px);
+      padding: 10px 18px;
+      border-radius: 60px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--cream);
+      letter-spacing: .04em;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all .4s;
+    }
+    .gallery-card:hover .gallery-card-label { opacity: 1; transform: translateY(0); }
+
+    /* ══ CHEF — vermillion bg ══ */
+    .chef {
+      background: var(--sage);
+      color: var(--cream);
+      padding: 160px 48px;
+    }
+    .chef-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 100px;
+      align-items: center;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .chef .section-label { color: var(--cream); }
+    .chef-img {
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      border-radius: 4px;
+      position: relative;
+    }
+    .chef-img img { width: 100%; height: 100%; object-fit: cover; }
+    .chef-quote {
+      font-family: var(--accent);
+      font-size: clamp(24px, 3vw, 40px);
+      font-style: italic;
+      line-height: 1.45;
+      margin-bottom: 36px;
+      color: var(--cream);
+    }
+    .chef-name {
+      font-family: var(--display);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .chef-role {
+      font-size: 13px;
+      font-weight: 300;
+      opacity: .6;
+      margin-top: 4px;
+    }
+
+    /* ══ RESERVATION — cream bg ══ */
+    .reservation {
+      background: var(--cream);
+      color: var(--text-dark);
+      padding: 160px 48px;
+      text-align: center;
+    }
+    .reservation .section-label { color: var(--vermillion); justify-content: center; }
+    .reservation .section-heading { color: var(--text-dark); }
+    .res-desc {
+      font-size: 15px; font-weight: 300;
+      color: #777; line-height: 1.8;
+      max-width: 440px;
+      margin: 0 auto 56px;
+    }
+    .res-form {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 720px;
+      margin: 0 auto 36px;
+    }
+    .res-form input, .res-form select {
+      background: #fff;
+      border: 1px solid #e0dbd2;
+      padding: 18px 20px;
+      font-family: var(--body);
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-dark);
+      outline: none;
+      border-radius: 4px;
+      transition: border-color .3s;
+    }
+    .res-form input:focus, .res-form select:focus { border-color: var(--vermillion); }
+    .res-form input::placeholder { color: #bbb; }
+    .res-form select { color: #999; }
+    .btn-main {
+      display: inline-block;
+      padding: 18px 56px;
+      background: var(--vermillion);
+      color: var(--cream);
+      font-family: var(--body);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: background .3s, transform .3s;
+    }
+    .btn-main:hover { background: #c7303c; transform: translateY(-2px); }
+
+    /* ══ FOOTER — dark ══ */
+    .footer {
+      background: var(--bg);
+      padding: 60px 48px 36px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      align-items: end;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .footer-brand {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--cream);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 12px;
+    }
+    .footer-addr { font-size: 12px; font-weight: 300; color: rgba(255,255,255,.3); line-height: 1.8; }
+    .footer-center { text-align: center; }
+    .footer-hours { font-size: 12px; font-weight: 300; color: rgba(255,255,255,.3); line-height: 1.8; }
+    .footer-right { text-align: right; }
+    .footer-socials { display: flex; gap: 24px; justify-content: flex-end; margin-bottom: 12px; }
+    .footer-socials a { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.3); text-decoration: none; transition: color .3s; }
+    .footer-socials a:hover { color: var(--vermillion); }
+    .footer-copy { font-size: 10px; color: rgba(255,255,255,.12); }
+
+    /* ══ RESPONSIVE ══ */
+    @media (max-width: 900px) {
+      .nav { padding: 20px 24px; } .nav-links { gap: 16px; }
+      .hero { grid-template-columns: 1fr; height: auto; min-height: auto; }
+      .hero-left { padding: 120px 24px 40px; }
+      .hero-right { height: 50vh; }
+      .hero-tag { display: none; }
+      .philosophy, .menu-section, .chef, .reservation { padding: 100px 24px; }
+      .philo-grid, .chef-grid { grid-template-columns: 1fr; gap: 48px; }
+      .philo-stats { grid-template-columns: 1fr; gap: 24px; }
+      .menu-cards { grid-template-columns: 1fr; }
+      .gallery-card { width: 300px; }
+      .gallery-card img { height: 380px; }
+      .res-form { grid-template-columns: 1fr; }
+      .footer { grid-template-columns: 1fr; gap: 24px; }
+      .footer-center, .footer-right { text-align: left; }
+      .footer-socials { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PRELOADER -->
+  <div class="preloader" id="preloader">
+    <p class="preloader-count" id="preCount">0</p>
+    <p class="preloader-word" id="preWord">cuisine fusion</p>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="#" class="nav-logo" onclick="event.preventDefault();gsap.to(window,{duration:1,scrollTo:0,ease:'power3.inOut'})">ŌKAMI</a>
+    <ul class="nav-links">
+      <li><a href="#philo">Philosophie</a></li>
+      <li><a href="#menu">Carte</a></li>
+      <li><a href="#gallery">Galerie</a></li>
+      <li><a href="#chef">Le Chef</a></li>
+      <li><a href="#reservation">Réserver</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="heroSection">
+    <div class="hero-left">
+      <p class="hero-eyebrow" id="heroEye">Cuisine Fusion — Paris 11e</p>
+      <h1 class="hero-title" id="heroTitle">
+        <span class="colored">ŌKA</span>MI<br>
+        <span class="italic-word">fusion</span>
+      </h1>
+      <p class="hero-sub" id="heroSub">Là où l'audace de la cuisine asiatique rencontre la finesse française. Une explosion de saveurs, de couleurs et de créativité.</p>
+      <a href="#reservation" class="hero-cta" id="heroCta">Réserver une table →</a>
+    </div>
+    <div class="hero-right">
+      <img class="hero-img" id="heroImg" src="https://images.unsplash.com/photo-1579027989536-b7b1f875659b?w=1000&q=80" alt="Plat fusion" />
+      <span class="hero-tag">Est. 2019 — Paris</span>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-band">
+    <div class="marquee-track">
+      <span>Ramen Artisanal</span><span class="dot">✦</span>
+      <span>Sushi Créatif</span><span class="dot">✦</span>
+      <span>Izakaya Moderne</span><span class="dot">✦</span>
+      <span>Cocktails Signature</span><span class="dot">✦</span>
+      <span>Brunch Week-end</span><span class="dot">✦</span>
+      <span>Ramen Artisanal</span><span class="dot">✦</span>
+      <span>Sushi Créatif</span><span class="dot">✦</span>
+      <span>Izakaya Moderne</span><span class="dot">✦</span>
+      <span>Cocktails Signature</span><span class="dot">✦</span>
+      <span>Brunch Week-end</span><span class="dot">✦</span>
+    </div>
+  </div>
+
+  <!-- PHILOSOPHY -->
+  <section class="philosophy" id="philo">
+    <div class="philo-grid">
+      <div>
+        <p class="section-label">Notre Philosophie</p>
+        <p class="philo-big">Briser les codes de la gastronomie, une assiette à la fois.</p>
+      </div>
+      <div class="philo-text">
+        <p>ŌKAMI naît d'une idée simple : la cuisine n'a pas de frontières. Nos chefs puisent leur inspiration entre Tokyo, Paris et Lima pour créer des plats qui bousculent les conventions.</p>
+        <p>Chaque produit est sourcé avec obsession — le thon rouge de Tsukiji, les légumes de nos maraîchers d'Île-de-France, les épices rares du Kerala. Rien n'est laissé au hasard.</p>
+        <p>L'ambiance ? Un mélange de néons et de bois brut, de musique vinyle et de cris de cuisine ouverte. Ici, on vient pour vivre une expérience, pas juste pour manger.</p>
+      </div>
+    </div>
+    <div class="philo-stats">
+      <div>
+        <p class="philo-stat-num">47</p>
+        <p class="philo-stat-label">Producteurs partenaires</p>
+      </div>
+      <div>
+        <p class="philo-stat-num">12K</p>
+        <p class="philo-stat-label">Couverts par an</p>
+      </div>
+      <div>
+        <p class="philo-stat-num">4.9</p>
+        <p class="philo-stat-label">Note Google — 820 avis</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="menu-section" id="menu">
+    <div class="menu-header">
+      <p class="section-label">La Carte</p>
+      <h2 class="section-heading">Notre <span class="serif">sélection</span></h2>
+      <p>Une carte qui évolue au fil des saisons et des inspirations de nos chefs.</p>
+    </div>
+    <div class="menu-cards">
+      <!-- Card 1 -->
+      <div class="menu-card">
+        <span class="menu-card-num menu-card-accent">01</span>
+        <p class="menu-card-cat">Entrées & Partage</p>
+        <div class="menu-card-item">
+          <div class="menu-card-item-head">
+            <span class="menu-card-item-name">Tataki de Thon</span>
+            <span class="menu-card-item-price">18 €</span>
+          </div>
+          <p class="menu-card-item-desc">Sésame noir, ponzu yuzu, avocat crémeaux</p>
+        </div>
+        <div class="menu-card-item">
+          <div class="menu-card-item-head">
+            <span class="menu-card-item-name">Gyozas Truffe</span>
+            <span class="menu-card-item-price">16 €</span>
+          </div>
+          <p class="menu-card-item-desc">Porc ibérique, truffe d'été, bouillon dashi</p>
+        </div>
+        <div class="menu-card-item">
+          <div class="menu-card-item-head">
+            <span class="menu-card-item-name">Ceviche Nikkei</span>
+            <span class="menu-card-item-price">22 €</span>
+          </div>
+          <p class="menu-card-item-desc">Bar sauvage, leche de tigre, maïs cancha</p>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="menu-card">
+        <span class="menu-card-num menu-card-accent">02</span>
+        <p class="menu-card-cat">Plats Signature</p>
+        <div class="menu-card-item">
+          <div class="menu-card-item-head">
+            <span class="menu-card-item-name">Ramen ŌKAMI</span>
+            <span class="menu-card-item-price">24 €</span>
+          </div>
+          <p class="menu-card-item-desc">Bouillon 48h, chashu fondant, œuf mollet, huile pimentée maison</p>
+        </div>
+        <div class="menu-card-item">
+          <div class="menu-card-item-head">
+            <span class="menu-card-item-name">Black Cod Miso</span>
+            <span class="menu-card-item-price">38 €</span>
+          </div>
+          <p class="menu-card-item-desc">Marinade miso blanc 72h, pak choï grillé</p>
+        </div>
+        <div class="menu-card-item">
+          <div class="menu-card-item-head">
+            <span class="menu-card-item-name">Wagyu Yakiniku</span>
+            <span class="menu-card-item-price">52 €</span>
+          </div>
+          <p class="menu-card-item-desc">A5 grillé au binchotan, condiments saisonniers</p>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="menu-card">
+        <span class="menu-card-num menu-card-accent">03</span>
+        <p class="menu-card-cat">Desserts & Mochis</p>
+        <div class="menu-card-item">
+          <div class="menu-card-item-head">
+            <span class="menu-card-item-name">Matcha Fondant</span>
+            <span class="menu-card-item-price">14 €</span>
+          </div>
+          <p class="menu-card-item-desc">Cœur coulant matcha Uji, glace sésame noir</p>
+        </div>
+        <div class="menu-card-item">
+          <div class="menu-card-item-head">
+            <span class="menu-card-item-name">Mochi Maison</span>
+            <span class="menu-card-item-price">12 €</span>
+          </div>
+          <p class="menu-card-item-desc">Assortiment 5 pièces — yuzu, sakura, passion, mangue, cassis</p>
+        </div>
+        <div class="menu-card-item">
+          <div class="menu-card-item-head">
+            <span class="menu-card-item-name">Crème Brûlée Shiso</span>
+            <span class="menu-card-item-price">13 €</span>
+          </div>
+          <p class="menu-card-item-desc">Infusion shiso pourpre, tuile de riz soufflé</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery-section" id="gallery">
+    <div class="gallery-header">
+      <div>
+        <p class="section-label" style="color:var(--vermillion)">Galerie</p>
+        <h2 class="section-heading">L'univers<br><span class="serif">ŌKAMI</span></h2>
+      </div>
+      <p class="gallery-count">01 — 06</p>
+    </div>
+    <div class="gallery-track" id="galleryTrack">
+      <div class="gallery-card"><img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&q=80" alt="Sushi" loading="lazy" /><span class="gallery-card-label">Sushi créatif</span></div>
+      <div class="gallery-card"><img src="https://images.unsplash.com/photo-1555126634-323283e090fa?w=600&q=80" alt="Ramen" loading="lazy" /><span class="gallery-card-label">Ramen signature</span></div>
+      <div class="gallery-card"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80" alt="Salle" loading="lazy" /><span class="gallery-card-label">L'ambiance</span></div>
+      <div class="gallery-card"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&q=80" alt="Plat coloré" loading="lazy" /><span class="gallery-card-label">Couleurs & saveurs</span></div>
+      <div class="gallery-card"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80" alt="Dressage" loading="lazy" /><span class="gallery-card-label">L'art du dressage</span></div>
+      <div class="gallery-card"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=600&q=80" alt="Dessert" loading="lazy" /><span class="gallery-card-label">Le dessert</span></div>
+    </div>
+  </section>
+
+  <!-- CHEF -->
+  <section class="chef" id="chef">
+    <div class="chef-grid">
+      <div class="chef-img"><img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=700&q=80" alt="Chef Kenji Morimoto" loading="lazy" /></div>
+      <div>
+        <p class="section-label">Le Chef</p>
+        <h2 class="section-heading">Kenji<br><span class="serif">Morimoto</span></h2>
+        <blockquote class="chef-quote">La cuisine fusion, ce n'est pas mélanger deux cultures. C'est créer une troisième, nouvelle, qui n'existait pas avant.</blockquote>
+        <p class="chef-name">Kenji Morimoto</p>
+        <p class="chef-role">Chef Exécutif — ex-Nobu, ex-L'Atelier Robuchon</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESERVATION -->
+  <section class="reservation" id="reservation">
+    <p class="section-label">Réservation</p>
+    <h2 class="section-heading">Réservez votre <span class="serif">expérience</span></h2>
+    <p class="res-desc">Du mardi au dimanche, déjeuner et dîner. Brunch le week-end de 11h à 15h.</p>
+    <div class="res-form">
+      <input type="text" placeholder="Nom complet" />
+      <input type="email" placeholder="Email" />
+      <input type="tel" placeholder="Téléphone" />
+      <input type="date" />
+      <input type="time" value="20:00" />
+      <select><option>2 personnes</option><option>3 personnes</option><option>4 personnes</option><option>5 personnes</option><option>6+</option></select>
+    </div>
+    <button class="btn-main">Réserver →</button>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div><p class="footer-brand">ŌKAMI</p><p class="footer-addr">34 Rue Oberkampf<br>75011 Paris, France<br>+33 1 58 30 12 45</p></div>
+    <div class="footer-center"><p class="footer-hours">Mar — Dim<br>Déjeuner 12h – 14h30<br>Dîner 19h – 23h<br>Brunch Sam-Dim 11h – 15h</p></div>
+    <div class="footer-right"><div class="footer-socials"><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">Google</a></div><p class="footer-copy">© 2026 ŌKAMI — Site par Gabin Goude</p></div>
+  </footer>
+
+  <script>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+    if (window.location.hash) history.replaceState(null, '', window.location.pathname);
+
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+    /* Smooth nav */
+    document.querySelectorAll('.nav-links a[href^="#"]').forEach(function(a) {
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        var t = document.querySelector(this.getAttribute('href'));
+        if (t) gsap.to(window, { duration: 1.2, scrollTo: { y: t }, ease: 'power3.inOut' });
+      });
+    });
+    document.querySelector('.hero-cta').addEventListener('click', function(e) {
+      e.preventDefault();
+      gsap.to(window, { duration: 1.2, scrollTo: '#reservation', ease: 'power3.inOut' });
+    });
+
+    /* Preloader counter */
+    var counter = { val: 0 };
+    var countEl = document.getElementById('preCount');
+    var ptl = gsap.timeline({ onComplete: function() {
+      window.scrollTo(0, 0);
+      document.body.style.overflowY = 'auto';
+      gsap.to('#preloader', { yPercent: -100, duration: .8, ease: 'power3.inOut', onComplete: function() {
+        document.getElementById('preloader').style.display = 'none';
+        ScrollTrigger.refresh();
+      }});
+      heroIntro();
+    }});
+    ptl.to('#preCount', { opacity: 1, duration: .3 })
+       .to('#preWord', { opacity: 1, duration: .3 }, .15)
+       .to(counter, { val: 100, duration: 1.6, ease: 'power2.inOut', onUpdate: function() {
+         countEl.textContent = Math.round(counter.val);
+       }}, .2)
+       .to({}, { duration: .3 });
+
+    /* Hero intro */
+    function heroIntro() {
+      var tl = gsap.timeline();
+      tl.to('#heroEye', { opacity: 1, duration: .7, ease: 'power2.out' })
+        .to('#heroTitle', { opacity: 1, duration: .9, ease: 'power2.out' }, .1)
+        .to('#heroSub', { opacity: 1, duration: .7, ease: 'power2.out' }, .35)
+        .to('#heroCta', { opacity: 1, duration: .6, ease: 'power2.out' }, .5)
+        .fromTo('#heroImg', { scale: 1.15 }, { scale: 1, duration: 1.6, ease: 'power2.out' }, 0);
+    }
+
+    /* Hero parallax */
+    gsap.to('#heroImg', {
+      scale: 1.08, ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+    });
+
+    /* Section reveals */
+    gsap.utils.toArray('.section-label, .section-heading, .philo-big, .philo-text p, .philo-stats, .philo-stat-num, .menu-header, .menu-card, .chef-img, .chef-quote, .chef-name, .chef .section-label, .chef .section-heading, .res-form, .btn-main, .res-desc, .reservation .section-label, .reservation .section-heading, .gallery-header').forEach(function(el) {
+      gsap.fromTo(el, { opacity: 0, y: 40 }, {
+        opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' }
+      });
+    });
+
+    /* Menu cards stagger */
+    ScrollTrigger.create({
+      trigger: '.menu-cards',
+      start: 'top 85%',
+      onEnter: function() {
+        gsap.fromTo('.menu-card', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: .8, stagger: .15, ease: 'power3.out' });
+      }
+    });
+
+    /* Stats counter animation */
+    document.querySelectorAll('.philo-stat-num').forEach(function(el) {
+      var target = el.textContent;
+      var isK = target.includes('K');
+      var isDot = target.includes('.');
+      var num = parseFloat(target);
+      var obj = { v: 0 };
+      gsap.to(obj, {
+        v: num, duration: 2, ease: 'power2.out',
+        scrollTrigger: { trigger: el, start: 'top 90%' },
+        onUpdate: function() {
+          if (isDot) el.textContent = obj.v.toFixed(1);
+          else if (isK) el.textContent = Math.round(obj.v) + 'K';
+          else el.textContent = Math.round(obj.v);
+        }
+      });
+    });
+
+    /* Gallery horizontal */
+    var track = document.getElementById('galleryTrack');
+    if (track) {
+      window.addEventListener('load', function() {
+        var totalScroll = track.scrollWidth - window.innerWidth + 96;
+        if (totalScroll > 0) {
+          gsap.to(track, {
+            x: -totalScroll, ease: 'none',
+            scrollTrigger: { trigger: '.gallery-section', start: 'top top', end: '+=' + totalScroll, pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true }
+          });
+        }
+        ScrollTrigger.refresh();
+      });
+    }
+
+    /* Parallax images */
+    gsap.utils.toArray('.chef-img img').forEach(function(img) {
+      gsap.fromTo(img, { y: '-6%' }, { y: '6%', ease: 'none',
+        scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true }
+      });
+    });
+  </script>
+</body>
+</html>
