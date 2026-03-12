@@ -1,0 +1,49 @@
+/**
+ * preview-card.js
+ * Dark card with "View" button — follows cursor on project hover
+ */
+
+const PreviewCard = (() => {
+  const card = document.getElementById('previewCard');
+  const pBg  = document.getElementById('pBg');
+  const pLbl = document.getElementById('pLbl');
+
+  let mx = 0, my = 0;
+  let pcx = 0, pcy = 0;
+
+  // Track mouse globally
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX;
+    my = e.clientY;
+  });
+
+  // Lag the card behind the cursor
+  (function tick() {
+    pcx += (mx - pcx) * 0.11;
+    pcy += (my - pcy) * 0.11;
+    card.style.left = (pcx - 160) + 'px';
+    card.style.top  = (pcy - 110) + 'px';
+    requestAnimationFrame(tick);
+  })();
+
+  // Show / hide on project hover
+  document.querySelectorAll('.project-item').forEach(item => {
+    item.addEventListener('mouseenter', () => {
+      pBg.style.background = item.dataset.color || '#111';
+      pLbl.textContent     = item.dataset.label  || '';
+      card.classList.add('show');
+      document.body.classList.add('c-proj');
+    });
+
+    item.addEventListener('mouseleave', () => {
+      card.classList.remove('show');
+      document.body.classList.remove('c-proj');
+    });
+
+    // Click navigates to project page
+    item.addEventListener('click', () => {
+      const href = item.dataset.href;
+      if (href && href !== '#') window.location.href = href;
+    });
+  });
+})();
