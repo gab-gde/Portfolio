@@ -9,79 +9,102 @@
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--font:'Hanken Grotesk',sans-serif;--dark:#1a1a1a;--mid:#8a8a8a;--light:#e4e4e4;--blue:#3d5af1}
+    :root{--font:'Hanken Grotesk',sans-serif;--dark:#1a1a1a;--mid:#8a8a8a;--border:#e4e4e4;--blue:#3d5af1;--beige:#e8e5de}
     html{scroll-behavior:smooth}
     body{font-family:var(--font);background:#fff;color:var(--dark);overflow-x:hidden}
     a{color:inherit;text-decoration:none}
 
-    /* NAV */
-    .nav{display:flex;justify-content:space-between;align-items:center;padding:32px 44px}
-    .nav-left{font-size:13px;color:var(--dark)}
-    .nav-right{display:flex;gap:40px}
-    .nav-right a{font-size:14px;color:var(--dark);transition:opacity .3s;position:relative}
-    .nav-right a::after{content:'';position:absolute;left:50%;bottom:-6px;width:5px;height:5px;border-radius:50%;background:var(--dark);transform:translateX(-50%);opacity:0;transition:opacity .3s}
-    .nav-right a.active::after{opacity:1}
-    .nav-right a:hover{opacity:.5}
+    /* REVEAL */
+    .rv{opacity:0;transform:translateY(60px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+    .rv.vis{opacity:1;transform:translateY(0)}
+    .dl1{transition-delay:.08s}.dl2{transition-delay:.16s}.dl3{transition-delay:.24s}.dl4{transition-delay:.32s}
 
-    /* HERO */
-    .project-hero{padding:80px 44px 60px;max-width:900px}
-    .project-title{font-size:clamp(56px,8vw,120px);font-weight:500;letter-spacing:-.03em;line-height:.95;margin-bottom:60px}
+    /* NAV */
+    nav{display:flex;justify-content:space-between;align-items:center;padding:32px 44px}
+    .nav-left{font-size:13px}
+    .nav-right{display:flex;gap:40px}
+    .nav-right a{font-size:14px;transition:opacity .3s;position:relative}
+    .nav-right a::after{content:'';position:absolute;left:50%;bottom:-8px;width:5px;height:5px;border-radius:50%;background:var(--dark);transform:translateX(-50%);opacity:0;transition:opacity .3s}
+    .nav-right a.active::after{opacity:1}
+    .nav-right a:hover{opacity:.4}
+
+    /* TITLE */
+    .title-section{padding:100px 44px 80px}
+    .title-section h1{font-size:clamp(64px,9vw,140px);font-weight:500;letter-spacing:-.035em;line-height:.92}
 
     /* META */
-    .project-meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;padding:0 44px 80px;border-bottom:1px solid var(--light);max-width:1100px}
-    .meta-col-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--light)}
-    .meta-col-value{font-size:15px;color:var(--dark);line-height:1.7}
+    .meta{display:grid;grid-template-columns:1fr 1fr 1fr;padding:0 44px 0;max-width:1000px}
+    .meta-col{padding:24px 0;border-top:1px solid var(--border)}
+    .meta-label{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);margin-bottom:20px}
+    .meta-value{font-size:15px;line-height:1.7}
 
-    /* LIVE SITE BUTTON */
-    .live-btn-wrap{position:relative;margin:80px 44px;display:inline-block}
-    .live-btn{display:flex;align-items:center;justify-content:center;width:140px;height:140px;border-radius:50%;background:var(--blue);color:#fff;font-size:15px;font-weight:500;letter-spacing:.02em;transition:transform .3s;box-shadow:0 12px 40px rgba(61,90,241,.35)}
+    /* LIVE SITE — overlapping right like Dennis */
+    .live-wrap{position:relative;height:0;z-index:10}
+    .live-btn{position:absolute;right:44px;top:-70px;width:160px;height:160px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;letter-spacing:.01em;box-shadow:0 16px 50px rgba(61,90,241,.4);transition:transform .4s cubic-bezier(.16,1,.3,1);cursor:pointer;gap:6px}
     .live-btn:hover{transform:scale(1.08)}
-    .live-btn-arrow{margin-left:6px;font-size:18px;transition:transform .3s}
-    .live-btn:hover .live-btn-arrow{transform:translate(3px,-3px)}
+    .live-arrow{font-size:20px;transition:transform .3s}
+    .live-btn:hover .live-arrow{transform:translate(3px,-3px)}
 
     /* IMAGES */
-    .project-images{padding:0 44px;max-width:1400px;margin:0 auto}
-    .project-img{width:100%;margin-bottom:24px;overflow:hidden;background:#f0ede6}
-    .project-img img{width:100%;display:block;transition:transform .6s cubic-bezier(.16,1,.3,1)}
-    .project-img:hover img{transform:scale(1.02)}
-    .project-img.padded{padding:40px;background:#e8e5de}
-    .project-img.padded img{box-shadow:0 8px 40px rgba(0,0,0,.1)}
-    .project-img-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
-    .project-img-row .project-img{margin-bottom:0}
+    .images{padding:100px 44px 0;max-width:1400px;margin:0 auto}
+    .img-full{width:100%;margin-bottom:28px;overflow:hidden}
+    .img-full img{width:100%;display:block}
+    .img-row{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:28px}
+    .img-row .img-full{margin-bottom:0}
+
+    /* MOCKUP — beige padding like Dennis */
+    .mockup{background:var(--beige);padding:48px;margin-bottom:28px;overflow:hidden;position:relative}
+    .mockup img{width:100%;display:block;box-shadow:0 6px 30px rgba(0,0,0,.08)}
+    .mockup:hover img{transform:scale(1.01);transition:transform .8s cubic-bezier(.16,1,.3,1)}
+
+    /* MACBOOK MOCKUP */
+    .macbook-frame{background:var(--beige);padding:60px 80px 40px;margin-bottom:28px;position:relative;overflow:hidden}
+    .macbook-screen{background:#1a1a1a;border-radius:6px 6px 0 0;overflow:hidden;position:relative;aspect-ratio:16/10}
+    .macbook-screen img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+    .macbook-bar{height:20px;background:linear-gradient(to bottom,#c0c0c0,#a8a8a8);border-radius:0 0 8px 8px;margin:0 -2px}
+    .macbook-notch{width:80px;height:4px;background:#888;border-radius:0 0 4px 4px;margin:0 auto}
+
+    /* PHONE MOCKUP */
+    .phone-frame{background:var(--beige);padding:60px;margin-bottom:28px;display:flex;justify-content:center;gap:40px}
+    .phone{width:280px;background:#1a1a1a;border-radius:32px;padding:12px;box-shadow:0 8px 30px rgba(0,0,0,.1)}
+    .phone-screen{border-radius:24px;overflow:hidden;aspect-ratio:9/19.5}
+    .phone-screen img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+
+    /* VIDEO PLACEHOLDER */
+    .video-placeholder{background:var(--beige);margin-bottom:28px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .video-placeholder.landscape{aspect-ratio:16/9;padding:48px}
+    .video-placeholder.square{aspect-ratio:1/1;max-width:700px;padding:48px}
+    .vp-inner{width:100%;height:100%;background:#d5d0c6;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+    .vp-icon{width:60px;height:60px;border-radius:50%;background:rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center}
+    .vp-icon svg{width:24px;height:24px;fill:none;stroke:#999;stroke-width:1.5}
+    .vp-text{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#999}
 
     /* NEXT PROJECT */
-    .next-project{padding:120px 44px 80px;border-top:1px solid var(--light);margin-top:120px;text-align:center}
-    .next-label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--mid);margin-bottom:16px}
-    .next-name{font-size:clamp(48px,7vw,100px);font-weight:500;letter-spacing:-.03em;color:#d4d4d0;transition:color .4s}
+    .next{padding:140px 44px 100px;border-top:1px solid var(--border);margin-top:100px;text-align:center}
+    .next-label{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--mid);margin-bottom:20px}
+    .next-name{font-size:clamp(52px,8vw,120px);font-weight:500;letter-spacing:-.03em;color:#d4d4d0;transition:color .4s;display:inline-block}
     .next-name:hover{color:var(--dark)}
 
     /* FOOTER */
-    .footer{padding:40px 44px;border-top:1px solid var(--light);display:flex;justify-content:space-between;align-items:center}
-    .footer-left{font-size:12px;color:var(--mid)}
-    .footer-right{font-size:11px;color:var(--mid)}
-
-    /* REVEAL */
-    .r{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
-    .r.v{opacity:1;transform:translateY(0)}
-    .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+    footer{padding:36px 44px;border-top:1px solid var(--border);display:flex;justify-content:space-between}
+    footer span{font-size:11px;color:var(--mid)}
 
     @media(max-width:768px){
-      .nav{padding:20px 24px}
-      .project-hero{padding:60px 24px 40px}
-      .project-meta{grid-template-columns:1fr;padding:0 24px 60px}
-      .live-btn-wrap{margin:60px 24px}
-      .project-images{padding:0 24px}
-      .project-img-row{grid-template-columns:1fr}
-      .project-img.padded{padding:20px}
-      .next-project{padding:80px 24px 60px}
-      .footer{padding:24px;flex-direction:column;gap:12px}
+      nav,.title-section,.meta,.images,.next{padding-left:24px;padding-right:24px}
+      .meta{grid-template-columns:1fr}
+      .img-row{grid-template-columns:1fr}
+      .macbook-frame{padding:24px 24px 16px}
+      .phone-frame{padding:32px;gap:20px}
+      .phone{width:200px}
+      .live-btn{width:120px;height:120px;font-size:14px;right:24px;top:-60px}
+      .mockup{padding:24px}
+      footer{padding:24px;flex-direction:column;gap:8px}
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav class="nav">
+  <nav>
     <span class="nav-left">© Code by Gabin Goude</span>
     <div class="nav-right">
       <a href="../../index.html#work" class="active">Work</a>
@@ -90,73 +113,94 @@
     </div>
   </nav>
 
-  <!-- PROJECT HERO -->
-  <div class="project-hero">
-    <h1 class="project-title r">Maison Élysée</h1>
+  <div class="title-section">
+    <h1 class="rv">Maison Élysée</h1>
   </div>
 
-  <!-- META -->
-  <div class="project-meta">
-    <div class="r d1">
-      <p class="meta-col-label">Rôle / Services</p>
-      <p class="meta-col-value">Design & Development</p>
+  <div class="meta">
+    <div class="meta-col rv dl1">
+      <p class="meta-label">Rôle / Services</p>
+      <p class="meta-value">Design & Development</p>
     </div>
-    <div class="r d2">
-      <p class="meta-col-label">Contexte</p>
-      <p class="meta-col-value">Restaurant gastronomique<br>2 étoiles Michelin<br>Paris 8ème</p>
+    <div class="meta-col rv dl2">
+      <p class="meta-label">Contexte</p>
+      <p class="meta-value">Restaurant gastronomique<br>2 étoiles Michelin<br>Paris 8ème</p>
     </div>
-    <div class="r d3">
-      <p class="meta-col-label">Année</p>
-      <p class="meta-col-value">Paris, France © 2026</p>
-    </div>
-  </div>
-
-  <!-- LIVE SITE -->
-  <div class="live-btn-wrap r">
-    <a href="index.html" class="live-btn">Live site <span class="live-btn-arrow">↗</span></a>
-  </div>
-
-  <!-- IMAGES -->
-  <div class="project-images">
-    <div class="project-img padded r">
-      <img src="../../assets/images/projects/maison-elysee.png" alt="Maison Élysée — Hero">
-    </div>
-    <div class="project-img-row">
-      <div class="project-img r d1">
-        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Restaurant ambiance">
-      </div>
-      <div class="project-img r d2">
-        <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80" alt="Intérieur">
-      </div>
-    </div>
-    <div class="project-img padded r">
-      <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=1400&q=80" alt="Maison Élysée — Menu">
-    </div>
-    <div class="project-img-row">
-      <div class="project-img r d1">
-        <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80" alt="Chef">
-      </div>
-      <div class="project-img r d2">
-        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80" alt="Cuisine">
-      </div>
+    <div class="meta-col rv dl3">
+      <p class="meta-label">Année</p>
+      <p class="meta-value">Paris, France © 2026</p>
     </div>
   </div>
 
-  <!-- NEXT -->
-  <div class="next-project r">
+  <div class="live-wrap">
+    <a href="index.html" class="live-btn rv">Live site <span class="live-arrow">↗</span></a>
+  </div>
+
+  <div class="images">
+    <!-- Hero screenshot in macbook -->
+    <div class="macbook-frame rv">
+      <div class="macbook-screen">
+        <img src="../../assets/images/projects/maison-elysee.png" alt="Maison Élysée">
+      </div>
+      <div class="macbook-bar"><div class="macbook-notch"></div></div>
+    </div>
+
+    <!-- Video placeholder -->
+    <div class="video-placeholder landscape rv">
+      <div class="vp-inner">
+        <div class="vp-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <p class="vp-text">Vidéo de présentation</p>
+      </div>
+    </div>
+
+    <!-- Two images -->
+    <div class="img-row">
+      <div class="mockup rv dl1"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Restaurant"></div>
+      <div class="mockup rv dl2"><img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80" alt="Intérieur"></div>
+    </div>
+
+    <!-- Phone mockups -->
+    <div class="phone-frame rv">
+      <div class="phone">
+        <div class="phone-screen"><img src="../../assets/images/projects/maison-elysee.png" alt="Mobile"></div>
+      </div>
+      <div class="phone">
+        <div class="phone-screen"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=400&q=80" alt="Mobile menu"></div>
+      </div>
+    </div>
+
+    <!-- Video placeholder 2 -->
+    <div class="video-placeholder landscape rv">
+      <div class="vp-inner">
+        <div class="vp-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <p class="vp-text">Scroll animation vidéo</p>
+      </div>
+    </div>
+
+    <!-- Full width -->
+    <div class="mockup rv">
+      <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=1400&q=80" alt="Cuisine">
+    </div>
+
+    <div class="img-row">
+      <div class="mockup rv dl1"><img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80" alt="Chef"></div>
+      <div class="mockup rv dl2"><img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800&q=80" alt="Vin"></div>
+    </div>
+  </div>
+
+  <div class="next rv">
     <p class="next-label">Next Project</p>
     <a href="../kami/details.html" class="next-name">TERRA</a>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <span class="footer-left">© Code by Gabin Goude</span>
-    <span class="footer-right">Gabin Goude — 2026</span>
+  <footer>
+    <span>© Code by Gabin Goude</span>
+    <span>2026</span>
   </footer>
 
   <script>
-    var obs=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting){e.target.classList.add('v');obs.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -30px 0px'});
-    document.querySelectorAll('.r').forEach(function(el){obs.observe(el)});
+    var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('vis');o.unobserve(x.target)}})},{threshold:.08,rootMargin:'0px 0px -50px 0px'});
+    document.querySelectorAll('.rv').forEach(function(el){o.observe(el)});
   </script>
 </body>
 </html>
