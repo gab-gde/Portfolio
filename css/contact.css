@@ -254,3 +254,9 @@ footer p { font-size: 11.5px; color: #c8c8c8; }
 /* ═══ CLIP LINE ═══ */
 .clip-wrap { overflow: hidden; display: block; }
 .clip-line  { display: block; }
+
+/* Hamburger always visible on subpages */
+#hamBtn {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
