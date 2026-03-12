@@ -83,10 +83,6 @@ const Animations = (() => {
     opacity: 0, y: -12, ease: 'none',
     scrollTrigger: { trigger: '.hero', start: '16% top', end: '40% top', scrub: true }
   });
-  gsap.to('.name-clip', {
-    opacity: 0, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: '10% top', end: '36% top', scrub: true }
-  });
 
   /* ──────────────────────────────────────
      5. FLOATING UI
