@@ -6,687 +6,345 @@
   <title>Maison Élysée — Restaurant Gastronomique Paris</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#0a0a08;--bg2:#111110;--bg3:#181816;
+      --cream:#f5f0e8;--gold:#C9A84C;--gold-dim:#a08636;
+      --text:#e8e2d6;--text-dim:#6b665c;
+      --border:rgba(201,168,76,.1);
+      --serif:'Cormorant Garamond',Georgia,serif;
+      --sans:'Outfit',sans-serif;
+    }
+    html{overflow-x:hidden}
+    body{font-family:var(--sans);background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
 
-    :root {
-      --bg:       #0c0b09;
-      --bg2:      #141310;
-      --cream:    #f5f0e8;
-      --gold:     #c9a84c;
-      --gold-dim: #a08636;
-      --text:     #e8e2d6;
-      --text-dim: #8a8478;
-      --serif:    'Cormorant Garamond', Georgia, serif;
-      --sans:     'Outfit', sans-serif;
-    }
+    /* ── PRELOADER ── */
+    .preloader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .preloader-line{width:0;height:1px;background:var(--gold);margin-bottom:32px}
+    .preloader-name{font-family:var(--serif);font-size:clamp(28px,4vw,48px);font-weight:300;font-style:italic;color:var(--gold);opacity:0;letter-spacing:.06em}
+    .preloader-sub{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--text-dim);opacity:0;margin-top:12px}
 
-    body {
-      font-family: var(--sans);
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-      line-height: 1.6;
-    }
+    /* ── NAV ── */
+    .nav{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:28px 48px;z-index:100;mix-blend-mode:difference}
+    .nav-logo{font-family:var(--serif);font-size:20px;font-weight:400;font-style:italic;color:#fff;text-decoration:none;letter-spacing:.04em}
+    .nav-links{display:flex;gap:40px;list-style:none}
+    .nav-links a{font-size:11px;color:#fff;text-decoration:none;letter-spacing:.15em;text-transform:uppercase;font-weight:300;position:relative;transition:opacity .3s}
+    .nav-links a::after{content:'';position:absolute;left:0;bottom:-4px;width:0;height:1px;background:var(--gold);transition:width .4s cubic-bezier(.76,0,.24,1)}
+    .nav-links a:hover::after{width:100%}
+    .nav-links a:hover{opacity:.7}
 
-    /* ═══ UTILITIES ═══ */
-    .reveal { opacity: 0; transform: translateY(40px); transition: opacity .9s ease, transform .9s ease; }
-    .reveal.vis { opacity: 1; transform: translateY(0); }
-    .reveal-delay-1 { transition-delay: .12s; }
-    .reveal-delay-2 { transition-delay: .24s; }
-    .reveal-delay-3 { transition-delay: .36s; }
+    /* ── HERO ── */
+    .hero{position:relative;height:100vh;min-height:700px;display:flex;align-items:flex-end;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=80') center/cover no-repeat;transform:scale(1.1);will-change:transform}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,8,.2) 0%,rgba(10,10,8,.55) 50%,rgba(10,10,8,.97) 100%)}
+    .hero-content{position:relative;z-index:2;padding:0 48px 72px;width:100%}
+    .hero-eyebrow{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);font-weight:300;margin-bottom:20px;opacity:0}
+    .hero-title{font-family:var(--serif);font-size:clamp(60px,10vw,160px);font-weight:300;line-height:.88;letter-spacing:-.025em;color:var(--cream);margin-bottom:28px;opacity:0}
+    .hero-title em{font-style:italic;color:var(--gold)}
+    .hero-line{width:0;height:1px;background:var(--gold);margin-bottom:20px}
+    .hero-sub{font-size:14px;font-weight:300;color:var(--text-dim);max-width:420px;letter-spacing:.015em;line-height:1.8;opacity:0}
+    .hero-badge{position:absolute;top:50%;right:48px;transform:translateY(-50%);z-index:2;text-align:right}
+    .hero-badge-star{font-family:var(--serif);font-size:48px;color:var(--gold);line-height:1;opacity:0}
+    .hero-badge-text{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--text-dim);margin-top:8px;opacity:0}
+    .hero-scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;opacity:0;text-align:center}
+    .hero-scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--gold),transparent);margin:0 auto 8px;animation:scroll-pulse 2s ease-in-out infinite}
+    .hero-scroll-text{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--text-dim)}
+    @keyframes scroll-pulse{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
 
-    /* ═══ NAV ═══ */
-    .nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 28px 48px;
-      z-index: 100;
-      mix-blend-mode: difference;
-    }
-    .nav-logo {
-      font-family: var(--serif);
-      font-size: 18px;
-      font-weight: 400;
-      color: #fff;
-      text-decoration: none;
-      letter-spacing: .04em;
-    }
-    .nav-links { display: flex; gap: 36px; list-style: none; }
-    .nav-links a {
-      font-size: 13px;
-      color: #fff;
-      text-decoration: none;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      font-weight: 300;
-      transition: opacity .3s;
-    }
-    .nav-links a:hover { opacity: .5; }
+    /* ── SECTION COMMON ── */
+    section{padding:160px 48px;position:relative}
+    .section-label{font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);font-weight:400;margin-bottom:16px;display:flex;align-items:center;gap:16px}
+    .section-label::before{content:'';width:32px;height:1px;background:var(--gold)}
+    .section-title{font-family:var(--serif);font-size:clamp(38px,5.5vw,80px);font-weight:300;line-height:1.05;letter-spacing:-.015em;color:var(--cream);margin-bottom:28px}
+    .section-title em{font-style:italic;color:var(--gold)}
+    .divider{width:100%;height:1px;background:var(--border)}
 
-    /* ═══ HERO ═══ */
-    .hero {
-      position: relative;
-      height: 100vh;
-      min-height: 700px;
-      display: flex;
-      align-items: flex-end;
-      overflow: hidden;
-    }
-    .hero-bg {
-      position: absolute; inset: 0;
-      background: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=80') center/cover no-repeat;
-    }
-    .hero-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to bottom, rgba(12,11,9,.3) 0%, rgba(12,11,9,.7) 60%, rgba(12,11,9,.95) 100%);
-    }
-    .hero-content {
-      position: relative; z-index: 2;
-      padding: 0 48px 80px;
-      width: 100%;
-    }
-    .hero-eyebrow {
-      font-size: 12px;
-      letter-spacing: .25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-weight: 300;
-      margin-bottom: 24px;
-    }
-    .hero-title {
-      font-family: var(--serif);
-      font-size: clamp(56px, 9vw, 140px);
-      font-weight: 300;
-      line-height: .92;
-      letter-spacing: -.02em;
-      color: var(--cream);
-      margin-bottom: 32px;
-    }
-    .hero-title em {
-      font-style: italic;
-      color: var(--gold);
-    }
-    .hero-line {
-      width: 60px; height: 1px;
-      background: var(--gold);
-      margin-bottom: 24px;
-    }
-    .hero-sub {
-      font-size: 15px;
-      font-weight: 300;
-      color: var(--text-dim);
-      max-width: 440px;
-      letter-spacing: .01em;
-    }
-    .hero-scroll {
-      position: absolute;
-      bottom: 32px; right: 48px;
-      font-size: 11px;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      writing-mode: vertical-rl;
-      z-index: 2;
-    }
+    /* ── STORY ── */
+    .story{background:var(--bg)}
+    .story-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:100px;align-items:center;max-width:1280px;margin:0 auto}
+    .story-img-wrap{position:relative}
+    .story-img-wrap::before{content:'';position:absolute;top:-16px;left:-16px;width:80px;height:80px;border-top:1px solid var(--gold);border-left:1px solid var(--gold);z-index:2;opacity:.5}
+    .story-img-wrap::after{content:'';position:absolute;bottom:-16px;right:-16px;width:80px;height:80px;border-bottom:1px solid var(--gold);border-right:1px solid var(--gold);z-index:2;opacity:.5}
+    .story-img{aspect-ratio:4/5;overflow:hidden;position:relative}
+    .story-img img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s cubic-bezier(.16,1,.3,1)}
+    .story-img:hover img{transform:scale(1.06)}
+    .story-text p{font-size:15px;font-weight:300;color:var(--text-dim);line-height:2;margin-bottom:24px}
+    .story-text .accent-text{font-family:var(--serif);font-size:20px;font-style:italic;color:var(--gold);line-height:1.5;padding-left:20px;border-left:1px solid var(--gold);margin-top:40px}
 
-    /* ═══ SECTION COMMON ═══ */
-    section { padding: 140px 48px; }
-    .section-label {
-      font-size: 11px;
-      letter-spacing: .3em;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-weight: 400;
-      margin-bottom: 20px;
-    }
-    .section-title {
-      font-family: var(--serif);
-      font-size: clamp(36px, 5vw, 72px);
-      font-weight: 300;
-      line-height: 1.1;
-      letter-spacing: -.01em;
-      color: var(--cream);
-      margin-bottom: 24px;
-    }
-    .section-title em { font-style: italic; color: var(--gold); }
+    /* ── MARQUEE ── */
+    .marquee-band{padding:36px 0;overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg)}
+    .marquee-track{display:flex;white-space:nowrap;animation:marquee 35s linear infinite}
+    .marquee-track span{font-family:var(--serif);font-size:clamp(24px,3.5vw,48px);font-weight:300;font-style:italic;color:rgba(201,168,76,.18);padding:0 40px;flex-shrink:0}
+    .marquee-track .dot{font-style:normal;color:rgba(201,168,76,.3)}
+    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-    /* ═══ STORY ═══ */
-    .story { background: var(--bg); }
-    .story-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .story-img {
-      position: relative;
-      aspect-ratio: 4/5;
-      overflow: hidden;
-    }
-    .story-img img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      transition: transform 1.2s ease;
-    }
-    .story-img:hover img { transform: scale(1.05); }
-    .story-img::after {
-      content: ''; position: absolute; inset: 0;
-      border: 1px solid rgba(201,168,76,.15);
-      pointer-events: none;
-    }
-    .story-text p {
-      font-size: 16px;
-      font-weight: 300;
-      color: var(--text-dim);
-      line-height: 1.9;
-      margin-bottom: 28px;
-    }
-    .story-sig {
-      font-family: var(--serif);
-      font-size: 22px;
-      font-style: italic;
-      color: var(--gold);
-    }
+    /* ── MENU ── */
+    .menu{background:var(--bg2)}
+    .menu-intro{max-width:560px;margin-bottom:100px}
+    .menu-intro p{font-size:14px;font-weight:300;color:var(--text-dim);line-height:1.9}
+    .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:1100px;border:1px solid var(--border)}
+    .menu-col{padding:56px}
+    .menu-col+.menu-col{border-left:1px solid var(--border)}
+    .menu-cat{font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);font-weight:400;margin-bottom:44px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+    .menu-item{margin-bottom:36px;padding-bottom:36px;border-bottom:1px solid rgba(255,255,255,.03);transition:border-color .4s}
+    .menu-item:hover{border-bottom-color:var(--border)}
+    .menu-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+    .menu-item-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+    .menu-item-name{font-family:var(--serif);font-size:21px;font-weight:400;color:var(--cream);letter-spacing:.01em;transition:color .3s}
+    .menu-item:hover .menu-item-name{color:var(--gold)}
+    .menu-item-dots{flex:1;margin:0 12px;border-bottom:1px dotted rgba(201,168,76,.15);height:1px;align-self:center}
+    .menu-item-price{font-family:var(--serif);font-size:18px;font-style:italic;color:var(--gold)}
+    .menu-item-desc{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.7;letter-spacing:.01em}
 
-    /* ═══ MARQUEE ═══ */
-    .marquee-band {
-      padding: 40px 0;
-      overflow: hidden;
-      border-top: 1px solid rgba(201,168,76,.12);
-      border-bottom: 1px solid rgba(201,168,76,.12);
-      background: var(--bg2);
-    }
-    .marquee-track {
-      display: flex;
-      white-space: nowrap;
-      animation: marquee-scroll 30s linear infinite;
-    }
-    .marquee-track span {
-      font-family: var(--serif);
-      font-size: clamp(28px, 4vw, 56px);
-      font-weight: 300;
-      font-style: italic;
-      color: rgba(201,168,76,.25);
-      padding: 0 48px;
-      flex-shrink: 0;
-    }
-    @keyframes marquee-scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
+    /* ── GALLERY horizontal scroll ── */
+    .gallery-section{background:var(--bg);padding:160px 0 80px;overflow:hidden}
+    .gallery-header{padding:0 48px;margin-bottom:80px}
+    .gallery-track{display:flex;gap:20px;padding:0 48px;will-change:transform}
+    .gallery-card{flex-shrink:0;width:380px;position:relative;overflow:hidden}
+    .gallery-card img{width:100%;height:480px;object-fit:cover;display:block;transition:transform 1s cubic-bezier(.16,1,.3,1)}
+    .gallery-card:hover img{transform:scale(1.05)}
+    .gallery-card-overlay{position:absolute;bottom:0;left:0;right:0;padding:28px;background:linear-gradient(to top,rgba(10,10,8,.85) 0%,transparent 100%);opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s}
+    .gallery-card:hover .gallery-card-overlay{opacity:1;transform:translateY(0)}
+    .gallery-card-overlay p{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--cream)}
 
-    /* ═══ MENU ═══ */
-    .menu { background: var(--bg2); }
-    .menu-intro {
-      max-width: 600px;
-      margin-bottom: 80px;
-    }
-    .menu-intro p {
-      font-size: 16px;
-      font-weight: 300;
-      color: var(--text-dim);
-      line-height: 1.8;
-    }
-    .menu-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-      max-width: 1100px;
-    }
-    .menu-col { padding-right: 80px; }
-    .menu-col + .menu-col {
-      padding-right: 0;
-      padding-left: 80px;
-      border-left: 1px solid rgba(201,168,76,.1);
-    }
-    .menu-cat {
-      font-size: 11px;
-      letter-spacing: .25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-weight: 400;
-      margin-bottom: 36px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(201,168,76,.15);
-    }
-    .menu-item {
-      margin-bottom: 32px;
-      padding-bottom: 32px;
-      border-bottom: 1px solid rgba(255,255,255,.04);
-    }
-    .menu-item:last-child { border-bottom: none; }
-    .menu-item-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 6px;
-    }
-    .menu-item-name {
-      font-family: var(--serif);
-      font-size: 20px;
-      font-weight: 400;
-      color: var(--cream);
-    }
-    .menu-item-price {
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--gold);
-      letter-spacing: .02em;
-    }
-    .menu-item-desc {
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--text-dim);
-      line-height: 1.6;
-    }
+    /* ── CHEF ── */
+    .chef{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .chef-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:120px;align-items:center;max-width:1280px;margin:0 auto}
+    .chef-img{position:relative;aspect-ratio:3/4;overflow:hidden}
+    .chef-img img{width:100%;height:100%;object-fit:cover}
+    .chef-img::after{content:'';position:absolute;inset:0;border:1px solid rgba(201,168,76,.08)}
+    .chef-quote{font-family:var(--serif);font-size:clamp(24px,2.8vw,38px);font-weight:300;font-style:italic;color:var(--cream);line-height:1.55;margin-bottom:40px;position:relative;padding-left:28px}
+    .chef-quote::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:2px;background:linear-gradient(to bottom,var(--gold),transparent)}
+    .chef-meta{display:flex;align-items:center;gap:20px}
+    .chef-meta-line{width:40px;height:1px;background:var(--gold)}
+    .chef-name{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:400}
+    .chef-role{font-size:12px;color:var(--text-dim);font-weight:300;margin-top:3px}
 
-    /* ═══ GALLERY ═══ */
-    .gallery { background: var(--bg); padding-bottom: 80px; }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      max-width: 1300px;
-      margin: 60px auto 0;
-    }
-    .gallery-item {
-      position: relative;
-      overflow: hidden;
-      aspect-ratio: 1/1;
-    }
-    .gallery-item:first-child { aspect-ratio: 1/1.3; grid-row: span 2; }
-    .gallery-item img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      transition: transform 1s ease;
-    }
-    .gallery-item:hover img { transform: scale(1.06); }
-    .gallery-item::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(12,11,9,.5) 0%, transparent 50%);
-      opacity: 0;
-      transition: opacity .4s;
-    }
-    .gallery-item:hover::after { opacity: 1; }
+    /* ── RESERVATION ── */
+    .reservation{background:var(--bg);text-align:center;padding:180px 48px}
+    .reservation .section-label{justify-content:center}
+    .reservation p.desc{font-size:14px;font-weight:300;color:var(--text-dim);margin:0 auto 56px;max-width:460px;line-height:1.9}
+    .res-form{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;max-width:740px;margin:0 auto 40px;background:var(--border);border:1px solid var(--border)}
+    .res-form input,.res-form select{background:var(--bg);border:none;padding:20px 24px;font-family:var(--sans);font-size:13px;font-weight:300;color:var(--cream);outline:none;transition:background .3s}
+    .res-form input:focus,.res-form select:focus{background:var(--bg2)}
+    .res-form input::placeholder{color:var(--text-dim)}
+    .res-form select{color:var(--text-dim)}
+    .res-form select option{background:var(--bg)}
+    .btn-gold{display:inline-block;padding:20px 64px;background:transparent;color:var(--gold);font-family:var(--sans);font-size:11px;font-weight:400;letter-spacing:.25em;text-transform:uppercase;border:1px solid var(--gold);cursor:pointer;transition:all .4s cubic-bezier(.76,0,.24,1);position:relative;overflow:hidden}
+    .btn-gold::before{content:'';position:absolute;inset:0;background:var(--gold);transform:translateY(100%);transition:transform .4s cubic-bezier(.76,0,.24,1);z-index:0}
+    .btn-gold:hover::before{transform:translateY(0)}
+    .btn-gold:hover{color:var(--bg)}
+    .btn-gold span{position:relative;z-index:1}
 
-    /* ═══ CHEF ═══ */
-    .chef { background: var(--bg2); }
-    .chef-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 100px;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .chef-img {
-      position: relative;
-      aspect-ratio: 3/4;
-      overflow: hidden;
-    }
-    .chef-img img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
-    .chef-img::before {
-      content: '';
-      position: absolute;
-      top: -12px; left: -12px;
-      width: 60px; height: 60px;
-      border-top: 1px solid var(--gold);
-      border-left: 1px solid var(--gold);
-      z-index: 2;
-    }
-    .chef-text blockquote {
-      font-family: var(--serif);
-      font-size: clamp(22px, 2.4vw, 32px);
-      font-weight: 300;
-      font-style: italic;
-      color: var(--cream);
-      line-height: 1.5;
-      margin-bottom: 32px;
-      padding-left: 24px;
-      border-left: 2px solid var(--gold);
-    }
-    .chef-text .chef-name {
-      font-size: 14px;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-weight: 400;
-    }
-    .chef-text .chef-role {
-      font-size: 13px;
-      color: var(--text-dim);
-      font-weight: 300;
-      margin-top: 4px;
-    }
+    /* ── FOOTER ── */
+    .footer{padding:56px 48px 36px;border-top:1px solid var(--border);background:var(--bg);display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;align-items:end}
+    .footer-logo{font-family:var(--serif);font-size:22px;font-weight:300;font-style:italic;color:var(--cream);margin-bottom:12px}
+    .footer-addr{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.8}
+    .footer-center{text-align:center}
+    .footer-hours{font-size:12px;font-weight:300;color:var(--text-dim);line-height:1.8}
+    .footer-right{text-align:right}
+    .footer-socials{display:flex;gap:28px;justify-content:flex-end;margin-bottom:12px}
+    .footer-socials a{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;transition:color .3s}
+    .footer-socials a:hover{color:var(--gold)}
+    .footer-copy{font-size:10px;color:rgba(255,255,255,.15);letter-spacing:.05em}
 
-    /* ═══ RESERVATION ═══ */
-    .reservation {
-      background: var(--bg);
-      text-align: center;
-      padding: 160px 48px;
-    }
-    .reservation .section-title { margin-bottom: 20px; }
-    .reservation p {
-      font-size: 16px;
-      font-weight: 300;
-      color: var(--text-dim);
-      margin-bottom: 48px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .res-form {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      max-width: 700px;
-      margin: 0 auto 32px;
-    }
-    .res-form input, .res-form select {
-      background: transparent;
-      border: 1px solid rgba(201,168,76,.2);
-      padding: 16px 20px;
-      font-family: var(--sans);
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--cream);
-      outline: none;
-      transition: border-color .3s;
-    }
-    .res-form input::placeholder { color: var(--text-dim); }
-    .res-form input:focus, .res-form select:focus {
-      border-color: var(--gold);
-    }
-    .res-form select { color: var(--text-dim); }
-    .res-form select option { background: var(--bg); }
-    .btn-gold {
-      display: inline-block;
-      padding: 18px 56px;
-      background: var(--gold);
-      color: var(--bg);
-      font-family: var(--sans);
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      border: none;
-      cursor: pointer;
-      transition: background .3s, transform .3s;
-    }
-    .btn-gold:hover { background: var(--gold-dim); transform: translateY(-2px); }
-
-    /* ═══ FOOTER ═══ */
-    .footer {
-      padding: 60px 48px 40px;
-      border-top: 1px solid rgba(201,168,76,.08);
-      background: var(--bg);
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-    }
-    .footer-logo {
-      font-family: var(--serif);
-      font-size: 24px;
-      font-weight: 300;
-      color: var(--cream);
-      margin-bottom: 8px;
-    }
-    .footer-addr {
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--text-dim);
-      line-height: 1.7;
-    }
-    .footer-right { text-align: right; }
-    .footer-hours {
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--text-dim);
-      line-height: 1.7;
-      margin-bottom: 16px;
-    }
-    .footer-copy {
-      font-size: 11px;
-      color: rgba(255,255,255,.2);
-      letter-spacing: .05em;
-    }
-
-    /* ═══ RESPONSIVE ═══ */
-    @media (max-width: 900px) {
-      section { padding: 100px 28px; }
-      .nav { padding: 20px 28px; }
-      .hero-content { padding: 0 28px 60px; }
-      .story-grid, .chef-grid { grid-template-columns: 1fr; gap: 48px; }
-      .menu-grid { grid-template-columns: 1fr; }
-      .menu-col + .menu-col { padding-left: 0; border-left: none; padding-top: 48px; }
-      .gallery-grid { grid-template-columns: 1fr 1fr; }
-      .gallery-item:first-child { grid-row: auto; aspect-ratio: 1/1; }
-      .res-form { grid-template-columns: 1fr; }
-      .footer { flex-direction: column; gap: 32px; }
-      .footer-right { text-align: left; }
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      section{padding:100px 24px}
+      .nav{padding:20px 24px}.nav-links{gap:20px}
+      .hero-content{padding:0 24px 60px}.hero-badge{display:none}
+      .story-grid,.chef-grid{grid-template-columns:1fr;gap:48px}
+      .menu-grid{grid-template-columns:1fr}
+      .menu-col+.menu-col{border-left:none;border-top:1px solid var(--border)}
+      .gallery-card{width:300px}.gallery-card img{height:380px}
+      .res-form{grid-template-columns:1fr}
+      .footer{grid-template-columns:1fr;gap:32px}
+      .footer-center,.footer-right{text-align:left}
+      .footer-socials{justify-content:flex-start}
     }
   </style>
 </head>
 <body>
+  <div class="preloader" id="preloader">
+    <div class="preloader-line" id="preloaderLine"></div>
+    <p class="preloader-name" id="preloaderName">Maison Élysée</p>
+    <p class="preloader-sub" id="preloaderSub">Restaurant Gastronomique</p>
+  </div>
 
-  <!-- NAV -->
   <nav class="nav">
     <a href="#" class="nav-logo">Maison Élysée</a>
     <ul class="nav-links">
-      <li><a href="#story">Notre Histoire</a></li>
-      <li><a href="#menu">La Carte</a></li>
+      <li><a href="#story">Histoire</a></li>
+      <li><a href="#menu">Carte</a></li>
       <li><a href="#gallery">Galerie</a></li>
+      <li><a href="#chef">Le Chef</a></li>
       <li><a href="#reservation">Réserver</a></li>
     </ul>
   </nav>
 
-  <!-- HERO -->
   <section class="hero">
-    <div class="hero-bg"></div>
+    <div class="hero-bg" id="heroBg"></div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <p class="hero-eyebrow reveal">Restaurant Gastronomique — Paris 8e</p>
-      <h1 class="hero-title reveal reveal-delay-1">Maison<br><em>Élysée</em></h1>
-      <div class="hero-line reveal reveal-delay-2"></div>
-      <p class="hero-sub reveal reveal-delay-3">Une expérience culinaire d'exception au cœur de Paris, où chaque plat raconte une histoire de passion et de savoir-faire.</p>
+      <p class="hero-eyebrow" id="heroEye">Restaurant Gastronomique — Paris VIII</p>
+      <h1 class="hero-title" id="heroTitle">Maison<br><em>Élysée</em></h1>
+      <div class="hero-line" id="heroLine"></div>
+      <p class="hero-sub" id="heroSub">Une expérience culinaire d'exception au cœur de Paris, où chaque plat raconte une histoire de passion et de savoir-faire.</p>
     </div>
-    <span class="hero-scroll">Découvrir ↓</span>
+    <div class="hero-badge">
+      <p class="hero-badge-star" id="heroBadgeStar">★★</p>
+      <p class="hero-badge-text" id="heroBadgeText">Guide Michelin</p>
+    </div>
+    <div class="hero-scroll" id="heroScroll">
+      <div class="hero-scroll-line"></div>
+      <p class="hero-scroll-text">Scroll</p>
+    </div>
   </section>
 
-  <!-- MARQUEE -->
   <div class="marquee-band">
     <div class="marquee-track">
-      <span>Gastronomie Française</span><span>★</span>
-      <span>2 Étoiles Michelin</span><span>★</span>
-      <span>Produits d'Exception</span><span>★</span>
-      <span>Depuis 1987</span><span>★</span>
-      <span>Gastronomie Française</span><span>★</span>
-      <span>2 Étoiles Michelin</span><span>★</span>
-      <span>Produits d'Exception</span><span>★</span>
-      <span>Depuis 1987</span><span>★</span>
+      <span>Gastronomie Française</span><span class="dot">✦</span><span>Deux Étoiles</span><span class="dot">✦</span><span>Produits d'Exception</span><span class="dot">✦</span><span>Depuis 1987</span><span class="dot">✦</span><span>Paris VIII</span><span class="dot">✦</span>
+      <span>Gastronomie Française</span><span class="dot">✦</span><span>Deux Étoiles</span><span class="dot">✦</span><span>Produits d'Exception</span><span class="dot">✦</span><span>Depuis 1987</span><span class="dot">✦</span><span>Paris VIII</span><span class="dot">✦</span>
     </div>
   </div>
 
-  <!-- STORY -->
   <section class="story" id="story">
     <div class="story-grid">
-      <div class="story-img reveal">
-        <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80" alt="Intérieur du restaurant" loading="lazy" />
-      </div>
+      <div class="story-img-wrap"><div class="story-img"><img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=900&q=80" alt="Intérieur" loading="lazy" /></div></div>
       <div class="story-text">
-        <p class="section-label reveal">Notre Histoire</p>
-        <h2 class="section-title reveal">L'art de la<br><em>table française</em></h2>
-        <p class="reveal">Depuis 1987, la Maison Élysée perpétue la tradition de la grande cuisine française. Nichée dans une demeure haussmannienne du 8ème arrondissement, notre maison allie l'élégance parisienne à l'audace créative.</p>
-        <p class="reveal">Chaque saison, notre Chef compose une carte nouvelle, guidé par les producteurs artisanaux qui partagent notre quête d'excellence. Les légumes viennent de nos potagers en Île-de-France, les poissons arrivent chaque matin de la criée de Rungis.</p>
-        <p class="story-sig reveal">— La famille Dumont, depuis trois générations</p>
+        <p class="section-label">Notre Histoire</p>
+        <h2 class="section-title">L'art de la<br><em>table française</em></h2>
+        <p>Depuis 1987, la Maison Élysée perpétue la tradition de la grande cuisine française. Nichée dans une demeure haussmannienne du 8ème arrondissement, notre maison allie l'élégance parisienne à l'audace créative.</p>
+        <p>Chaque saison, notre Chef compose une carte nouvelle, guidé par les producteurs artisanaux qui partagent notre quête d'excellence. Les légumes viennent de nos potagers en Île-de-France, les poissons arrivent chaque matin de la criée.</p>
+        <p class="accent-text">La famille Dumont, depuis trois générations au service de l'excellence.</p>
       </div>
     </div>
   </section>
 
-  <!-- MENU -->
+  <div class="divider"></div>
+
   <section class="menu" id="menu">
     <div class="menu-intro">
-      <p class="section-label reveal">La Carte</p>
-      <h2 class="section-title reveal">Menu <em>Dégustation</em></h2>
-      <p class="reveal">Notre menu dégustation en sept services est une invitation au voyage à travers les terroirs de France. Chaque plat est pensé comme un chapitre d'une histoire gustative unique.</p>
+      <p class="section-label">La Carte</p>
+      <h2 class="section-title">Menu<br><em>Dégustation</em></h2>
+      <p>Sept services d'exception, un voyage à travers les terroirs de France.</p>
     </div>
     <div class="menu-grid">
       <div class="menu-col">
-        <p class="menu-cat reveal">Entrées</p>
-        <div class="menu-item reveal">
-          <div class="menu-item-head">
-            <span class="menu-item-name">Homard Bleu de Bretagne</span>
-            <span class="menu-item-price">58 €</span>
-          </div>
-          <p class="menu-item-desc">Bisque légère, émulsion de corail, caviar Osciètre</p>
-        </div>
-        <div class="menu-item reveal">
-          <div class="menu-item-head">
-            <span class="menu-item-name">Foie Gras de Canard</span>
-            <span class="menu-item-price">46 €</span>
-          </div>
-          <p class="menu-item-desc">Mi-cuit, chutney de figues, brioche toastée au beurre noisette</p>
-        </div>
-        <div class="menu-item reveal">
-          <div class="menu-item-head">
-            <span class="menu-item-name">Oursin de Méditerranée</span>
-            <span class="menu-item-price">52 €</span>
-          </div>
-          <p class="menu-item-desc">Crème d'oursin, gelée d'eau de mer, fenouil croquant</p>
-        </div>
-        <div class="menu-item reveal">
-          <div class="menu-item-head">
-            <span class="menu-item-name">Velouté de Cèpes</span>
-            <span class="menu-item-price">38 €</span>
-          </div>
-          <p class="menu-item-desc">Mousse de parmesan 36 mois, huile de truffe noire du Périgord</p>
-        </div>
+        <p class="menu-cat">Entrées</p>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Homard Bleu de Bretagne</span><span class="menu-item-dots"></span><span class="menu-item-price">58 €</span></div><p class="menu-item-desc">Bisque légère, émulsion de corail, caviar Osciètre</p></div>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Foie Gras de Canard</span><span class="menu-item-dots"></span><span class="menu-item-price">46 €</span></div><p class="menu-item-desc">Mi-cuit, chutney de figues, brioche toastée au beurre noisette</p></div>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Oursin de Méditerranée</span><span class="menu-item-dots"></span><span class="menu-item-price">52 €</span></div><p class="menu-item-desc">Crème d'oursin, gelée d'eau de mer, fenouil croquant</p></div>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Velouté de Cèpes</span><span class="menu-item-dots"></span><span class="menu-item-price">38 €</span></div><p class="menu-item-desc">Mousse de parmesan 36 mois, truffe noire du Périgord</p></div>
       </div>
       <div class="menu-col">
-        <p class="menu-cat reveal">Plats</p>
-        <div class="menu-item reveal">
-          <div class="menu-item-head">
-            <span class="menu-item-name">Pigeon de Bresse en Deux Services</span>
-            <span class="menu-item-price">78 €</span>
-          </div>
-          <p class="menu-item-desc">Suprême rôti au foin, cuisse confite, jus corsé aux épices douces</p>
-        </div>
-        <div class="menu-item reveal">
-          <div class="menu-item-head">
-            <span class="menu-item-name">Turbot Sauvage</span>
-            <span class="menu-item-price">72 €</span>
-          </div>
-          <p class="menu-item-desc">Cuit sur l'arête, beurre blanc aux algues, pommes grenailles</p>
-        </div>
-        <div class="menu-item reveal">
-          <div class="menu-item-head">
-            <span class="menu-item-name">Filet de Bœuf Wagyu A5</span>
-            <span class="menu-item-price">96 €</span>
-          </div>
-          <p class="menu-item-desc">Grillé au binchotan, moelle rôtie, sauce bordelaise</p>
-        </div>
-        <div class="menu-item reveal">
-          <div class="menu-item-head">
-            <span class="menu-item-name">Ris de Veau Croustillant</span>
-            <span class="menu-item-price">64 €</span>
-          </div>
-          <p class="menu-item-desc">Morilles farcies, crème de persil plat, jus de veau réduit</p>
-        </div>
+        <p class="menu-cat">Plats</p>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Pigeon de Bresse</span><span class="menu-item-dots"></span><span class="menu-item-price">78 €</span></div><p class="menu-item-desc">Suprême rôti au foin, cuisse confite, jus corsé aux épices douces</p></div>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Turbot Sauvage</span><span class="menu-item-dots"></span><span class="menu-item-price">72 €</span></div><p class="menu-item-desc">Cuit sur l'arête, beurre blanc aux algues, pommes grenailles</p></div>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Bœuf Wagyu A5</span><span class="menu-item-dots"></span><span class="menu-item-price">96 €</span></div><p class="menu-item-desc">Grillé au binchotan, moelle rôtie, sauce bordelaise</p></div>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Ris de Veau</span><span class="menu-item-dots"></span><span class="menu-item-price">64 €</span></div><p class="menu-item-desc">Croustillant, morilles farcies, crème de persil, jus réduit</p></div>
       </div>
     </div>
   </section>
 
-  <!-- GALLERY -->
-  <section class="gallery" id="gallery">
-    <p class="section-label reveal" style="text-align:center">Galerie</p>
-    <h2 class="section-title reveal" style="text-align:center">L'univers <em>Élysée</em></h2>
-    <div class="gallery-grid">
-      <div class="gallery-item reveal">
-        <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=800&q=80" alt="Plat gastronomique" loading="lazy" />
-      </div>
-      <div class="gallery-item reveal reveal-delay-1">
-        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80" alt="Cuisine" loading="lazy" />
-      </div>
-      <div class="gallery-item reveal reveal-delay-2">
-        <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=600&q=80" alt="Dessert" loading="lazy" />
-      </div>
-      <div class="gallery-item reveal reveal-delay-1">
-        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80" alt="Salle" loading="lazy" />
-      </div>
-      <div class="gallery-item reveal reveal-delay-2">
-        <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=600&q=80" alt="Vin" loading="lazy" />
-      </div>
+  <section class="gallery-section" id="gallery">
+    <div class="gallery-header">
+      <p class="section-label">Galerie</p>
+      <h2 class="section-title">L'univers<br><em>Élysée</em></h2>
+    </div>
+    <div class="gallery-track" id="galleryTrack">
+      <div class="gallery-card"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=600&q=80" alt="Plat" loading="lazy" /><div class="gallery-card-overlay"><p>Le plat signature</p></div></div>
+      <div class="gallery-card"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80" alt="Cuisine" loading="lazy" /><div class="gallery-card-overlay"><p>La brigade en cuisine</p></div></div>
+      <div class="gallery-card"><img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=600&q=80" alt="Dessert" loading="lazy" /><div class="gallery-card-overlay"><p>L'art du dessert</p></div></div>
+      <div class="gallery-card"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80" alt="Salle" loading="lazy" /><div class="gallery-card-overlay"><p>La grande salle</p></div></div>
+      <div class="gallery-card"><img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=600&q=80" alt="Cave" loading="lazy" /><div class="gallery-card-overlay"><p>La cave</p></div></div>
+      <div class="gallery-card"><img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&q=80" alt="Ambiance" loading="lazy" /><div class="gallery-card-overlay"><p>L'ambiance</p></div></div>
     </div>
   </section>
 
-  <!-- CHEF -->
+  <div class="divider"></div>
+
   <section class="chef" id="chef">
     <div class="chef-grid">
-      <div class="chef-img reveal">
-        <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=700&q=80" alt="Chef Julien Dumont" loading="lazy" />
-      </div>
+      <div class="chef-img"><img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=700&q=80" alt="Chef" loading="lazy" /></div>
       <div class="chef-text">
-        <p class="section-label reveal">Le Chef</p>
-        <h2 class="section-title reveal">Julien <em>Dumont</em></h2>
-        <blockquote class="reveal">
-          « La cuisine est un langage universel. Mon rôle est de transformer les produits les plus nobles en émotions, en souvenirs, en moments de partage. »
-        </blockquote>
-        <p class="chef-name reveal">Julien Dumont</p>
-        <p class="chef-role reveal">Chef Exécutif — 2 Étoiles Michelin</p>
+        <p class="section-label">Le Chef</p>
+        <h2 class="section-title">Julien<br><em>Dumont</em></h2>
+        <blockquote class="chef-quote">La cuisine est un langage universel. Mon rôle est de transformer les produits les plus nobles en émotions, en souvenirs, en moments de partage.</blockquote>
+        <div class="chef-meta"><div class="chef-meta-line"></div><div class="chef-meta-info"><p class="chef-name">Julien Dumont</p><p class="chef-role">Chef Exécutif — 2 étoiles Michelin</p></div></div>
       </div>
     </div>
   </section>
 
-  <!-- RESERVATION -->
   <section class="reservation" id="reservation">
-    <p class="section-label reveal">Réservation</p>
-    <h2 class="section-title reveal">Réservez votre <em>table</em></h2>
-    <p class="reveal">Nous vous accueillons du mardi au samedi, pour le déjeuner et le dîner. Réservation recommandée 48h à l'avance.</p>
-    <div class="res-form reveal">
+    <p class="section-label">Réservation</p>
+    <h2 class="section-title">Réservez votre <em>table</em></h2>
+    <p class="desc">Du mardi au samedi, déjeuner et dîner. Réservation recommandée 48h à l'avance.</p>
+    <div class="res-form">
       <input type="text" placeholder="Nom complet" />
       <input type="email" placeholder="Email" />
       <input type="tel" placeholder="Téléphone" />
       <input type="date" />
       <input type="time" value="20:00" />
-      <select>
-        <option>2 convives</option>
-        <option>3 convives</option>
-        <option>4 convives</option>
-        <option>5 convives</option>
-        <option>6+ convives</option>
-      </select>
+      <select><option>2 convives</option><option>3 convives</option><option>4 convives</option><option>5 convives</option><option>6+</option></select>
     </div>
-    <button class="btn-gold reveal">Réserver</button>
+    <button class="btn-gold"><span>Réserver une table</span></button>
   </section>
 
-  <!-- FOOTER -->
   <footer class="footer">
-    <div>
-      <p class="footer-logo">Maison Élysée</p>
-      <p class="footer-addr">12 Rue du Faubourg Saint-Honoré<br>75008 Paris, France<br>+33 1 42 65 89 00</p>
-    </div>
-    <div class="footer-right">
-      <p class="footer-hours">Mardi — Samedi<br>Déjeuner 12h00 – 14h00<br>Dîner 19h30 – 22h30</p>
-      <p class="footer-copy">© 2026 Maison Élysée — Site créé par Gabin Goude</p>
-    </div>
+    <div><p class="footer-logo">Maison Élysée</p><p class="footer-addr">12 Rue du Faubourg Saint-Honoré<br>75008 Paris, France<br>+33 1 42 65 89 00</p></div>
+    <div class="footer-center"><p class="footer-hours">Mardi — Samedi<br>Déjeuner 12h – 14h<br>Dîner 19h30 – 22h30</p></div>
+    <div class="footer-right"><div class="footer-socials"><a href="#">Instagram</a><a href="#">Facebook</a></div><p class="footer-copy">© 2026 Maison Élysée — Site par Gabin Goude</p></div>
   </footer>
 
   <script>
-    // Scroll reveal
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }});
-    }, { threshold: 0.15 });
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-  </script>
+    gsap.registerPlugin(ScrollTrigger);
 
+    /* Preloader */
+    var ptl = gsap.timeline({onComplete:function(){
+      gsap.to('#preloader',{opacity:0,duration:.6,ease:'power2.inOut',onComplete:function(){document.getElementById('preloader').style.display='none'}});
+      heroIntro();
+    }});
+    ptl.to('#preloaderLine',{width:'80px',duration:1,ease:'power2.inOut'})
+       .to('#preloaderName',{opacity:1,duration:.8,ease:'power2.out'},.4)
+       .to('#preloaderSub',{opacity:1,duration:.6,ease:'power2.out'},.9)
+       .to({},{duration:.6});
+
+    /* Hero intro */
+    function heroIntro(){
+      var tl=gsap.timeline();
+      tl.to('#heroEye',{opacity:1,duration:.8,ease:'power2.out'})
+        .to('#heroTitle',{opacity:1,duration:1,ease:'power2.out'},.15)
+        .to('#heroLine',{width:'60px',duration:.8,ease:'power2.inOut'},.3)
+        .to('#heroSub',{opacity:1,duration:.8,ease:'power2.out'},.5)
+        .to('#heroBadgeStar',{opacity:1,duration:.6,ease:'power2.out'},.6)
+        .to('#heroBadgeText',{opacity:1,duration:.6,ease:'power2.out'},.75)
+        .to('#heroScroll',{opacity:1,duration:.5,ease:'power2.out'},.9);
+    }
+
+    /* Hero bg zoom out on scroll */
+    gsap.to('#heroBg',{scale:1,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
+
+    /* Reveal sections */
+    gsap.utils.toArray('.section-label,.section-title,.story-text p,.story-img-wrap,.accent-text,.menu-cat,.menu-item,.chef-img,.chef-quote,.chef-meta,.chef-text .section-label,.chef-text .section-title,.res-form,.btn-gold,.reservation .section-label,.reservation .section-title,.reservation p.desc').forEach(function(el){
+      gsap.fromTo(el,{opacity:0,y:36},{opacity:1,y:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 88%',toggleActions:'play none none none'}});
+    });
+
+    /* Gallery horizontal scroll */
+    var track=document.getElementById('galleryTrack');
+    if(track){
+      var totalScroll=track.scrollWidth-window.innerWidth+96;
+      gsap.to(track,{x:-totalScroll,ease:'none',scrollTrigger:{trigger:'.gallery-section',start:'top top',end:function(){return '+='+totalScroll},pin:true,scrub:1,anticipatePin:1}});
+    }
+
+    /* Parallax images */
+    gsap.utils.toArray('.story-img img,.chef-img img').forEach(function(img){
+      gsap.fromTo(img,{y:'-8%'},{y:'8%',ease:'none',scrollTrigger:{trigger:img.parentElement,start:'top bottom',end:'bottom top',scrub:true}});
+    });
+  </script>
 </body>
 </html>
