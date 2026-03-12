@@ -529,8 +529,8 @@ body.c-proj  #curR { opacity: 0; }
 #previewCard {
   position: fixed;
   top: 0; left: 0;
-  width: 420px;
-  height: 320px;
+  width: 480px;
+  height: 380px;
   overflow: hidden;
   pointer-events: none;
   z-index: 600;
@@ -549,7 +549,7 @@ body.c-proj  #curR { opacity: 0; }
   height: 100%;
   position: relative;
   background: #e8e5de;
-  padding: 28px;
+  padding: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -560,7 +560,7 @@ body.c-proj  #curR { opacity: 0; }
   height: 100%;
   object-fit: cover;
   display: block;
-  box-shadow: 0 8px 40px rgba(0,0,0,.15);
+  box-shadow: 0 8px 40px rgba(0,0,0,.12);
 }
 
 .preview-view {
