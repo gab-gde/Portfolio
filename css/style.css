@@ -248,7 +248,7 @@ body.c-proj  #curR { opacity: 0; }
 #heroArrow {
   position: absolute;
   right: 44px;
-  bottom: 300px;
+  bottom: 460px;
   font-size: 20px;
   color: #1a1a1a;
   opacity: .6;
@@ -260,7 +260,7 @@ body.c-proj  #curR { opacity: 0; }
 #heroRole {
   position: absolute;
   right: 44px;
-  bottom: 188px;
+  bottom: 360px;
   z-index: 20;
   text-align: right;
   will-change: transform, opacity;

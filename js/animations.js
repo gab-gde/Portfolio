@@ -211,7 +211,7 @@ const Animations = (() => {
 /* ══════════════════════════════════════════════════════════════
    HERO NAME MARQUEE — standalone, outside Animations module
    Scroll down → text moves left, scroll up → text moves right
-   Auto-drifts left when idle
+   Auto-drifts left when idle. Wraps around edges.
 ══════════════════════════════════════════════════════════════ */
 (function() {
   var nameEl = document.getElementById('heroName');
@@ -219,37 +219,48 @@ const Animations = (() => {
 
   var xPos = 0;
   var speed = 0;
-  var baseSpeed = -1.2;      // idle drift left (px per frame)
-  var scrollBoost = 0;       // extra speed from scroll
+  var baseSpeed = -0.4;      // slow idle drift left
+  var scrollBoost = 0;
   var lastY = window.pageYOffset || document.documentElement.scrollTop;
 
-  // Listen to raw scroll (works even without Lenis)
   function handleScroll() {
     var nowY = window.pageYOffset || document.documentElement.scrollTop;
     var delta = nowY - lastY;
     lastY = nowY;
-    // scroll down (delta > 0) → push left (negative), scroll up → push right (positive)
-    scrollBoost += delta * -2.5;
+    // Gentle scroll influence
+    scrollBoost += delta * -0.6;
   }
 
   window.addEventListener('scroll', handleScroll, { passive: true });
-  // Also listen to wheel for smoother response
   window.addEventListener('wheel', function(e) {
-    scrollBoost += e.deltaY * -1.5;
+    scrollBoost += e.deltaY * -0.4;
   }, { passive: true });
 
   function loop() {
-    // Clamp scroll boost
-    if (scrollBoost > 200) scrollBoost = 200;
-    if (scrollBoost < -200) scrollBoost = -200;
+    // Clamp scroll boost so it doesn't fly away
+    if (scrollBoost > 60) scrollBoost = 60;
+    if (scrollBoost < -60) scrollBoost = -60;
 
-    // Combine base drift + scroll boost
     speed = baseSpeed + scrollBoost;
 
-    // Decay scroll boost back to 0
-    scrollBoost *= 0.92;
+    // Decay scroll boost slowly
+    scrollBoost *= 0.94;
 
     xPos += speed;
+
+    // Wrap around: when text fully exits one side, reappear from the other
+    var textW = nameEl.offsetWidth;
+    var viewW = window.innerWidth;
+
+    // If text went fully off the left side
+    if (xPos < -textW) {
+      xPos = viewW;
+    }
+    // If text went fully off the right side
+    if (xPos > viewW) {
+      xPos = -textW;
+    }
+
     nameEl.style.transform = 'translateX(' + xPos + 'px)';
     requestAnimationFrame(loop);
   }
