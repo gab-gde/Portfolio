@@ -185,24 +185,24 @@ body.c-proj  #curR { opacity: 0; }
 /* Logo — Dennis Snellenberg style */
 .logo {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 5px;
   cursor: pointer;
   text-decoration: none;
 }
 
 .logo-copy {
-  font-size: 11px;
+  font-size: 14px;
   color: #fff;
   letter-spacing: .02em;
   margin: 0;
-  line-height: 16px;
+  line-height: 20px;
 }
 
 .logo-name {
   position: relative;
   overflow: hidden;
-  height: 32px; /* shows exactly 2 lines */
+  height: 20px; /* shows exactly 1 line */
 }
 
 .logo-name-inner {
@@ -210,16 +210,16 @@ body.c-proj  #curR { opacity: 0; }
 }
 
 .logo:hover .logo-name-inner {
-  transform: translateY(-16px); /* slide up by 1 line height */
+  transform: translateY(-20px);
 }
 
 .logo-name p {
   margin: 0;
-  font-size: 11px;
+  font-size: 14px;
   color: #fff;
   letter-spacing: .02em;
-  line-height: 16px;
-  height: 16px;
+  line-height: 20px;
+  height: 20px;
   white-space: nowrap;
 }
 

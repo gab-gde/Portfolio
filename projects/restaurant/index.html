@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maison Élysée — Restaurant Gastronomique Paris</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --bg:       #0c0b09;
+      --bg2:      #141310;
+      --cream:    #f5f0e8;
+      --gold:     #c9a84c;
+      --gold-dim: #a08636;
+      --text:     #e8e2d6;
+      --text-dim: #8a8478;
+      --serif:    'Cormorant Garamond', Georgia, serif;
+      --sans:     'Outfit', sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ═══ UTILITIES ═══ */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity .9s ease, transform .9s ease; }
+    .reveal.vis { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .12s; }
+    .reveal-delay-2 { transition-delay: .24s; }
+    .reveal-delay-3 { transition-delay: .36s; }
+
+    /* ═══ NAV ═══ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 48px;
+      z-index: 100;
+      mix-blend-mode: difference;
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 400;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: .04em;
+    }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 13px;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 300;
+      transition: opacity .3s;
+    }
+    .nav-links a:hover { opacity: .5; }
+
+    /* ═══ HERO ═══ */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=80') center/cover no-repeat;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(12,11,9,.3) 0%, rgba(12,11,9,.7) 60%, rgba(12,11,9,.95) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 0 48px 80px;
+      width: 100%;
+    }
+    .hero-eyebrow {
+      font-size: 12px;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(56px, 9vw, 140px);
+      font-weight: 300;
+      line-height: .92;
+      letter-spacing: -.02em;
+      color: var(--cream);
+      margin-bottom: 32px;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-line {
+      width: 60px; height: 1px;
+      background: var(--gold);
+      margin-bottom: 24px;
+    }
+    .hero-sub {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-dim);
+      max-width: 440px;
+      letter-spacing: .01em;
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px; right: 48px;
+      font-size: 11px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      writing-mode: vertical-rl;
+      z-index: 2;
+    }
+
+    /* ═══ SECTION COMMON ═══ */
+    section { padding: 140px 48px; }
+    .section-label {
+      font-size: 11px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(36px, 5vw, 72px);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -.01em;
+      color: var(--cream);
+      margin-bottom: 24px;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+
+    /* ═══ STORY ═══ */
+    .story { background: var(--bg); }
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .story-img {
+      position: relative;
+      aspect-ratio: 4/5;
+      overflow: hidden;
+    }
+    .story-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 1.2s ease;
+    }
+    .story-img:hover img { transform: scale(1.05); }
+    .story-img::after {
+      content: ''; position: absolute; inset: 0;
+      border: 1px solid rgba(201,168,76,.15);
+      pointer-events: none;
+    }
+    .story-text p {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text-dim);
+      line-height: 1.9;
+      margin-bottom: 28px;
+    }
+    .story-sig {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    /* ═══ MARQUEE ═══ */
+    .marquee-band {
+      padding: 40px 0;
+      overflow: hidden;
+      border-top: 1px solid rgba(201,168,76,.12);
+      border-bottom: 1px solid rgba(201,168,76,.12);
+      background: var(--bg2);
+    }
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee-scroll 30s linear infinite;
+    }
+    .marquee-track span {
+      font-family: var(--serif);
+      font-size: clamp(28px, 4vw, 56px);
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(201,168,76,.25);
+      padding: 0 48px;
+      flex-shrink: 0;
+    }
+    @keyframes marquee-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ═══ MENU ═══ */
+    .menu { background: var(--bg2); }
+    .menu-intro {
+      max-width: 600px;
+      margin-bottom: 80px;
+    }
+    .menu-intro p {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text-dim);
+      line-height: 1.8;
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      max-width: 1100px;
+    }
+    .menu-col { padding-right: 80px; }
+    .menu-col + .menu-col {
+      padding-right: 0;
+      padding-left: 80px;
+      border-left: 1px solid rgba(201,168,76,.1);
+    }
+    .menu-cat {
+      font-size: 11px;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 400;
+      margin-bottom: 36px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(201,168,76,.15);
+    }
+    .menu-item {
+      margin-bottom: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-item-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .menu-item-name {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--cream);
+    }
+    .menu-item-price {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--gold);
+      letter-spacing: .02em;
+    }
+    .menu-item-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* ═══ GALLERY ═══ */
+    .gallery { background: var(--bg); padding-bottom: 80px; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 1300px;
+      margin: 60px auto 0;
+    }
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 1/1;
+    }
+    .gallery-item:first-child { aspect-ratio: 1/1.3; grid-row: span 2; }
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 1s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .gallery-item::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(12,11,9,.5) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity .4s;
+    }
+    .gallery-item:hover::after { opacity: 1; }
+
+    /* ═══ CHEF ═══ */
+    .chef { background: var(--bg2); }
+    .chef-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 100px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .chef-img {
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+    }
+    .chef-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .chef-img::before {
+      content: '';
+      position: absolute;
+      top: -12px; left: -12px;
+      width: 60px; height: 60px;
+      border-top: 1px solid var(--gold);
+      border-left: 1px solid var(--gold);
+      z-index: 2;
+    }
+    .chef-text blockquote {
+      font-family: var(--serif);
+      font-size: clamp(22px, 2.4vw, 32px);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.5;
+      margin-bottom: 32px;
+      padding-left: 24px;
+      border-left: 2px solid var(--gold);
+    }
+    .chef-text .chef-name {
+      font-size: 14px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 400;
+    }
+    .chef-text .chef-role {
+      font-size: 13px;
+      color: var(--text-dim);
+      font-weight: 300;
+      margin-top: 4px;
+    }
+
+    /* ═══ RESERVATION ═══ */
+    .reservation {
+      background: var(--bg);
+      text-align: center;
+      padding: 160px 48px;
+    }
+    .reservation .section-title { margin-bottom: 20px; }
+    .reservation p {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text-dim);
+      margin-bottom: 48px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .res-form {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 700px;
+      margin: 0 auto 32px;
+    }
+    .res-form input, .res-form select {
+      background: transparent;
+      border: 1px solid rgba(201,168,76,.2);
+      padding: 16px 20px;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--cream);
+      outline: none;
+      transition: border-color .3s;
+    }
+    .res-form input::placeholder { color: var(--text-dim); }
+    .res-form input:focus, .res-form select:focus {
+      border-color: var(--gold);
+    }
+    .res-form select { color: var(--text-dim); }
+    .res-form select option { background: var(--bg); }
+    .btn-gold {
+      display: inline-block;
+      padding: 18px 56px;
+      background: var(--gold);
+      color: var(--bg);
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background .3s, transform .3s;
+    }
+    .btn-gold:hover { background: var(--gold-dim); transform: translateY(-2px); }
+
+    /* ═══ FOOTER ═══ */
+    .footer {
+      padding: 60px 48px 40px;
+      border-top: 1px solid rgba(201,168,76,.08);
+      background: var(--bg);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .footer-logo {
+      font-family: var(--serif);
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 8px;
+    }
+    .footer-addr {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+    .footer-right { text-align: right; }
+    .footer-hours {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .footer-copy {
+      font-size: 11px;
+      color: rgba(255,255,255,.2);
+      letter-spacing: .05em;
+    }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width: 900px) {
+      section { padding: 100px 28px; }
+      .nav { padding: 20px 28px; }
+      .hero-content { padding: 0 28px 60px; }
+      .story-grid, .chef-grid { grid-template-columns: 1fr; gap: 48px; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .menu-col + .menu-col { padding-left: 0; border-left: none; padding-top: 48px; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item:first-child { grid-row: auto; aspect-ratio: 1/1; }
+      .res-form { grid-template-columns: 1fr; }
+      .footer { flex-direction: column; gap: 32px; }
+      .footer-right { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">Maison Élysée</a>
+    <ul class="nav-links">
+      <li><a href="#story">Notre Histoire</a></li>
+      <li><a href="#menu">La Carte</a></li>
+      <li><a href="#gallery">Galerie</a></li>
+      <li><a href="#reservation">Réserver</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow reveal">Restaurant Gastronomique — Paris 8e</p>
+      <h1 class="hero-title reveal reveal-delay-1">Maison<br><em>Élysée</em></h1>
+      <div class="hero-line reveal reveal-delay-2"></div>
+      <p class="hero-sub reveal reveal-delay-3">Une expérience culinaire d'exception au cœur de Paris, où chaque plat raconte une histoire de passion et de savoir-faire.</p>
+    </div>
+    <span class="hero-scroll">Découvrir ↓</span>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-band">
+    <div class="marquee-track">
+      <span>Gastronomie Française</span><span>★</span>
+      <span>2 Étoiles Michelin</span><span>★</span>
+      <span>Produits d'Exception</span><span>★</span>
+      <span>Depuis 1987</span><span>★</span>
+      <span>Gastronomie Française</span><span>★</span>
+      <span>2 Étoiles Michelin</span><span>★</span>
+      <span>Produits d'Exception</span><span>★</span>
+      <span>Depuis 1987</span><span>★</span>
+    </div>
+  </div>
+
+  <!-- STORY -->
+  <section class="story" id="story">
+    <div class="story-grid">
+      <div class="story-img reveal">
+        <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80" alt="Intérieur du restaurant" loading="lazy" />
+      </div>
+      <div class="story-text">
+        <p class="section-label reveal">Notre Histoire</p>
+        <h2 class="section-title reveal">L'art de la<br><em>table française</em></h2>
+        <p class="reveal">Depuis 1987, la Maison Élysée perpétue la tradition de la grande cuisine française. Nichée dans une demeure haussmannienne du 8ème arrondissement, notre maison allie l'élégance parisienne à l'audace créative.</p>
+        <p class="reveal">Chaque saison, notre Chef compose une carte nouvelle, guidé par les producteurs artisanaux qui partagent notre quête d'excellence. Les légumes viennent de nos potagers en Île-de-France, les poissons arrivent chaque matin de la criée de Rungis.</p>
+        <p class="story-sig reveal">— La famille Dumont, depuis trois générations</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="menu" id="menu">
+    <div class="menu-intro">
+      <p class="section-label reveal">La Carte</p>
+      <h2 class="section-title reveal">Menu <em>Dégustation</em></h2>
+      <p class="reveal">Notre menu dégustation en sept services est une invitation au voyage à travers les terroirs de France. Chaque plat est pensé comme un chapitre d'une histoire gustative unique.</p>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-col">
+        <p class="menu-cat reveal">Entrées</p>
+        <div class="menu-item reveal">
+          <div class="menu-item-head">
+            <span class="menu-item-name">Homard Bleu de Bretagne</span>
+            <span class="menu-item-price">58 €</span>
+          </div>
+          <p class="menu-item-desc">Bisque légère, émulsion de corail, caviar Osciètre</p>
+        </div>
+        <div class="menu-item reveal">
+          <div class="menu-item-head">
+            <span class="menu-item-name">Foie Gras de Canard</span>
+            <span class="menu-item-price">46 €</span>
+          </div>
+          <p class="menu-item-desc">Mi-cuit, chutney de figues, brioche toastée au beurre noisette</p>
+        </div>
+        <div class="menu-item reveal">
+          <div class="menu-item-head">
+            <span class="menu-item-name">Oursin de Méditerranée</span>
+            <span class="menu-item-price">52 €</span>
+          </div>
+          <p class="menu-item-desc">Crème d'oursin, gelée d'eau de mer, fenouil croquant</p>
+        </div>
+        <div class="menu-item reveal">
+          <div class="menu-item-head">
+            <span class="menu-item-name">Velouté de Cèpes</span>
+            <span class="menu-item-price">38 €</span>
+          </div>
+          <p class="menu-item-desc">Mousse de parmesan 36 mois, huile de truffe noire du Périgord</p>
+        </div>
+      </div>
+      <div class="menu-col">
+        <p class="menu-cat reveal">Plats</p>
+        <div class="menu-item reveal">
+          <div class="menu-item-head">
+            <span class="menu-item-name">Pigeon de Bresse en Deux Services</span>
+            <span class="menu-item-price">78 €</span>
+          </div>
+          <p class="menu-item-desc">Suprême rôti au foin, cuisse confite, jus corsé aux épices douces</p>
+        </div>
+        <div class="menu-item reveal">
+          <div class="menu-item-head">
+            <span class="menu-item-name">Turbot Sauvage</span>
+            <span class="menu-item-price">72 €</span>
+          </div>
+          <p class="menu-item-desc">Cuit sur l'arête, beurre blanc aux algues, pommes grenailles</p>
+        </div>
+        <div class="menu-item reveal">
+          <div class="menu-item-head">
+            <span class="menu-item-name">Filet de Bœuf Wagyu A5</span>
+            <span class="menu-item-price">96 €</span>
+          </div>
+          <p class="menu-item-desc">Grillé au binchotan, moelle rôtie, sauce bordelaise</p>
+        </div>
+        <div class="menu-item reveal">
+          <div class="menu-item-head">
+            <span class="menu-item-name">Ris de Veau Croustillant</span>
+            <span class="menu-item-price">64 €</span>
+          </div>
+          <p class="menu-item-desc">Morilles farcies, crème de persil plat, jus de veau réduit</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery">
+    <p class="section-label reveal" style="text-align:center">Galerie</p>
+    <h2 class="section-title reveal" style="text-align:center">L'univers <em>Élysée</em></h2>
+    <div class="gallery-grid">
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=800&q=80" alt="Plat gastronomique" loading="lazy" />
+      </div>
+      <div class="gallery-item reveal reveal-delay-1">
+        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80" alt="Cuisine" loading="lazy" />
+      </div>
+      <div class="gallery-item reveal reveal-delay-2">
+        <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=600&q=80" alt="Dessert" loading="lazy" />
+      </div>
+      <div class="gallery-item reveal reveal-delay-1">
+        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80" alt="Salle" loading="lazy" />
+      </div>
+      <div class="gallery-item reveal reveal-delay-2">
+        <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=600&q=80" alt="Vin" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- CHEF -->
+  <section class="chef" id="chef">
+    <div class="chef-grid">
+      <div class="chef-img reveal">
+        <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=700&q=80" alt="Chef Julien Dumont" loading="lazy" />
+      </div>
+      <div class="chef-text">
+        <p class="section-label reveal">Le Chef</p>
+        <h2 class="section-title reveal">Julien <em>Dumont</em></h2>
+        <blockquote class="reveal">
+          « La cuisine est un langage universel. Mon rôle est de transformer les produits les plus nobles en émotions, en souvenirs, en moments de partage. »
+        </blockquote>
+        <p class="chef-name reveal">Julien Dumont</p>
+        <p class="chef-role reveal">Chef Exécutif — 2 Étoiles Michelin</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESERVATION -->
+  <section class="reservation" id="reservation">
+    <p class="section-label reveal">Réservation</p>
+    <h2 class="section-title reveal">Réservez votre <em>table</em></h2>
+    <p class="reveal">Nous vous accueillons du mardi au samedi, pour le déjeuner et le dîner. Réservation recommandée 48h à l'avance.</p>
+    <div class="res-form reveal">
+      <input type="text" placeholder="Nom complet" />
+      <input type="email" placeholder="Email" />
+      <input type="tel" placeholder="Téléphone" />
+      <input type="date" />
+      <input type="time" value="20:00" />
+      <select>
+        <option>2 convives</option>
+        <option>3 convives</option>
+        <option>4 convives</option>
+        <option>5 convives</option>
+        <option>6+ convives</option>
+      </select>
+    </div>
+    <button class="btn-gold reveal">Réserver</button>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div>
+      <p class="footer-logo">Maison Élysée</p>
+      <p class="footer-addr">12 Rue du Faubourg Saint-Honoré<br>75008 Paris, France<br>+33 1 42 65 89 00</p>
+    </div>
+    <div class="footer-right">
+      <p class="footer-hours">Mardi — Samedi<br>Déjeuner 12h00 – 14h00<br>Dîner 19h30 – 22h30</p>
+      <p class="footer-copy">© 2026 Maison Élysée — Site créé par Gabin Goude</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }});
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+
+</body>
+</html>
