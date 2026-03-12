@@ -1,159 +1,209 @@
 /**
  * menu.js
- * Full-screen overlay menu — Dennis Snellenberg style
- * Large links that slide up, hamburger transforms to ✕
+ * Side panel menu — Dennis Snellenberg style
+ * Right panel, dark bg, large nav links, socials at bottom
  */
 
 const Menu = (() => {
 
-  // ── Inject overlay HTML ──
-  const overlay = document.createElement('div');
-  overlay.id = 'menuOverlay';
-  overlay.innerHTML = `
-    <nav class="menu-nav">
-      <ul class="menu-links">
-        <li class="menu-item"><a href="index.html"><span class="ml-inner">Work</span></a></li>
-        <li class="menu-item"><a href="about.html"><span class="ml-inner">About</span></a></li>
-        <li class="menu-item"><a href="contact.html"><span class="ml-inner">Contact</span></a></li>
-      </ul>
-      <div class="menu-footer">
-        <div class="menu-footer-left">
+  // ── Inject panel HTML ──
+  const panel = document.createElement('div');
+  panel.id = 'menuPanel';
+  panel.innerHTML = `
+    <div class="mp-inner">
+      <div class="mp-top">
+        <span class="mp-label">Navigation</span>
+        <ul class="mp-links">
+          <li><a href="index.html"><span class="mpl-inner">Home</span></a></li>
+          <li><a href="index.html#work"><span class="mpl-inner">Work</span></a></li>
+          <li><a href="about.html"><span class="mpl-inner">About</span></a></li>
+          <li><a href="contact.html"><span class="mpl-inner">Contact</span></a></li>
+        </ul>
+      </div>
+      <div class="mp-bottom">
+        <span class="mp-label">Socials</span>
+        <div class="mp-socials">
           <a href="https://linkedin.com/in/" target="_blank" rel="noopener">LinkedIn</a>
           <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
           <a href="https://malt.fr/" target="_blank" rel="noopener">Malt</a>
         </div>
-        <div class="menu-footer-right">
-          <span>hello@gabingoude.fr</span>
-        </div>
       </div>
-    </nav>
+    </div>
   `;
-  document.body.appendChild(overlay);
+  document.body.appendChild(panel);
 
   // ── Inject styles ──
   const style = document.createElement('style');
   style.textContent = `
-    #menuOverlay {
+    #menuPanel {
       position: fixed;
-      inset: 0;
+      top: 0; right: 0;
+      width: 360px;
+      height: 100vh;
       background: #1a1a1a;
       z-index: 800;
-      display: flex;
-      align-items: center;
-      padding: 44px;
-      pointer-events: none;
+      transform: translateX(100%);
       visibility: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
-    .menu-nav {
-      width: 100%;
+    .mp-inner {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       height: 100%;
-      padding: 80px 0 0;
+      padding: 44px 44px 40px;
     }
 
-    .menu-links {
+    .mp-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.25);
+      margin-bottom: 20px;
+    }
+
+    .mp-links {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 0;
+      margin-top: 8px;
     }
 
-    .menu-item {
+    .mp-links li {
       overflow: hidden;
-      border-top: 1px solid rgba(255,255,255,.08);
-      padding: 18px 0;
+      border-top: 1px solid rgba(255,255,255,.07);
+      padding: 10px 0;
+    }
+    .mp-links li:last-child {
+      border-bottom: 1px solid rgba(255,255,255,.07);
     }
 
-    .menu-item:last-child {
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-
-    .menu-item a {
+    .mp-links a {
       display: block;
-      font-size: clamp(52px, 10vw, 130px);
+      font-size: clamp(38px, 5.5vw, 62px);
       font-weight: 600;
       color: #fff;
       text-decoration: none;
-      letter-spacing: -.04em;
-      line-height: 1;
-      transition: opacity .25s;
+      letter-spacing: -.03em;
+      line-height: 1.05;
+      transition: opacity .2s;
     }
+    .mp-links a:hover { opacity: .35; }
 
-    .menu-item a:hover { opacity: .4; }
-
-    .ml-inner {
+    .mpl-inner {
       display: block;
       transform: translateY(110%);
     }
 
-    .menu-footer {
+    .mp-bottom { }
+
+    .mp-socials {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      padding-bottom: 8px;
-      opacity: 0;
+      gap: 20px;
+      flex-wrap: wrap;
     }
 
-    .menu-footer-left {
-      display: flex;
-      gap: 28px;
-    }
-
-    .menu-footer-left a,
-    .menu-footer-right span {
+    .mp-socials a {
       font-size: 12px;
       color: rgba(255,255,255,.35);
       text-decoration: none;
-      letter-spacing: .06em;
+      letter-spacing: .04em;
       transition: color .2s;
     }
+    .mp-socials a:hover { color: #fff; }
 
-    .menu-footer-left a:hover { color: #fff; }
+    /* Close button — blue circle like Dennis */
+    #menuClose {
+      position: fixed;
+      top: 22px;
+      right: 22px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #3d5af1;
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(.7);
+      transition: background .2s, transform .2s;
+    }
+    #menuClose:hover { background: #2a45d4; transform: scale(1.06) !important; }
 
-    /* Hamburger transforms to ✕ */
-    #hamBtn.open span:nth-child(1) {
-      transform: translateY(6.5px) rotate(45deg);
+    /* Backdrop */
+    #menuBackdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 790;
+      opacity: 0;
+      pointer-events: none;
     }
-    #hamBtn.open span:nth-child(2) {
-      transform: translateY(-6.5px) rotate(-45deg);
-    }
-    #hamBtn span {
-      transition: transform .35s cubic-bezier(.16,1,.3,1);
-    }
+
+    /* Ham morphs to hidden when panel open */
+    #hamBtn.open { opacity: 0 !important; pointer-events: none !important; }
   `;
   document.head.appendChild(style);
 
-  // ── State ──
+  // ── Close button ──
+  const closeBtn = document.createElement('button');
+  closeBtn.id = 'menuClose';
+  closeBtn.innerHTML = '✕';
+  document.body.appendChild(closeBtn);
+
+  // ── Backdrop ──
+  const backdrop = document.createElement('div');
+  backdrop.id = 'menuBackdrop';
+  document.body.appendChild(backdrop);
+
+  const hamBtn  = document.getElementById('hamBtn');
+  const items   = panel.querySelectorAll('.mpl-inner');
+  const bottom  = panel.querySelector('.mp-bottom');
+
   let isOpen = false;
-  const hamBtn = document.getElementById('hamBtn');
-  const items  = overlay.querySelectorAll('.ml-inner');
-  const footer = overlay.querySelector('.menu-footer');
 
   // ── Open ──
   function open() {
     isOpen = true;
     hamBtn.classList.add('open');
-    overlay.style.visibility = 'visible';
-    overlay.style.pointerEvents = 'auto';
 
-    gsap.fromTo(overlay,
-      { clipPath: 'inset(0 0 100% 0)' },
-      { clipPath: 'inset(0 0 0% 0)', duration: .7, ease: 'power4.inOut' }
-    );
+    panel.style.visibility = 'visible';
+    backdrop.style.pointerEvents = 'auto';
 
+    // Panel slides in
+    gsap.to(panel, { x: 0, duration: .65, ease: 'power4.inOut' });
+
+    // Backdrop fades in
+    gsap.to(backdrop, { opacity: 1, duration: .4 });
+
+    // Links slide up with stagger
     gsap.fromTo(items,
       { y: '110%' },
-      { y: '0%', duration: .8, ease: 'power4.out', stagger: .07, delay: .35 }
+      { y: '0%', duration: .7, ease: 'power4.out', stagger: .07, delay: .3 }
     );
 
-    gsap.to(footer,
-      { opacity: 1, duration: .6, delay: .75, ease: 'power2.out' }
+    // Bottom fades in
+    gsap.fromTo(bottom,
+      { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: .5, delay: .65, ease: 'power2.out' }
     );
 
-    document.body.style.overflow = 'hidden';
+    // Close btn appears
+    gsap.to(closeBtn, {
+      opacity: 1, scale: 1, duration: .35, delay: .3, ease: 'back.out(1.4)',
+      pointerEvents: 'auto'
+    });
+    closeBtn.style.pointerEvents = 'auto';
   }
 
   // ── Close ──
@@ -161,42 +211,37 @@ const Menu = (() => {
     isOpen = false;
     hamBtn.classList.remove('open');
 
-    gsap.to(items, { y: '110%', duration: .4, ease: 'power3.in', stagger: .04 });
-    gsap.to(footer, { opacity: 0, duration: .25 });
+    gsap.to(items, { y: '110%', duration: .35, ease: 'power3.in', stagger: .04 });
+    gsap.to(bottom, { opacity: 0, duration: .2 });
+    gsap.to(closeBtn, { opacity: 0, scale: .7, duration: .25, pointerEvents: 'none' });
+    closeBtn.style.pointerEvents = 'none';
 
-    gsap.to(overlay, {
-      clipPath: 'inset(0 0 100% 0)',
-      duration: .65,
+    gsap.to(backdrop, { opacity: 0, duration: .4 });
+
+    gsap.to(panel, {
+      x: '100%',
+      duration: .6,
       ease: 'power4.inOut',
       delay: .1,
-      onComplete: () => {
-        overlay.style.visibility = 'hidden';
-        overlay.style.pointerEvents = 'none';
-      }
+      onComplete: () => { panel.style.visibility = 'hidden'; }
     });
 
-    document.body.style.overflow = '';
+    backdrop.style.pointerEvents = 'none';
   }
 
-  // ── Toggle ──
+  // ── Init ──
+  gsap.set(panel, { x: '100%' });
+  gsap.set(bottom, { opacity: 0 });
+
   hamBtn.addEventListener('click', () => isOpen ? close() : open());
+  closeBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && isOpen) close(); });
 
-  // ── Close on link click (transition handles navigation) ──
-  overlay.querySelectorAll('a[href]').forEach(a => {
-    a.addEventListener('click', () => {
-      // Let page-transition.js handle the nav, just reset the body overflow
-      document.body.style.overflow = '';
-    });
+  // Close on link click
+  panel.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => { document.body.style.overflow = ''; });
   });
-
-  // ── ESC key ──
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && isOpen) close();
-  });
-
-  // Init clip state
-  gsap.set(overlay, { clipPath: 'inset(0 0 100% 0)' });
 
   return { open, close };
-
 })();
