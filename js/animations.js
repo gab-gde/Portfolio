@@ -90,6 +90,11 @@ const Animations = (() => {
   const aboutBubble = document.getElementById('aboutBubble');
   const hamBtn      = document.getElementById('hamBtn');
 
+  // Force hidden on load
+  gsap.set([aboutBubble, hamBtn], { opacity: 0 });
+  aboutBubble.classList.remove('vis');
+  hamBtn.classList.remove('vis');
+
   ScrollTrigger.create({
     trigger: '.work-section',
     start: 'top 68%',
