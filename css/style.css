@@ -230,10 +230,10 @@ body.c-proj  #curR { opacity: 0; }
 
 .photo-inner img {
   position: absolute;
-  top: 0;
+  top: -2%;
   left: 50%;
   transform: translateX(-50%);
-  width: 100%;
+  width: 105%;
   height: auto;
   max-width: none;
   object-fit: cover;
@@ -311,7 +311,8 @@ body.c-proj  #curR { opacity: 0; }
 .name-clip {
   position: absolute;
   bottom: 60px;
-  left: 0; right: 0;
+  left: -20%;
+  right: -20%;
   overflow: hidden;
   z-index: 20;
   pointer-events: none;

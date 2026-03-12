@@ -46,18 +46,37 @@ const Animations = (() => {
   }
 
   /* ──────────────────────────────────────
-     2. HERO NAME — slides left on scroll
+     2. HERO NAME — scroll-direction marquee (like Dennis Snellenberg)
   ────────────────────────────────────── */
-  gsap.to('#heroName', {
-    x: '-8%',
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '.hero',
-      start: 'top top',
-      end:   'bottom top',
-      scrub: 1.6,
+  (function() {
+    const nameEl = document.getElementById('heroName');
+    if (!nameEl) return;
+
+    let currentX = 0;
+    let targetSpeed = -0.6;  // base auto-scroll speed (px/frame) — moves left
+    let currentSpeed = -0.6;
+    let lastScroll = window.scrollY;
+
+    function onScroll() {
+      const newScroll = window.scrollY;
+      const delta = newScroll - lastScroll;
+      lastScroll = newScroll;
+      // Scroll down → move left faster, scroll up → move right
+      targetSpeed = -0.6 + (delta * -0.35);
     }
-  });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    function tick() {
+      // Ease current speed toward target, then decay target back to base
+      currentSpeed += (targetSpeed - currentSpeed) * 0.06;
+      targetSpeed += (-0.6 - targetSpeed) * 0.03;
+      currentX += currentSpeed;
+      nameEl.style.transform = 'translateX(' + currentX + 'px)';
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
 
   /* ──────────────────────────────────────
      3. PHOTO — parallax
