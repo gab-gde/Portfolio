@@ -603,7 +603,7 @@ body.c-proj  #curR { opacity: 0; }
 
 .clip-line {
   display: block;
-  transform: translateY(110%);
+  /* initial translateY set by GSAP fromTo */
 }
 
 .about-body {
@@ -724,10 +724,4 @@ footer p {
   color: #c8c8c8;
 }
 
-/* ═══════════════════════════════════════
-   GSAP — initial hidden states
-═══════════════════════════════════════ */
-.g-init {
-  opacity: 0;
-  transform: translateY(26px);
-}
+/* g-init — initial states handled by GSAP (fromTo), not CSS */

@@ -9,11 +9,34 @@ gsap.registerPlugin(ScrollTrigger);
 const Animations = (() => {
 
   /* ──────────────────────────────────────
+     HELPER — fade in any element when it enters viewport
+  ────────────────────────────────────── */
+  function fadeIn(el, delay = 0) {
+    gsap.fromTo(el,
+      { opacity: 0, y: 28 },
+      {
+        opacity: 1, y: 0,
+        duration: .9,
+        delay,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 88%',
+          // Once the animation plays, kill the trigger
+          toggleActions: 'play none none none',
+        }
+      }
+    );
+  }
+
+  /* ──────────────────────────────────────
      1. HERO INTRO — called after preloader
   ────────────────────────────────────── */
   function runIntro() {
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    // Refresh all trigger positions now that preloader is gone
+    ScrollTrigger.refresh();
 
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
     tl.fromTo('#heroNav',   { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: .8  }, 0.1)
       .fromTo('#heroName',  { opacity: 0, y: 70  }, { opacity: 1, y: 0, duration: 1.3 }, 0.28)
       .fromTo('#heroPhoto', { opacity: 0, y: 55  }, { opacity: 1, y: 0, duration: 1.2 }, 0.36)
@@ -23,7 +46,7 @@ const Animations = (() => {
   }
 
   /* ──────────────────────────────────────
-     2. HERO NAME — slides left on scroll (Dennis style)
+     2. HERO NAME — slides left on scroll
   ────────────────────────────────────── */
   gsap.to('#heroName', {
     x: '-8%',
@@ -37,7 +60,7 @@ const Animations = (() => {
   });
 
   /* ──────────────────────────────────────
-     3. PHOTO INNER — parallax (moves slower than page)
+     3. PHOTO — parallax
   ────────────────────────────────────── */
   gsap.to('#photoInner', {
     y: '-12%',
@@ -51,30 +74,27 @@ const Animations = (() => {
   });
 
   /* ──────────────────────────────────────
-     4. HERO ELEMENTS — fade out as user scrolls
+     4. HERO ELEMENTS — fade out on scroll
   ────────────────────────────────────── */
   gsap.to('#heroRole', {
     y: -68, opacity: 0, ease: 'none',
     scrollTrigger: { trigger: '.hero', start: 'top top', end: '36% top', scrub: true }
   });
-
   gsap.to('#heroArrow', {
     y: -48, opacity: 0, ease: 'none',
     scrollTrigger: { trigger: '.hero', start: 'top top', end: '26% top', scrub: true }
   });
-
   gsap.to('#locBadge', {
     y: 26, opacity: 0, ease: 'none',
     scrollTrigger: { trigger: '.hero', start: '6% top', end: '33% top', scrub: true }
   });
-
   gsap.to('#heroNav', {
     opacity: 0, y: -12, ease: 'none',
     scrollTrigger: { trigger: '.hero', start: '16% top', end: '40% top', scrub: true }
   });
 
   /* ──────────────────────────────────────
-     5. FLOATING UI — appears after hero (Dennis style)
+     5. FLOATING UI
   ────────────────────────────────────── */
   const aboutBubble = document.getElementById('aboutBubble');
   const hamBtn      = document.getElementById('hamBtn');
@@ -85,9 +105,7 @@ const Animations = (() => {
     onEnter() {
       aboutBubble.classList.add('vis');
       hamBtn.classList.add('vis');
-      gsap.to([aboutBubble, hamBtn], {
-        opacity: 1, duration: .5, stagger: .07, ease: 'power2.out'
-      });
+      gsap.to([aboutBubble, hamBtn], { opacity: 1, duration: .5, stagger: .07, ease: 'power2.out' });
     },
     onLeaveBack() {
       aboutBubble.classList.remove('vis');
@@ -99,40 +117,47 @@ const Animations = (() => {
   /* ──────────────────────────────────────
      6. WORK LABEL
   ────────────────────────────────────── */
-  gsap.to('.work-label', {
-    opacity: 1, y: 0, duration: .85, ease: 'power3.out',
-    scrollTrigger: { trigger: '.work-label', start: 'top 88%' }
-  });
+  gsap.fromTo('.work-label',
+    { opacity: 0, y: 26 },
+    {
+      opacity: 1, y: 0, duration: .85, ease: 'power3.out',
+      scrollTrigger: { trigger: '.work-label', start: 'top 88%', toggleActions: 'play none none none' }
+    }
+  );
 
   /* ──────────────────────────────────────
-     7. PROJECT ITEMS — stagger + horizontal offset
+     7. PROJECT ITEMS
   ────────────────────────────────────── */
   document.querySelectorAll('.project-item').forEach((item, i) => {
-    // Fade in stagger
-    gsap.to(item, {
-      opacity: 1, y: 0, duration: .9, ease: 'power3.out', delay: i * .07,
-      scrollTrigger: { trigger: '.projects-list', start: 'top 83%' }
-    });
+    gsap.fromTo(item,
+      { opacity: 0, y: 26 },
+      {
+        opacity: 1, y: 0, duration: .9, ease: 'power3.out', delay: i * .07,
+        scrollTrigger: { trigger: '.projects-list', start: 'top 83%', toggleActions: 'play none none none' }
+      }
+    );
 
-    // Name slides in from alternating sides
+    // Name slides from alternating sides on scroll
     const dir = i % 2 === 0 ? -18 : 18;
     gsap.fromTo(item.querySelector('.project-name'),
       { x: dir },
-      {
-        x: 0, ease: 'none',
+      { x: 0, ease: 'none',
         scrollTrigger: { trigger: item, start: 'top 88%', end: 'top 30%', scrub: 1.8 }
       }
     );
   });
 
   /* ──────────────────────────────────────
-     8. STATS — count-up on enter
+     8. STATS
   ────────────────────────────────────── */
   document.querySelectorAll('.stat-col').forEach((col, i) => {
-    gsap.to(col, {
-      opacity: 1, y: 0, duration: .8, ease: 'power3.out', delay: i * .06,
-      scrollTrigger: { trigger: '.stats-section', start: 'top 84%' }
-    });
+    gsap.fromTo(col,
+      { opacity: 0, y: 26 },
+      {
+        opacity: 1, y: 0, duration: .8, ease: 'power3.out', delay: i * .06,
+        scrollTrigger: { trigger: '.stats-section', start: 'top 84%', toggleActions: 'play none none none' }
+      }
+    );
   });
 
   document.querySelectorAll('.cnt').forEach(el => {
@@ -141,48 +166,49 @@ const Animations = (() => {
       start: 'top 86%',
       once: true,
       onEnter() {
-        gsap.fromTo(
-          { v: 0 },
-          {
-            v: +el.dataset.t,
-            duration: 1.6,
-            ease: 'power2.out',
-            onUpdate() { el.textContent = Math.round(this.targets()[0].v); }
-          }
-        );
+        gsap.fromTo({ v: 0 }, {
+          v: +el.dataset.t,
+          duration: 1.6,
+          ease: 'power2.out',
+          onUpdate() { el.textContent = Math.round(this.targets()[0].v); }
+        });
       }
     });
   });
 
   /* ──────────────────────────────────────
-     9. ABOUT — clip-reveal line by line
+     9. ABOUT — clip reveal
   ────────────────────────────────────── */
-  gsap.to('.clip-line', {
-    y: '0%', duration: 1.05, ease: 'power4.out', stagger: .12,
-    scrollTrigger: { trigger: '.about-section', start: 'top 78%' }
-  });
+  gsap.fromTo('.clip-line',
+    { y: '110%' },
+    {
+      y: '0%', duration: 1.05, ease: 'power4.out', stagger: .12,
+      scrollTrigger: { trigger: '.about-section', start: 'top 78%', toggleActions: 'play none none none' }
+    }
+  );
+
+  // About right column items
+  fadeIn('.about-body');
+  fadeIn('.skills-list', .1);
 
   /* ──────────────────────────────────────
-     10. GENERIC g-init FADES
+     10. CONTACT
   ────────────────────────────────────── */
-  document.querySelectorAll('.g-init').forEach(el => {
-    // Already handled individually above
-    const skip = ['.project-item', '.work-label', '.stat-col'];
-    if (skip.some(s => el.matches(s))) return;
+  gsap.fromTo('.contact-email',
+    { opacity: 0, y: 28 },
+    {
+      opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: '.contact-section', start: 'top 82%', toggleActions: 'play none none none' }
+    }
+  );
 
-    gsap.to(el, {
-      opacity: 1, y: 0, duration: .9, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 88%' }
-    });
-  });
-
-  /* ──────────────────────────────────────
-     11. CONTACT EMAIL
-  ────────────────────────────────────── */
-  gsap.to('.contact-email', {
-    opacity: 1, y: 0, duration: 1, ease: 'power3.out',
-    scrollTrigger: { trigger: '.contact-section', start: 'top 80%' }
-  });
+  gsap.fromTo('.contact-bottom',
+    { opacity: 0, y: 20 },
+    {
+      opacity: 1, y: 0, duration: .8, ease: 'power3.out',
+      scrollTrigger: { trigger: '.contact-bottom', start: 'top 90%', toggleActions: 'play none none none' }
+    }
+  );
 
   return { runIntro };
 
