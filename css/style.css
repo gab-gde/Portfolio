@@ -307,28 +307,39 @@ body.c-proj  #curR { opacity: 0; }
   font-size: 15px;
 }
 
-/* Giant name — ON TOP of photo like Dennis */
+/* Giant name — infinite scroll like Dennis Snellenberg */
 .name-clip {
   position: absolute;
   bottom: 30px;
-  left: -50%;
-  right: -50%;
-  overflow: visible;
+  left: 0;
+  right: 0;
+  overflow: hidden;
   z-index: 20;
   pointer-events: none;
 }
 
-#heroName {
-  display: block;
-  text-align: center;
+.name-slider {
+  position: relative;
   white-space: nowrap;
+  will-change: transform;
+}
+
+.name-slider p {
+  display: inline-block;
   font-size: clamp(100px, 17vw, 300px);
   font-weight: 600;
   color: rgba(255,255,255,1);
   letter-spacing: -.038em;
   line-height: 1;
-  will-change: transform;
+  margin: 0;
+  padding-right: 40px;
   user-select: none;
+}
+
+#secondName {
+  position: absolute;
+  left: 100%;
+  top: 0;
 }
 
 /* ═══════════════════════════════════════

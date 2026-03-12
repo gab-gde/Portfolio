@@ -38,7 +38,7 @@ const Animations = (() => {
 
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
     tl.fromTo('#heroNav',   { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: .8  }, 0.1)
-      .fromTo('#heroName',  { opacity: 0, y: 70  }, { opacity: 1, y: 0, duration: 1.3 }, 0.28)
+      .fromTo('#nameSlider',  { opacity: 0, y: 70  }, { opacity: 1, y: 0, duration: 1.3 }, 0.28)
       .fromTo('#heroPhoto', { opacity: 0, y: 55  }, { opacity: 1, y: 0, duration: 1.2 }, 0.36)
       .fromTo('#heroRole',  { opacity: 0, x: 28  }, { opacity: 1, x: 0, duration: .9  }, 0.56)
       .fromTo('#locBadge',  { opacity: 0, x: -22 }, { opacity: 1, x: 0, duration: .85 }, 0.64)
@@ -82,6 +82,10 @@ const Animations = (() => {
   gsap.to('#heroNav', {
     opacity: 0, y: -12, ease: 'none',
     scrollTrigger: { trigger: '.hero', start: '16% top', end: '40% top', scrub: true }
+  });
+  gsap.to('.name-clip', {
+    opacity: 0, ease: 'none',
+    scrollTrigger: { trigger: '.hero', start: '10% top', end: '36% top', scrub: true }
   });
 
   /* ──────────────────────────────────────
@@ -209,61 +213,45 @@ const Animations = (() => {
 })();
 
 /* ══════════════════════════════════════════════════════════════
-   HERO NAME MARQUEE — standalone, outside Animations module
-   Scroll down → text moves left, scroll up → text moves right
-   Auto-drifts left when idle. Wraps around edges.
+   HERO NAME — Infinite text move on scroll (Dennis Snellenberg)
+   Two copies of text, xPercent loops -100 ↔ 0, direction flips on scroll
 ══════════════════════════════════════════════════════════════ */
 (function() {
-  var nameEl = document.getElementById('heroName');
-  if (!nameEl) return;
+  var firstText = document.getElementById('firstName');
+  var secondText = document.getElementById('secondName');
+  var slider = document.getElementById('nameSlider');
+  if (!firstText || !secondText || !slider) return;
 
-  var xPos = 0;
-  var speed = 0;
-  var baseSpeed = -0.4;      // slow idle drift left
-  var scrollBoost = 0;
-  var lastY = window.pageYOffset || document.documentElement.scrollTop;
+  var xPercent = 0;
+  var direction = -1; // -1 = moving left (default)
 
-  function handleScroll() {
-    var nowY = window.pageYOffset || document.documentElement.scrollTop;
-    var delta = nowY - lastY;
-    lastY = nowY;
-    // Gentle scroll influence
-    scrollBoost += delta * -0.6;
+  // Position second text right after first
+  gsap.set(secondText, { left: secondText.getBoundingClientRect().width });
+
+  // ScrollTrigger: translates slider on scrub + reads scroll direction
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.to(slider, {
+    scrollTrigger: {
+      trigger: document.documentElement,
+      scrub: 0.25,
+      start: 0,
+      end: window.innerHeight,
+      onUpdate: function(e) { direction = e.direction * -1; }
+    },
+    x: '-500px'
+  });
+
+  function animate() {
+    if (xPercent < -100) {
+      xPercent = 0;
+    } else if (xPercent > 0) {
+      xPercent = -100;
+    }
+    gsap.set(firstText, { xPercent: xPercent });
+    gsap.set(secondText, { xPercent: xPercent });
+    requestAnimationFrame(animate);
+    xPercent += 0.1 * direction;
   }
 
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  window.addEventListener('wheel', function(e) {
-    scrollBoost += e.deltaY * -0.4;
-  }, { passive: true });
-
-  function loop() {
-    // Clamp scroll boost so it doesn't fly away
-    if (scrollBoost > 60) scrollBoost = 60;
-    if (scrollBoost < -60) scrollBoost = -60;
-
-    speed = baseSpeed + scrollBoost;
-
-    // Decay scroll boost slowly
-    scrollBoost *= 0.94;
-
-    xPos += speed;
-
-    // Wrap around: when text fully exits one side, reappear from the other
-    var textW = nameEl.offsetWidth;
-    var viewW = window.innerWidth;
-
-    // If text went fully off the left side
-    if (xPos < -textW) {
-      xPos = viewW;
-    }
-    // If text went fully off the right side
-    if (xPos > viewW) {
-      xPos = -textW;
-    }
-
-    nameEl.style.transform = 'translateX(' + xPos + 'px)';
-    requestAnimationFrame(loop);
-  }
-
-  requestAnimationFrame(loop);
+  requestAnimationFrame(animate);
 })();
