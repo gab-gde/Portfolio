@@ -186,6 +186,7 @@ body.c-proj  #curR { opacity: 0; }
   font-size: 12.5px;
   color: #1a1a1a;
   letter-spacing: .015em;
+  text-decoration: none;
 }
 
 .nav-links {
@@ -204,23 +205,22 @@ body.c-proj  #curR { opacity: 0; }
 
 .nav-links a:hover { opacity: .45; }
 
-/* Photo */
+/* Photo — fills hero, anchored bottom center, clipped by hero overflow:hidden */
 .hero-photo {
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 420px;
-  height: 92vh;
-  overflow: visible;
+  width: 560px;
+  height: 100%;
   z-index: 10;
+  pointer-events: none;
   will-change: transform;
 }
 
 .photo-inner {
   width: 100%;
-  height: 100%;
-  background: transparent;
+  height: 115%;
   position: relative;
   will-change: transform;
 }
@@ -230,8 +230,8 @@ body.c-proj  #curR { opacity: 0; }
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: auto;
   height: 100%;
+  width: auto;
   max-width: none;
   object-fit: contain;
   object-position: bottom center;
@@ -304,13 +304,13 @@ body.c-proj  #curR { opacity: 0; }
   font-size: 15px;
 }
 
-/* Giant name — behind photo, bleeds off edges */
+/* Giant name — ON TOP of photo like Dennis */
 .name-clip {
   position: absolute;
-  bottom: -10px;
+  bottom: -14px;
   left: 0; right: 0;
   overflow: hidden;
-  z-index: 5;
+  z-index: 20;
   pointer-events: none;
 }
 
@@ -318,7 +318,7 @@ body.c-proj  #curR { opacity: 0; }
   display: block;
   text-align: center;
   white-space: nowrap;
-  font-size: clamp(80px, 13.5vw, 220px);
+  font-size: clamp(80px, 13.8vw, 224px);
   font-weight: 600;
   color: rgba(255,255,255,1);
   letter-spacing: -.038em;
