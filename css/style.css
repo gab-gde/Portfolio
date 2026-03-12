@@ -209,10 +209,10 @@ body.c-proj  #curR { opacity: 0; }
 .hero-photo {
   position: absolute;
   top: 0;
-  left: 50%;
+  left: 47%;
   transform: translateX(-50%);
-  width: 70vw;
-  max-width: 1100px;
+  width: 78vw;
+  max-width: 1200px;
   min-width: 520px;
   height: 100%;
   z-index: 10;
@@ -230,10 +230,10 @@ body.c-proj  #curR { opacity: 0; }
 
 .photo-inner img {
   position: absolute;
-  top: -2%;
+  top: -3%;
   left: 50%;
   transform: translateX(-50%);
-  width: 105%;
+  width: 110%;
   height: auto;
   max-width: none;
   object-fit: cover;
@@ -310,10 +310,10 @@ body.c-proj  #curR { opacity: 0; }
 /* Giant name — ON TOP of photo like Dennis */
 .name-clip {
   position: absolute;
-  bottom: 60px;
-  left: -20%;
-  right: -20%;
-  overflow: hidden;
+  bottom: 30px;
+  left: -50%;
+  right: -50%;
+  overflow: visible;
   z-index: 20;
   pointer-events: none;
 }
@@ -322,7 +322,7 @@ body.c-proj  #curR { opacity: 0; }
   display: block;
   text-align: center;
   white-space: nowrap;
-  font-size: clamp(80px, 13.8vw, 224px);
+  font-size: clamp(100px, 17vw, 300px);
   font-weight: 600;
   color: rgba(255,255,255,1);
   letter-spacing: -.038em;

@@ -48,35 +48,7 @@ const Animations = (() => {
   /* ──────────────────────────────────────
      2. HERO NAME — scroll-direction marquee (like Dennis Snellenberg)
   ────────────────────────────────────── */
-  (function() {
-    const nameEl = document.getElementById('heroName');
-    if (!nameEl) return;
-
-    let currentX = 0;
-    let targetSpeed = -0.6;  // base auto-scroll speed (px/frame) — moves left
-    let currentSpeed = -0.6;
-    let lastScroll = window.scrollY;
-
-    function onScroll() {
-      const newScroll = window.scrollY;
-      const delta = newScroll - lastScroll;
-      lastScroll = newScroll;
-      // Scroll down → move left faster, scroll up → move right
-      targetSpeed = -0.6 + (delta * -0.35);
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    function tick() {
-      // Ease current speed toward target, then decay target back to base
-      currentSpeed += (targetSpeed - currentSpeed) * 0.06;
-      targetSpeed += (-0.6 - targetSpeed) * 0.03;
-      currentX += currentSpeed;
-      nameEl.style.transform = 'translateX(' + currentX + 'px)';
-      requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  })();
+  // Moved to standalone block below module for proper scroll access
 
   /* ──────────────────────────────────────
      3. PHOTO — parallax
@@ -234,4 +206,53 @@ const Animations = (() => {
 
   return { runIntro };
 
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   HERO NAME MARQUEE — standalone, outside Animations module
+   Scroll down → text moves left, scroll up → text moves right
+   Auto-drifts left when idle
+══════════════════════════════════════════════════════════════ */
+(function() {
+  var nameEl = document.getElementById('heroName');
+  if (!nameEl) return;
+
+  var xPos = 0;
+  var speed = 0;
+  var baseSpeed = -1.2;      // idle drift left (px per frame)
+  var scrollBoost = 0;       // extra speed from scroll
+  var lastY = window.pageYOffset || document.documentElement.scrollTop;
+
+  // Listen to raw scroll (works even without Lenis)
+  function handleScroll() {
+    var nowY = window.pageYOffset || document.documentElement.scrollTop;
+    var delta = nowY - lastY;
+    lastY = nowY;
+    // scroll down (delta > 0) → push left (negative), scroll up → push right (positive)
+    scrollBoost += delta * -2.5;
+  }
+
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  // Also listen to wheel for smoother response
+  window.addEventListener('wheel', function(e) {
+    scrollBoost += e.deltaY * -1.5;
+  }, { passive: true });
+
+  function loop() {
+    // Clamp scroll boost
+    if (scrollBoost > 200) scrollBoost = 200;
+    if (scrollBoost < -200) scrollBoost = -200;
+
+    // Combine base drift + scroll boost
+    speed = baseSpeed + scrollBoost;
+
+    // Decay scroll boost back to 0
+    scrollBoost *= 0.92;
+
+    xPos += speed;
+    nameEl.style.transform = 'translateX(' + xPos + 'px)';
+    requestAnimationFrame(loop);
+  }
+
+  requestAnimationFrame(loop);
 })();
