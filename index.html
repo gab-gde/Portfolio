@@ -3,49 +3,21 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  <!-- SEO -->
   <title>Gabin Goude — Full-Stack Developer</title>
-  <meta name="description" content="Freelance Full-Stack Developer based in Paris. Building fast, scalable web applications with Next.js, React, Node.js and more."/>
-  <meta name="keywords" content="développeur freelance, full-stack, Next.js, React, Node.js, Paris"/>
-  <meta name="author" content="Gabin Goude"/>
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Gabin Goude — Full-Stack Developer"/>
-  <meta property="og:description" content="Freelance Full-Stack Developer based in Paris."/>
-  <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://gabingoude.fr"/>
-  <!-- <meta property="og:image" content="https://gabingoude.fr/assets/images/og.jpg"/> -->
-
-  <!-- Favicon -->
-  <!-- <link rel="icon" href="/assets/images/favicon.ico"/> -->
-
-  <!-- Fonts -->
+  <meta name="description" content="Freelance Full-Stack Developer based in Paris. Building fast, scalable web applications."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-
-  <!-- Styles -->
   <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
 
-  <!-- ═══ PRELOADER ═══ -->
-  <div id="preloader">
-    <div class="pre-word"><span id="preTxt">Gabin Goude</span></div>
-    <div class="pre-line-wrap"><div class="pre-line" id="preLine"></div></div>
-    <div class="pre-pct" id="prePct">0%</div>
-  </div>
-
-  <!-- ═══ CURSOR ═══ -->
   <div id="cur"></div>
   <div id="curR"></div>
 
-  <!-- ═══ FLOATING UI (Dennis style) ═══ -->
-  <div id="aboutBubble">About me</div>
+  <a href="about.html" id="aboutBubble">About me</a>
   <div id="hamBtn"><span></span><span></span></div>
 
-  <!-- ═══ PREVIEW CARD ═══ -->
   <div id="previewCard">
     <div class="preview-bg" id="pBg">
       <div class="preview-view">View</div>
@@ -53,26 +25,19 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════
-       HERO
-  ═══════════════════════════════════════ -->
   <section class="hero" id="hero">
     <nav id="heroNav">
-      <span class="nav-copy">© Code by Gabin Goude</span>
+      <a href="index.html" class="nav-copy">© Code by Gabin Goude</a>
       <ul class="nav-links">
         <li><a href="#work">Work</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
       </ul>
     </nav>
 
-    <!-- Replace the placeholder div with your actual photo -->
     <div class="hero-photo" id="heroPhoto">
       <div class="photo-inner" id="photoInner">
-        <!--
-          PHOTO: Replace this block with:
-          <img src="assets/images/photo.jpg" alt="Gabin Goude" />
-        -->
+        <!-- <img src="assets/images/photo.jpg" alt="Gabin Goude" /> -->
         <span class="photo-icon">👤</span>
         <span class="photo-hint">Your photo here</span>
       </div>
@@ -95,78 +60,53 @@
     </div>
   </section>
 
-  <!-- ═══ MARQUEE ═══ -->
   <div class="marquee-strip">
     <div class="marquee-track" id="mqTrack"></div>
   </div>
 
-  <!-- ═══════════════════════════════════════
-       WORK
-  ═══════════════════════════════════════ -->
   <section class="work-section" id="work">
-    <p class="work-label g-init">Recent Work</p>
+    <p class="work-label">Recent Work</p>
     <ul class="projects-list">
-
-      <li class="project-item g-init"
-          data-color="#101018"
-          data-label="Interaction & Development"
-          data-href="#">
+      <li class="project-item" data-color="#101018" data-label="Interaction & Development" data-href="#">
         <span class="project-name">PROJECT ONE</span>
         <span class="project-cat">Interaction &amp; Development</span>
       </li>
-
-      <li class="project-item g-init"
-          data-color="#1b1208"
-          data-label="Design & Development"
-          data-href="#">
+      <li class="project-item" data-color="#1b1208" data-label="Design & Development" data-href="#">
         <span class="project-name">The Project Two</span>
         <span class="project-cat">Design &amp; Development</span>
       </li>
-
-      <li class="project-item g-init"
-          data-color="#0c1520"
-          data-label="Design & Development"
-          data-href="#">
+      <li class="project-item" data-color="#0c1520" data-label="Design & Development" data-href="#">
         <span class="project-name">PROJECT THREE™</span>
         <span class="project-cat">Design &amp; Development</span>
       </li>
-
-      <li class="project-item g-init"
-          data-color="#0f160e"
-          data-label="Backend & API"
-          data-href="#">
+      <li class="project-item" data-color="#0f160e" data-label="Backend & API" data-href="#">
         <span class="project-name">Project Four</span>
         <span class="project-cat">Backend &amp; API</span>
       </li>
-
     </ul>
   </section>
 
-  <!-- ═══ STATS ═══ -->
   <div class="stats-section">
-    <div class="stat-col g-init">
+    <div class="stat-col">
       <span class="stat-num"><span class="cnt" data-t="3">0</span><span class="stat-sup">+</span></span>
       <span class="stat-lbl">Years experience</span>
     </div>
-    <div class="stat-col g-init">
+    <div class="stat-col">
       <span class="stat-num"><span class="cnt" data-t="20">0</span><span class="stat-sup">+</span></span>
       <span class="stat-lbl">Projects delivered</span>
     </div>
-    <div class="stat-col g-init">
+    <div class="stat-col">
       <span class="stat-num"><span class="cnt" data-t="12">0</span><span class="stat-sup">+</span></span>
       <span class="stat-lbl">Happy clients</span>
     </div>
-    <div class="stat-col g-init">
+    <div class="stat-col">
       <span class="stat-num"><span class="cnt" data-t="100">0</span><span class="stat-sup">%</span></span>
       <span class="stat-lbl">Remote ready</span>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════
-       ABOUT
-  ═══════════════════════════════════════ -->
-  <section class="about-section" id="about">
-    <div class="about-left">
+  <section class="about-strip">
+    <div class="about-strip-inner">
       <span class="about-label">About me</span>
       <h2 class="about-title">
         <span class="clip-wrap"><span class="clip-line">Building products</span></span>
@@ -174,49 +114,15 @@
         <span class="clip-wrap"><span class="clip-line">want to use.</span></span>
       </h2>
     </div>
-    <div class="about-right">
-      <p class="about-body g-init">
-        Freelance full-stack developer based in Villejuif, Paris.
-        I build fast, scalable web applications — from pixel-perfect
-        frontends to robust backends. Specialized in Next.js,
-        React Native and Node.js ecosystems.
-      </p>
-      <ul class="skills-list g-init">
-        <li class="skill-row">
-          <span class="skill-name">Next.js &amp; React</span>
-          <span class="skill-lvl">Expert</span>
-        </li>
-        <li class="skill-row">
-          <span class="skill-name">Node.js &amp; Express</span>
-          <span class="skill-lvl">Expert</span>
-        </li>
-        <li class="skill-row">
-          <span class="skill-name">React Native &amp; Expo</span>
-          <span class="skill-lvl">Advanced</span>
-        </li>
-        <li class="skill-row">
-          <span class="skill-name">Supabase &amp; PostgreSQL</span>
-          <span class="skill-lvl">Advanced</span>
-        </li>
-        <li class="skill-row">
-          <span class="skill-name">TypeScript</span>
-          <span class="skill-lvl">Expert</span>
-        </li>
-        <li class="skill-row">
-          <span class="skill-name">Stripe &amp; Payments</span>
-          <span class="skill-lvl">Advanced</span>
-        </li>
-      </ul>
+    <div class="about-strip-cta">
+      <a href="about.html" class="cta-circle"><span>Learn<br>more</span></a>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════
-       CONTACT
-  ═══════════════════════════════════════ -->
-  <section class="contact-section" id="contact">
+  <section class="contact-strip" id="contact">
     <span class="contact-label">Get in touch</span>
-    <div class="contact-email g-init">
-      <a href="mailto:hello@gabingoude.fr">hello@gabingoude.fr</a>
+    <div class="contact-email">
+      <a href="contact.html">hello@gabingoude.fr</a>
     </div>
     <div class="contact-bottom">
       <ul class="contact-links">
@@ -233,15 +139,12 @@
     <p>SIREN 100 233 501</p>
   </footer>
 
-  <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <!-- App -->
-  <script src="js/smooth-scroll.js"></script>
+  <script src="js/page-transition.js"></script>
   <script src="js/cursor.js"></script>
-  <script src="js/preloader.js"></script>
   <script src="js/marquee.js"></script>
-  <script src="js/animations.js"></script>
   <script src="js/preview-card.js"></script>
+  <script src="js/animations.js"></script>
 </body>
 </html>

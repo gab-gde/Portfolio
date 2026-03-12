@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact — Gabin Goude</title>
+  <meta name="description" content="Get in touch with Gabin Goude — Freelance Full-Stack Developer, Paris."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/contact.css"/>
+</head>
+<body>
+
+  <div id="cur"></div>
+  <div id="curR"></div>
+
+  <!-- NAV -->
+  <nav class="page-nav" id="pageNav">
+    <a href="index.html" class="nav-logo">Gabin Goude</a>
+    <ul class="nav-links">
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══ CONTACT HEADER ═══ -->
+  <header class="contact-header">
+    <div class="ch-top">
+      <span class="ch-label">Get in touch</span>
+      <span class="ch-index">02 / 02</span>
+    </div>
+    <h1 class="ch-title">
+      <span class="clip-wrap"><span class="clip-line">Let's build</span></span>
+      <span class="clip-wrap"><span class="clip-line">something great</span></span>
+      <span class="clip-wrap"><span class="clip-line">together.</span></span>
+    </h1>
+  </header>
+
+  <!-- ═══ EMAIL LARGE ═══ -->
+  <section class="email-section">
+    <a href="mailto:hello@gabingoude.fr" class="email-link">
+      hello@gabingoude.fr
+    </a>
+    <span class="email-hint">↑ Click to email me directly</span>
+  </section>
+
+  <!-- ═══ CONTACT INFO + FORM ═══ -->
+  <section class="contact-body">
+
+    <div class="cb-info">
+      <div class="cb-block">
+        <span class="cb-title">Based in</span>
+        <span class="cb-value">Villejuif, Paris<br>France</span>
+      </div>
+      <div class="cb-block">
+        <span class="cb-title">Availability</span>
+        <span class="cb-value">
+          <span class="avail-dot"></span>
+          Available for projects
+        </span>
+      </div>
+      <div class="cb-block">
+        <span class="cb-title">Response time</span>
+        <span class="cb-value">Within 24 hours</span>
+      </div>
+      <div class="cb-socials">
+        <span class="cb-title">Socials</span>
+        <ul class="cb-links">
+          <li><a href="https://linkedin.com/in/" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+          <li><a href="https://github.com/" target="_blank" rel="noopener">GitHub ↗</a></li>
+          <li><a href="https://malt.fr/" target="_blank" rel="noopener">Malt ↗</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cb-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="name">Your name</label>
+          <input class="form-input" type="text" id="name" name="name" placeholder="John Doe" autocomplete="off"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Your email</label>
+          <input class="form-input" type="email" id="email" name="email" placeholder="john@company.com" autocomplete="off"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="subject">Subject</label>
+        <input class="form-input" type="text" id="subject" name="subject" placeholder="Project inquiry" autocomplete="off"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="message">Message</label>
+        <textarea class="form-input form-textarea" id="message" name="message" placeholder="Tell me about your project..."></textarea>
+      </div>
+      <button class="form-submit" type="button" id="formSubmit">
+        <span class="fs-text">Send message</span>
+        <span class="fs-arrow">↗</span>
+      </button>
+    </div>
+
+  </section>
+
+  <!-- ═══ FOOTER NAV ═══ -->
+  <section class="page-footer-nav">
+    <a href="index.html" class="pfn-next">
+      <span class="pfn-label">Back to</span>
+      <span class="pfn-title">Home ↗</span>
+    </a>
+  </section>
+
+  <footer>
+    <p>Gabin Goude — Full-Stack Developer, Paris</p>
+    <p>© 2026</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/page-transition.js"></script>
+  <script src="js/cursor.js"></script>
+  <script src="js/contact-animations.js"></script>
+</body>
+</html>

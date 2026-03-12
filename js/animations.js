@@ -177,28 +177,31 @@ const Animations = (() => {
   });
 
   /* ──────────────────────────────────────
-     9. ABOUT — clip reveal
+     9. ABOUT STRIP — clip reveal
   ────────────────────────────────────── */
   gsap.fromTo('.clip-line',
     { y: '110%' },
     {
       y: '0%', duration: 1.05, ease: 'power4.out', stagger: .12,
-      scrollTrigger: { trigger: '.about-section', start: 'top 78%', toggleActions: 'play none none none' }
+      scrollTrigger: { trigger: '.about-strip', start: 'top 78%', toggleActions: 'play none none none' }
     }
   );
 
-  // About right column items
-  fadeIn('.about-body');
-  fadeIn('.skills-list', .1);
+  gsap.fromTo('.cta-circle',
+    { opacity: 0, scale: .8 },
+    { opacity: 1, scale: 1, duration: .8, ease: 'back.out(1.4)',
+      scrollTrigger: { trigger: '.about-strip', start: 'top 78%', toggleActions: 'play none none none' }
+    }
+  );
 
   /* ──────────────────────────────────────
-     10. CONTACT
+     10. CONTACT STRIP
   ────────────────────────────────────── */
-  gsap.fromTo('.contact-email',
+  gsap.fromTo('.contact-strip .contact-email',
     { opacity: 0, y: 28 },
     {
       opacity: 1, y: 0, duration: 1, ease: 'power3.out',
-      scrollTrigger: { trigger: '.contact-section', start: 'top 82%', toggleActions: 'play none none none' }
+      scrollTrigger: { trigger: '.contact-strip', start: 'top 82%', toggleActions: 'play none none none' }
     }
   );
 

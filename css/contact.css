@@ -1,0 +1,256 @@
+/* ═══════════════════════════════════════
+   SHARED PAGE NAV — same as about.css
+═══════════════════════════════════════ */
+.page-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32px 44px;
+  z-index: 500;
+  background: rgba(255,255,255,0);
+  transition: background .3s;
+}
+
+.page-nav.scrolled { background: rgba(255,255,255,.94); backdrop-filter: blur(12px); }
+
+.nav-logo {
+  font-size: 15px; font-weight: 600; color: #1a1a1a;
+  text-decoration: none; letter-spacing: -.02em; transition: opacity .2s;
+}
+.nav-logo:hover { opacity: .45; }
+
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a {
+  font-size: 14px; color: #1a1a1a;
+  text-decoration: none; letter-spacing: .01em; transition: opacity .2s;
+}
+.nav-links a:hover { opacity: .45; }
+.nav-links a.active { border-bottom: 1px solid #1a1a1a; padding-bottom: 1px; }
+
+/* ═══════════════════════════════════════
+   CONTACT HEADER
+═══════════════════════════════════════ */
+.contact-header {
+  padding: 160px 44px 80px;
+  border-bottom: 1px solid #e4e4e4;
+}
+
+.ch-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 48px;
+}
+
+.ch-label {
+  font-size: 10.5px; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase; color: #8a8a8a;
+}
+
+.ch-index {
+  font-size: 11px; letter-spacing: .1em; color: #c8c8c8;
+}
+
+.ch-title {
+  font-size: clamp(56px, 9vw, 136px);
+  font-weight: 600; letter-spacing: -.04em;
+  line-height: .95; color: #1a1a1a;
+}
+
+/* ═══════════════════════════════════════
+   EMAIL LARGE
+═══════════════════════════════════════ */
+.email-section {
+  padding: 80px 44px;
+  border-bottom: 1px solid #e4e4e4;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.email-link {
+  font-size: clamp(32px, 5.5vw, 80px);
+  font-weight: 500;
+  letter-spacing: -.035em;
+  line-height: 1;
+  color: #1a1a1a;
+  text-decoration: none;
+  display: inline-block;
+  transition: opacity .2s;
+  position: relative;
+}
+
+.email-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: #1a1a1a;
+  transition: width .4s cubic-bezier(.16,1,.3,1);
+}
+.email-link:hover::after { width: 100%; }
+
+.email-hint {
+  font-size: 11.5px;
+  color: #c8c8c8;
+  letter-spacing: .04em;
+}
+
+/* ═══════════════════════════════════════
+   CONTACT BODY — info + form
+═══════════════════════════════════════ */
+.contact-body {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  border-bottom: 1px solid #e4e4e4;
+}
+
+.cb-info {
+  border-right: 1px solid #e4e4e4;
+  padding: 60px 44px;
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+
+.cb-block { display: flex; flex-direction: column; gap: 10px; }
+
+.cb-title {
+  font-size: 10.5px; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase; color: #8a8a8a;
+}
+
+.cb-value {
+  font-size: 15px; color: #1a1a1a; line-height: 1.6;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.avail-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #22c55e; flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+
+.cb-socials { display: flex; flex-direction: column; gap: 10px; }
+.cb-links { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.cb-links a {
+  font-size: 14px; color: #1a1a1a; text-decoration: none;
+  transition: opacity .2s;
+}
+.cb-links a:hover { opacity: .45; }
+
+/* ─── FORM ─── */
+.cb-form {
+  padding: 60px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-label {
+  font-size: 10.5px; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase; color: #8a8a8a;
+}
+
+.form-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #e4e4e4;
+  padding: 12px 0;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 15px;
+  color: #1a1a1a;
+  outline: none;
+  transition: border-color .25s;
+  width: 100%;
+  resize: none;
+}
+
+.form-input::placeholder { color: #c8c8c8; }
+.form-input:focus { border-bottom-color: #1a1a1a; }
+
+.form-textarea {
+  min-height: 140px;
+  line-height: 1.6;
+}
+
+.form-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  padding: 18px 36px;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  cursor: pointer;
+  border-radius: 100px;
+  transition: transform .2s, background .2s;
+  align-self: flex-start;
+  margin-top: 8px;
+}
+
+.form-submit:hover { transform: scale(1.03); }
+
+.fs-arrow { font-size: 16px; }
+
+/* ═══════════════════════════════════════
+   PAGE FOOTER NAV — Dennis style
+═══════════════════════════════════════ */
+.page-footer-nav { border-bottom: 1px solid #e4e4e4; }
+
+.pfn-next {
+  display: flex; flex-direction: column;
+  padding: 80px 44px; text-decoration: none;
+  transition: background .25s; cursor: pointer;
+}
+.pfn-next:hover { background: #fafafa; }
+
+.pfn-label {
+  font-size: 10.5px; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: #8a8a8a; margin-bottom: 20px; display: block;
+}
+
+.pfn-title {
+  font-size: clamp(52px, 8vw, 116px);
+  font-weight: 600; color: #1a1a1a;
+  letter-spacing: -.04em; line-height: 1; display: block;
+  transition: transform .35s cubic-bezier(.16,1,.3,1);
+}
+.pfn-next:hover .pfn-title { transform: translateX(16px); }
+
+/* ═══ FOOTER ═══ */
+footer {
+  border-top: 1px solid #e4e4e4;
+  padding: 24px 44px;
+  display: flex; justify-content: space-between;
+  align-items: center; background: #fff;
+}
+footer p { font-size: 11.5px; color: #c8c8c8; }
+
+/* ═══ CLIP LINE ═══ */
+.clip-wrap { overflow: hidden; display: block; }
+.clip-line  { display: block; }
