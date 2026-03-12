@@ -12,593 +12,174 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root {
-      --black: #0c0c0c;
-      --white: #f8f6f1;
-      --offwhite: #edeae2;
-      --olive: #4a5a3a;
-      --rust: #c45d3e;
-      --earth: #8b6f4e;
-      --moss: #2d3a24;
-      --clay: #d4a574;
-      --charcoal: #2a2a28;
-      --display: 'Syne', sans-serif;
-      --serif: 'Instrument Serif', serif;
-      --body: 'DM Sans', sans-serif;
+    :root{
+      --black:#0c0c0c;--white:#f8f6f1;--offwhite:#edeae2;
+      --olive:#4a5a3a;--rust:#c45d3e;--earth:#8b6f4e;
+      --moss:#2d3a24;--clay:#d4a574;--charcoal:#2a2a28;
+      --display:'Syne',sans-serif;--serif:'Instrument Serif',serif;--body:'DM Sans',sans-serif;
     }
-    html { overflow-x: hidden; }
-    body { font-family: var(--body); background: var(--black); color: var(--white); overflow-x: hidden; overflow-y: hidden; }
-    a { color: inherit; text-decoration: none; }
+    html{overflow-x:hidden}
+    body{font-family:var(--body);background:var(--black);color:var(--white);overflow-x:hidden;overflow-y:hidden}
+    a{color:inherit;text-decoration:none}
 
-    /* ══════════════════════════════════
-       LOADER — botanical line drawing
-    ══════════════════════════════════ */
-    .loader {
-      position: fixed; inset: 0;
-      background: var(--moss);
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .loader-text {
-      font-family: var(--serif);
-      font-size: clamp(48px, 8vw, 100px);
-      font-style: italic;
-      color: var(--clay);
-      opacity: 0;
-      letter-spacing: .04em;
-    }
-    .loader-bar-track {
-      width: 200px; height: 1px;
-      background: rgba(212,165,116,.15);
-      position: relative;
-      overflow: hidden;
-    }
-    .loader-bar {
-      width: 0; height: 100%;
-      background: var(--clay);
+    /* GRAIN OVERLAY */
+    body::after{
+      content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity:.5;
     }
 
-    /* ══════════════════════════════════
-       FLOATING NAV — minimal, side
-    ══════════════════════════════════ */
-    .side-nav {
-      position: fixed;
-      right: 28px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 90;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: flex-end;
-      mix-blend-mode: difference;
-    }
-    .side-nav-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,.4);
-      background: transparent;
-      cursor: pointer;
-      transition: all .4s;
-      position: relative;
-    }
-    .side-nav-dot.active {
-      background: #fff;
-      transform: scale(1.4);
-    }
-    .side-nav-dot:hover { border-color: #fff; }
-    .side-nav-label {
-      position: absolute;
-      right: 20px; top: 50%;
-      transform: translateY(-50%);
-      font-size: 10px;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: #fff;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .3s;
-    }
-    .side-nav-dot:hover .side-nav-label { opacity: 1; }
+    /* ── LOADER ── */
+    .loader{position:fixed;inset:0;background:var(--moss);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px}
+    .loader-text{font-family:var(--serif);font-size:clamp(48px,8vw,100px);font-style:italic;color:var(--clay);opacity:0;letter-spacing:.04em}
+    .loader-bar-track{width:200px;height:1px;background:rgba(212,165,116,.15);overflow:hidden}
+    .loader-bar{width:0;height:100%;background:var(--clay)}
 
-    .top-bar {
-      position: fixed; top: 0; left: 0; right: 0;
-      padding: 28px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 90;
-      mix-blend-mode: difference;
-    }
-    .top-logo {
-      font-family: var(--display);
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-    }
-    .top-reserve {
-      font-size: 11px;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: #fff;
-      border: 1px solid rgba(255,255,255,.3);
-      padding: 10px 28px;
-      border-radius: 100px;
-      transition: all .3s;
-      cursor: pointer;
-    }
-    .top-reserve:hover { background: #fff; color: var(--black); }
+    /* ── TOP BAR ── */
+    .top-bar{position:fixed;top:0;left:0;right:0;padding:28px 40px;display:flex;justify-content:space-between;align-items:center;z-index:90;mix-blend-mode:difference}
+    .top-logo{font-family:var(--display);font-size:16px;font-weight:700;color:#fff;letter-spacing:.2em;text-transform:uppercase}
+    .top-reserve{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,.3);padding:10px 28px;border-radius:100px;transition:all .3s;cursor:pointer}
+    .top-reserve:hover{background:#fff;color:var(--black)}
 
-    /* ══════════════════════════════════
-       HERO — text mask with image behind
-    ══════════════════════════════════ */
-    .hero-panel {
-      position: relative;
-      height: 100vh;
-      overflow: hidden;
-      background: var(--offwhite);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .hero-img-bg {
-      position: absolute; inset: 0;
-      background: url('https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=1920&q=80') center/cover;
-      opacity: 0;
-      transform: scale(1.2);
-    }
-    .hero-word {
-      font-family: var(--display);
-      font-size: clamp(120px, 22vw, 360px);
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: -.04em;
-      line-height: .85;
-      color: var(--moss);
-      z-index: 2;
-      text-align: center;
-      opacity: 0;
-      will-change: transform;
-    }
-    .hero-tagline {
-      position: absolute;
-      bottom: 60px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 3;
-      text-align: center;
-      opacity: 0;
-    }
-    .hero-tagline p {
-      font-family: var(--serif);
-      font-size: 18px;
-      font-style: italic;
-      color: var(--earth);
-    }
-    .hero-tagline small {
-      font-size: 10px;
-      letter-spacing: .35em;
-      text-transform: uppercase;
-      color: var(--earth);
-      opacity: .5;
-      display: block;
-      margin-top: 10px;
-    }
-    .hero-scroll-hint {
-      position: absolute;
-      bottom: 24px; right: 40px;
-      z-index: 3;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      opacity: 0;
-    }
-    .hero-scroll-hint span {
-      font-size: 8px;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--earth);
-      opacity: .5;
-    }
-    .hero-scroll-hint .line {
-      width: 1px; height: 40px;
-      background: var(--earth);
-      opacity: .3;
-      animation: pulse-line 1.8s ease-in-out infinite;
-    }
-    @keyframes pulse-line {
-      0%,100% { transform: scaleY(.4); opacity: .2; }
-      50% { transform: scaleY(1); opacity: .5; }
-    }
+    /* ── SIDE NAV ── */
+    .side-nav{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:90;display:flex;flex-direction:column;gap:20px;align-items:flex-end;mix-blend-mode:difference}
+    .side-nav-dot{width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:transparent;cursor:pointer;transition:all .4s;position:relative}
+    .side-nav-dot.active{background:#fff;transform:scale(1.4)}
+    .side-nav-label{position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#fff;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .3s}
+    .side-nav-dot:hover .side-nav-label{opacity:1}
 
-    /* ══════════════════════════════════
-       IMAGE REVEAL — circle expand
-    ══════════════════════════════════ */
-    .reveal-section {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      background: var(--black);
-      overflow: hidden;
-    }
-    .reveal-circle {
-      position: absolute;
-      top: 50%; left: 50%;
-      width: 100vmax; height: 100vmax;
-      transform: translate(-50%, -50%) scale(0);
-      border-radius: 50%;
-      overflow: hidden;
-      will-change: transform;
-    }
-    .reveal-circle img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
-    .reveal-text {
-      position: relative;
-      z-index: 2;
-      padding: 0 80px;
-      max-width: 700px;
-    }
-    .reveal-text .kicker {
-      font-size: 10px;
-      letter-spacing: .4em;
-      text-transform: uppercase;
-      color: var(--clay);
-      margin-bottom: 16px;
-    }
-    .reveal-text h2 {
-      font-family: var(--display);
-      font-size: clamp(36px, 4.5vw, 64px);
-      font-weight: 700;
-      line-height: 1.05;
-      text-transform: uppercase;
-      letter-spacing: -.02em;
-      margin-bottom: 20px;
-    }
-    .reveal-text h2 .italic {
-      font-family: var(--serif);
-      font-style: italic;
-      text-transform: none;
-      font-weight: 400;
-      color: var(--clay);
-    }
-    .reveal-text p {
-      font-size: 15px;
-      font-weight: 300;
-      color: rgba(248,246,241,.5);
-      line-height: 2;
-    }
+    /* ═══════════════ HERO ═══════════════ */
+    .hero-panel{position:relative;height:100vh;min-height:700px;overflow:hidden;background:var(--offwhite);display:flex;align-items:center;justify-content:center}
+    .hero-img-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=1920&q=80') center/cover;opacity:0;transform:scale(1.2)}
+    .hero-word{font-family:var(--display);font-size:clamp(120px,22vw,360px);font-weight:800;text-transform:uppercase;letter-spacing:-.04em;line-height:.85;color:var(--moss);z-index:2;text-align:center;opacity:0}
+    .hero-tagline{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);z-index:3;text-align:center;opacity:0}
+    .hero-tagline p{font-family:var(--serif);font-size:18px;font-style:italic;color:var(--earth)}
+    .hero-tagline small{font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:var(--earth);opacity:.5;display:block;margin-top:10px}
+    .hero-scroll-hint{position:absolute;bottom:24px;right:40px;z-index:3;display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0}
+    .hero-scroll-hint span{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--earth);opacity:.5}
+    .hero-scroll-hint .line{width:1px;height:40px;background:var(--earth);opacity:.3;animation:pulse-line 1.8s ease-in-out infinite}
+    @keyframes pulse-line{0%,100%{transform:scaleY(.4);opacity:.2}50%{transform:scaleY(1);opacity:.5}}
 
-    /* ══════════════════════════════════
-       DISH PARADE — full screen slides
-    ══════════════════════════════════ */
-    .dish-parade {
-      position: relative;
-      height: 100vh;
-      overflow: hidden;
-      background: var(--offwhite);
-      color: var(--black);
-    }
-    .dish-parade-pin { height: 400vh; position: relative; }
-    .dish-slide-container {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow: hidden;
-    }
-    .dish-slide {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      opacity: 0;
-    }
-    .dish-slide.active { opacity: 1; }
-    .dish-slide-img {
-      overflow: hidden;
-      position: relative;
-    }
-    .dish-slide-img img {
-      width: 100%; height: 100vh;
-      object-fit: cover;
-    }
-    .dish-slide-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 80px 80px 80px 100px;
-    }
-    .dish-num {
-      font-family: var(--display);
-      font-size: 120px;
-      font-weight: 800;
-      opacity: .06;
-      line-height: 1;
-      margin-bottom: -20px;
-    }
-    .dish-name {
-      font-family: var(--display);
-      font-size: clamp(32px, 3.5vw, 52px);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: -.02em;
-      line-height: 1.05;
-      margin-bottom: 12px;
-    }
-    .dish-name .italic {
-      font-family: var(--serif);
-      font-style: italic;
-      text-transform: none;
-      font-weight: 400;
-      color: var(--olive);
-    }
-    .dish-desc {
-      font-size: 14px;
-      font-weight: 300;
-      color: #777;
-      line-height: 1.9;
-      margin-bottom: 32px;
-      max-width: 380px;
-    }
-    .dish-price {
-      font-family: var(--serif);
-      font-size: 28px;
-      font-style: italic;
-      color: var(--rust);
-    }
-    .dish-progress {
-      position: absolute;
-      bottom: 48px; left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 8px;
-      z-index: 5;
-    }
-    .dish-progress-dot {
-      width: 32px; height: 2px;
-      background: rgba(0,0,0,.12);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .dish-progress-dot .fill {
-      width: 0; height: 100%;
-      background: var(--rust);
-      border-radius: 2px;
-    }
+    /* ═══════════════ MARQUEE — double, opposed ═══════════════ */
+    .marquee-double{overflow:hidden;background:var(--moss);padding:28px 0;border-top:1px solid rgba(212,165,116,.1);border-bottom:1px solid rgba(212,165,116,.1)}
+    .marquee-row{display:flex;white-space:nowrap}
+    .marquee-row span{font-family:var(--display);font-size:clamp(14px,2vw,24px);font-weight:700;text-transform:uppercase;color:rgba(212,165,116,.2);padding:0 28px;letter-spacing:.1em;flex-shrink:0}
+    .marquee-row .dot{font-weight:400;opacity:.4}
+    .marquee-row:first-child{animation:marqL 30s linear infinite}
+    .marquee-row:last-child{animation:marqR 30s linear infinite;margin-top:8px}
+    @keyframes marqL{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    @keyframes marqR{0%{transform:translateX(-50%)}100%{transform:translateX(0)}}
 
-    /* ══════════════════════════════════
-       QUOTE — full screen text
-    ══════════════════════════════════ */
-    .quote-section {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 80px;
-      background: var(--moss);
-      position: relative;
-      overflow: hidden;
-    }
-    .quote-bg-word {
-      position: absolute;
-      font-family: var(--display);
-      font-size: clamp(200px, 30vw, 500px);
-      font-weight: 800;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.02);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      white-space: nowrap;
-    }
-    .quote-content {
-      position: relative;
-      z-index: 2;
-      max-width: 800px;
-    }
-    .quote-content blockquote {
-      font-family: var(--serif);
-      font-size: clamp(28px, 4vw, 56px);
-      font-style: italic;
-      color: var(--white);
-      line-height: 1.4;
-      margin-bottom: 40px;
-    }
-    .quote-author {
-      font-size: 12px;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--clay);
-      font-weight: 500;
-    }
-    .quote-role {
-      font-size: 12px;
-      color: rgba(248,246,241,.3);
-      margin-top: 6px;
-    }
+    /* ═══════════════ STORY — circle reveal ═══════════════ */
+    .reveal-section{position:relative;min-height:100vh;display:flex;align-items:center;background:var(--black);overflow:hidden}
+    .reveal-circle{position:absolute;top:50%;left:50%;width:100vmax;height:100vmax;transform:translate(-50%,-50%) scale(0);border-radius:50%;overflow:hidden;will-change:transform}
+    .reveal-circle img{width:100%;height:100%;object-fit:cover;filter:brightness(.6)}
+    .reveal-text{position:relative;z-index:2;padding:0 80px;max-width:700px}
+    .reveal-text .kicker{font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--clay);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+    .reveal-text .kicker::before{content:'';width:24px;height:1px;background:var(--clay)}
+    .reveal-text h2{font-family:var(--display);font-size:clamp(36px,4.5vw,64px);font-weight:700;line-height:1.05;text-transform:uppercase;letter-spacing:-.02em;margin-bottom:20px}
+    .reveal-text h2 .italic{font-family:var(--serif);font-style:italic;text-transform:none;font-weight:400;color:var(--clay)}
+    .reveal-text p{font-size:15px;font-weight:300;color:rgba(248,246,241,.5);line-height:2}
 
-    /* ══════════════════════════════════
-       RESERVE — split diagonal
-    ══════════════════════════════════ */
-    .reserve-section {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 100vh;
-    }
-    .reserve-left {
-      background: var(--charcoal);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 80px;
-      position: relative;
-      overflow: hidden;
-    }
-    .reserve-left::after {
-      content: 'TERRA';
-      position: absolute;
-      bottom: -40px; left: -20px;
-      font-family: var(--display);
-      font-size: 220px;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.015);
-      letter-spacing: -.04em;
-    }
-    .reserve-left .kicker {
-      font-size: 10px;
-      letter-spacing: .35em;
-      text-transform: uppercase;
-      color: var(--clay);
-      margin-bottom: 16px;
-    }
-    .reserve-left h2 {
-      font-family: var(--display);
-      font-size: clamp(36px, 4vw, 60px);
-      font-weight: 700;
-      text-transform: uppercase;
-      line-height: 1;
-      margin-bottom: 16px;
-    }
-    .reserve-left h2 .italic {
-      font-family: var(--serif);
-      font-style: italic;
-      text-transform: none;
-      font-weight: 400;
-      color: var(--clay);
-    }
-    .reserve-left p {
-      font-size: 14px;
-      font-weight: 300;
-      color: rgba(255,255,255,.35);
-      line-height: 1.9;
-      max-width: 380px;
-      margin-bottom: 40px;
-    }
-    .reserve-info {
-      display: flex;
-      gap: 48px;
-      border-top: 1px solid rgba(255,255,255,.06);
-      padding-top: 32px;
-    }
-    .reserve-info div small {
-      font-size: 9px;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.25);
-      display: block;
-      margin-bottom: 6px;
-    }
-    .reserve-info div span {
-      font-size: 13px;
-      color: rgba(255,255,255,.6);
-      line-height: 1.7;
-    }
-    .reserve-right {
-      background: var(--offwhite);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 80px;
-    }
-    .reserve-right h3 {
-      font-family: var(--display);
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: var(--charcoal);
-      margin-bottom: 40px;
-    }
-    .res-form {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-    .res-form input, .res-form select {
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid rgba(0,0,0,.12);
-      padding: 16px 0;
-      font-family: var(--body);
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--charcoal);
-      outline: none;
-      transition: border-color .3s;
-      border-radius: 0;
-    }
-    .res-form input:focus, .res-form select:focus { border-color: var(--rust); }
-    .res-form input::placeholder { color: #bbb; }
-    .res-form select { color: #999; }
-    .res-form .full { grid-column: 1 / -1; }
-    .btn-reserve {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 18px 48px;
-      background: var(--charcoal);
-      color: var(--offwhite);
-      font-family: var(--body);
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      border: none;
-      cursor: pointer;
-      transition: background .3s, transform .3s;
-    }
-    .btn-reserve:hover { background: var(--rust); transform: translateY(-2px); }
+    /* ═══════════════ FULL IMAGE BREAK ═══════════════ */
+    .img-break{position:relative;height:60vh;overflow:hidden}
+    .img-break img{width:100%;height:100%;object-fit:cover;display:block}
+    .img-break-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,var(--black),transparent 30%,transparent 70%,var(--black))}
+    .img-break-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;text-align:center}
+    .img-break-text p{font-family:var(--serif);font-size:clamp(28px,4vw,52px);font-style:italic;color:var(--white);line-height:1.35}
 
-    /* ══════════════════════════════════
-       FOOTER — minimal
-    ══════════════════════════════════ */
-    .footer {
-      background: var(--black);
-      padding: 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid rgba(255,255,255,.04);
-    }
-    .footer-left {
-      font-family: var(--display);
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.2);
-    }
-    .footer-copy {
-      font-size: 10px;
-      color: rgba(255,255,255,.1);
-    }
+    /* ═══════════════ MENU — immersive cards ═══════════════ */
+    .menu-section{background:var(--offwhite);color:var(--charcoal);padding:160px 48px;position:relative;overflow:hidden}
+    .menu-section::before{content:'MENU';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--display);font-size:clamp(200px,25vw,450px);font-weight:800;text-transform:uppercase;color:rgba(0,0,0,.02);white-space:nowrap;pointer-events:none}
+    .menu-header{max-width:600px;margin-bottom:100px;position:relative;z-index:2}
+    .menu-header .kicker{font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--rust);margin-bottom:12px;display:flex;align-items:center;gap:12px}
+    .menu-header .kicker::before{content:'';width:24px;height:2px;background:var(--rust)}
+    .menu-header h2{font-family:var(--display);font-size:clamp(40px,5vw,72px);font-weight:800;text-transform:uppercase;letter-spacing:-.02em;line-height:1;margin-bottom:16px;color:var(--charcoal)}
+    .menu-header h2 .italic{font-family:var(--serif);font-style:italic;text-transform:none;font-weight:400;color:var(--olive)}
+    .menu-header p{font-size:14px;font-weight:300;color:#888;line-height:1.9}
+    .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;max-width:1100px;position:relative;z-index:2}
+    .menu-col-title{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--rust);margin-bottom:40px;padding-bottom:16px;border-bottom:2px solid var(--rust)}
+    .menu-item{margin-bottom:32px;padding-bottom:32px;border-bottom:1px solid rgba(0,0,0,.06);transition:all .3s}
+    .menu-item:hover{padding-left:12px}
+    .menu-item:last-child{border-bottom:none}
+    .menu-item-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+    .menu-item-name{font-family:var(--serif);font-size:22px;color:var(--charcoal);transition:color .3s}
+    .menu-item:hover .menu-item-name{color:var(--rust)}
+    .menu-item-price{font-family:var(--serif);font-size:20px;font-style:italic;color:var(--olive)}
+    .menu-item-desc{font-size:12px;font-weight:300;color:#999;line-height:1.7}
 
-    /* ══ RESPONSIVE ══ */
-    @media (max-width:900px) {
-      .side-nav { display: none; }
-      .hero-word { font-size: 28vw; }
-      .reveal-text { padding: 0 32px; }
-      .dish-slide { grid-template-columns: 1fr; }
-      .dish-slide-img { height: 40vh; }
-      .dish-slide-content { padding: 32px; }
-      .dish-num { font-size: 80px; }
-      .quote-section { padding: 48px; }
-      .reserve-section { grid-template-columns: 1fr; }
-      .reserve-left, .reserve-right { padding: 60px 32px; }
-      .res-form { grid-template-columns: 1fr; }
-      .footer { flex-direction: column; gap: 16px; text-align: center; }
+    /* ═══════════════ GALLERY — staggered masonry ═══════════════ */
+    .gallery-section{background:var(--black);padding:160px 48px}
+    .gallery-header{margin-bottom:80px}
+    .gallery-header .kicker{font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--clay);margin-bottom:12px;display:flex;align-items:center;gap:12px}
+    .gallery-header .kicker::before{content:'';width:24px;height:1px;background:var(--clay)}
+    .gallery-header h2{font-family:var(--display);font-size:clamp(40px,5vw,72px);font-weight:800;text-transform:uppercase;letter-spacing:-.02em;line-height:1;margin-bottom:16px}
+    .gallery-header h2 .italic{font-family:var(--serif);font-style:italic;text-transform:none;font-weight:400;color:var(--clay)}
+    .gallery-masonry{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1300px}
+    .gallery-masonry .gal-item{overflow:hidden;position:relative;cursor:pointer}
+    .gallery-masonry .gal-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s cubic-bezier(.16,1,.3,1),filter .6s}
+    .gallery-masonry .gal-item:hover img{transform:scale(1.08);filter:brightness(.8)}
+    .gal-item:nth-child(1){grid-row:span 2}
+    .gal-item:nth-child(1) img{height:100%}
+    .gal-caption{position:absolute;bottom:0;left:0;right:0;padding:24px;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);transform:translateY(100%);transition:transform .5s cubic-bezier(.16,1,.3,1)}
+    .gal-item:hover .gal-caption{transform:translateY(0)}
+    .gal-caption p{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--white)}
+
+    /* ═══════════════ CHEF QUOTE — cinematic ═══════════════ */
+    .quote-section{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px;background:var(--moss);position:relative;overflow:hidden}
+    .quote-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(45,58,36,.0) 0%,rgba(45,58,36,1) 70%);pointer-events:none}
+    .quote-bg-img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40vw;height:40vw;border-radius:50%;overflow:hidden;opacity:.15}
+    .quote-bg-img img{width:100%;height:100%;object-fit:cover}
+    .quote-bg-word{position:absolute;font-family:var(--display);font-size:clamp(200px,30vw,500px);font-weight:800;text-transform:uppercase;color:rgba(255,255,255,.015);top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap}
+    .quote-content{position:relative;z-index:2;max-width:800px}
+    .quote-content blockquote{font-family:var(--serif);font-size:clamp(28px,4vw,56px);font-style:italic;color:var(--white);line-height:1.4;margin-bottom:40px}
+    .quote-author{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--clay);font-weight:500}
+    .quote-role{font-size:12px;color:rgba(248,246,241,.3);margin-top:6px}
+
+    /* ═══════════════ RESERVE — split ═══════════════ */
+    .reserve-section{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+    .reserve-left{background:var(--charcoal);display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+    .reserve-left::after{content:'TERRA';position:absolute;bottom:-40px;left:-20px;font-family:var(--display);font-size:220px;font-weight:800;text-transform:uppercase;color:rgba(255,255,255,.015);letter-spacing:-.04em;pointer-events:none}
+    .reserve-left .kicker{font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:var(--clay);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+    .reserve-left .kicker::before{content:'';width:24px;height:1px;background:var(--clay)}
+    .reserve-left h2{font-family:var(--display);font-size:clamp(36px,4vw,60px);font-weight:700;text-transform:uppercase;line-height:1;margin-bottom:16px}
+    .reserve-left h2 .italic{font-family:var(--serif);font-style:italic;text-transform:none;font-weight:400;color:var(--clay)}
+    .reserve-left>p{font-size:14px;font-weight:300;color:rgba(255,255,255,.35);line-height:1.9;max-width:380px;margin-bottom:40px}
+    .reserve-info{display:flex;gap:48px;border-top:1px solid rgba(255,255,255,.06);padding-top:32px}
+    .reserve-info div small{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.25);display:block;margin-bottom:6px}
+    .reserve-info div span{font-size:13px;color:rgba(255,255,255,.6);line-height:1.7;display:block}
+    .reserve-right{background:var(--offwhite);display:flex;flex-direction:column;justify-content:center;padding:80px}
+    .reserve-right h3{font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--charcoal);margin-bottom:40px}
+    .res-form{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+    .res-form input,.res-form select{background:transparent;border:none;border-bottom:1px solid rgba(0,0,0,.12);padding:16px 0;font-family:var(--body);font-size:14px;font-weight:300;color:var(--charcoal);outline:none;transition:border-color .3s;border-radius:0;-webkit-appearance:none}
+    .res-form input:focus,.res-form select:focus{border-color:var(--rust)}
+    .res-form input::placeholder{color:#bbb}
+    .res-form select{color:#999}
+    .res-form .full{grid-column:1/-1}
+    .btn-reserve{display:inline-flex;align-items:center;gap:12px;padding:18px 48px;background:var(--charcoal);color:var(--offwhite);font-family:var(--body);font-size:12px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:background .3s,transform .3s}
+    .btn-reserve:hover{background:var(--rust);transform:translateY(-2px)}
+
+    /* ── FOOTER ── */
+    .footer{background:var(--black);padding:40px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.04)}
+    .footer-left{font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.2)}
+    .footer-copy{font-size:10px;color:rgba(255,255,255,.1)}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .side-nav{display:none}
+      .hero-word{font-size:28vw}
+      .reveal-text{padding:0 32px}
+      .img-break{height:40vh}
+      .menu-section{padding:100px 24px}
+      .menu-grid{grid-template-columns:1fr;gap:48px}
+      .gallery-masonry{grid-template-columns:1fr 1fr}
+      .gal-item:nth-child(1){grid-row:auto}
+      .gallery-section{padding:100px 24px}
+      .quote-section{padding:48px}
+      .reserve-section{grid-template-columns:1fr}
+      .reserve-left,.reserve-right{padding:60px 32px}
+      .res-form{grid-template-columns:1fr}
+      .footer{flex-direction:column;gap:16px;text-align:center}
     }
   </style>
 </head>
@@ -615,17 +196,18 @@
     <div class="side-nav-dot active" data-section="0"><span class="side-nav-label">Accueil</span></div>
     <div class="side-nav-dot" data-section="1"><span class="side-nav-label">Histoire</span></div>
     <div class="side-nav-dot" data-section="2"><span class="side-nav-label">Carte</span></div>
-    <div class="side-nav-dot" data-section="3"><span class="side-nav-label">Le Chef</span></div>
-    <div class="side-nav-dot" data-section="4"><span class="side-nav-label">Réserver</span></div>
+    <div class="side-nav-dot" data-section="3"><span class="side-nav-label">Galerie</span></div>
+    <div class="side-nav-dot" data-section="4"><span class="side-nav-label">Le Chef</span></div>
+    <div class="side-nav-dot" data-section="5"><span class="side-nav-label">Réserver</span></div>
   </div>
 
   <!-- TOP BAR -->
   <div class="top-bar">
-    <a href="#" class="top-logo">Terra</a>
-    <a href="#reserve" class="top-reserve" id="topReserve">Réserver</a>
+    <a href="#" class="top-logo" onclick="event.preventDefault();gsap.to(window,{duration:1,scrollTo:0,ease:'power3.inOut'})">Terra</a>
+    <a href="#" class="top-reserve" id="topReserve">Réserver</a>
   </div>
 
-  <!-- ═══ 1. HERO — massive text ═══ -->
+  <!-- ═══ HERO ═══ -->
   <section class="hero-panel" id="sec0">
     <div class="hero-img-bg" id="heroBgImg"></div>
     <h1 class="hero-word" id="heroWord">TERRA</h1>
@@ -633,16 +215,25 @@
       <p>Cuisine vivante, produits de la terre</p>
       <small>Restaurant — Paris 3e — Depuis 2021</small>
     </div>
-    <div class="hero-scroll-hint" id="heroHint">
-      <span>Scroll</span>
-      <div class="line"></div>
-    </div>
+    <div class="hero-scroll-hint" id="heroHint"><span>Scroll</span><div class="line"></div></div>
   </section>
 
-  <!-- ═══ 2. STORY — circle reveal ═══ -->
+  <!-- DOUBLE MARQUEE -->
+  <div class="marquee-double">
+    <div class="marquee-row">
+      <span>Produits Locaux</span><span class="dot">✦</span><span>Cuisine Vivante</span><span class="dot">✦</span><span>Farm to Table</span><span class="dot">✦</span><span>Terroir Français</span><span class="dot">✦</span><span>Zéro Déchet</span><span class="dot">✦</span>
+      <span>Produits Locaux</span><span class="dot">✦</span><span>Cuisine Vivante</span><span class="dot">✦</span><span>Farm to Table</span><span class="dot">✦</span><span>Terroir Français</span><span class="dot">✦</span><span>Zéro Déchet</span><span class="dot">✦</span>
+    </div>
+    <div class="marquee-row">
+      <span>Paris 3e</span><span class="dot">✦</span><span>30 Couverts</span><span class="dot">✦</span><span>Menu Saison</span><span class="dot">✦</span><span>Cuisine Ouverte</span><span class="dot">✦</span><span>Vins Nature</span><span class="dot">✦</span>
+      <span>Paris 3e</span><span class="dot">✦</span><span>30 Couverts</span><span class="dot">✦</span><span>Menu Saison</span><span class="dot">✦</span><span>Cuisine Ouverte</span><span class="dot">✦</span><span>Vins Nature</span><span class="dot">✦</span>
+    </div>
+  </div>
+
+  <!-- ═══ STORY — circle reveal ═══ -->
   <section class="reveal-section" id="sec1">
     <div class="reveal-circle" id="revealCircle">
-      <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1600&q=80" alt="Restaurant intérieur" />
+      <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1600&q=80" alt="Intérieur" />
     </div>
     <div class="reveal-text" id="revealText">
       <p class="kicker">Notre histoire</p>
@@ -651,56 +242,63 @@
     </div>
   </section>
 
-  <!-- ═══ 3. DISH PARADE — full screen slides ═══ -->
-  <div class="dish-parade-pin" id="sec2">
-    <div class="dish-slide-container" id="dishContainer">
-      <div class="dish-slide active" data-dish="0">
-        <div class="dish-slide-img"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=1000&q=80" alt="Betterave" /></div>
-        <div class="dish-slide-content">
-          <p class="dish-num">01</p>
-          <h3 class="dish-name">Betterave<br><span class="italic">en terre</span></h3>
-          <p class="dish-desc">Cuite en croûte d'argile pendant 6 heures, émulsion de chèvre frais au miel de bruyère, pousses de moutarde, jus de betterave réduit au cassis.</p>
-          <p class="dish-price">32 €</p>
-        </div>
-      </div>
-      <div class="dish-slide" data-dish="1">
-        <div class="dish-slide-img"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=1000&q=80" alt="Canard" /></div>
-        <div class="dish-slide-content">
-          <p class="dish-num">02</p>
-          <h3 class="dish-name">Canard<br><span class="italic">fumé au foin</span></h3>
-          <p class="dish-desc">Magret de canard fermier fumé au foin de Crau, purée de topinambour noisette, jus de carcasse corsé aux baies de genièvre. Un classique revisité.</p>
-          <p class="dish-price">42 €</p>
-        </div>
-      </div>
-      <div class="dish-slide" data-dish="2">
-        <div class="dish-slide-img"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=1000&q=80" alt="Cabillaud" /></div>
-        <div class="dish-slide-content">
-          <p class="dish-num">03</p>
-          <h3 class="dish-name">Cabillaud<br><span class="italic">basse température</span></h3>
-          <p class="dish-desc">Cuit à 52° pendant 18 minutes, crème de chou-fleur brûlé, câpres croustillantes, huile de persil plat. Pureté et précision.</p>
-          <p class="dish-price">38 €</p>
-        </div>
-      </div>
-      <div class="dish-slide" data-dish="3">
-        <div class="dish-slide-img"><img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=1000&q=80" alt="Dessert" /></div>
-        <div class="dish-slide-content">
-          <p class="dish-num">04</p>
-          <h3 class="dish-name">Chocolat<br><span class="italic">et terre</span></h3>
-          <p class="dish-desc">Mousse chocolat Kalingo 65%, crumble de sarrasin torréfié, sorbet betterave-cassis, éclats de fève de cacao. Notre signature dessert.</p>
-          <p class="dish-price">18 €</p>
-        </div>
-      </div>
-      <div class="dish-progress" id="dishProgress">
-        <div class="dish-progress-dot"><div class="fill"></div></div>
-        <div class="dish-progress-dot"><div class="fill"></div></div>
-        <div class="dish-progress-dot"><div class="fill"></div></div>
-        <div class="dish-progress-dot"><div class="fill"></div></div>
-      </div>
-    </div>
+  <!-- FULL IMAGE BREAK -->
+  <div class="img-break" id="imgBreak1">
+    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600&q=80" alt="Cuisine" />
+    <div class="img-break-overlay"></div>
+    <div class="img-break-text"><p>Chaque plat est un<br>paysage comestible.</p></div>
   </div>
 
-  <!-- ═══ 4. QUOTE — chef ═══ -->
-  <section class="quote-section" id="sec3">
+  <!-- ═══ MENU ═══ -->
+  <section class="menu-section" id="sec2">
+    <div class="menu-header">
+      <p class="kicker">La Carte</p>
+      <h2>Notre <span class="italic">sélection</span></h2>
+      <p>Une carte courte qui change chaque semaine selon les arrivages.</p>
+    </div>
+    <div class="menu-grid">
+      <div>
+        <p class="menu-col-title">Entrées & Partage</p>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Betterave en croûte d'argile</span><span class="menu-item-price">26 €</span></div><p class="menu-item-desc">Émulsion chèvre frais, miel de bruyère, pousses de moutarde</p></div>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Œuf parfait 64°</span><span class="menu-item-price">18 €</span></div><p class="menu-item-desc">Crème de champignons des bois, copeaux de comté 24 mois</p></div>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Tartare de veau fermier</span><span class="menu-item-price">24 €</span></div><p class="menu-item-desc">Câpres croquantes, jaune d'œuf confit, pain au levain</p></div>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Velouté de saison</span><span class="menu-item-price">16 €</span></div><p class="menu-item-desc">Légumes du potager, huile vierge, graines torréfiées</p></div>
+      </div>
+      <div>
+        <p class="menu-col-title">Plats & Desserts</p>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Canard fumé au foin de Crau</span><span class="menu-item-price">38 €</span></div><p class="menu-item-desc">Purée de topinambour noisette, jus corsé aux baies de genièvre</p></div>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Cabillaud basse température</span><span class="menu-item-price">34 €</span></div><p class="menu-item-desc">Chou-fleur brûlé, câpres croustillantes, beurre noisette</p></div>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Céleri-rave en croûte de sel</span><span class="menu-item-price">28 €</span></div><p class="menu-item-desc">Truffe noire, sauce périgueux végétale, noisettes du Piémont</p></div>
+        <div class="menu-item"><div class="menu-item-head"><span class="menu-item-name">Chocolat & terre</span><span class="menu-item-price">16 €</span></div><p class="menu-item-desc">Mousse Kalingo 65%, crumble sarrasin, sorbet betterave-cassis</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FULL IMAGE BREAK 2 -->
+  <div class="img-break" id="imgBreak2">
+    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80" alt="Table" />
+    <div class="img-break-overlay" style="background:linear-gradient(to bottom,rgba(12,12,12,1),transparent 30%,transparent 70%,rgba(12,12,12,1))"></div>
+    <div class="img-break-text"><p>30 couverts.<br>Deux services. L'intimité.</p></div>
+  </div>
+
+  <!-- ═══ GALLERY — masonry ═══ -->
+  <section class="gallery-section" id="sec3">
+    <div class="gallery-header">
+      <p class="kicker">Galerie</p>
+      <h2>L'univers <span class="italic">Terra</span></h2>
+    </div>
+    <div class="gallery-masonry">
+      <div class="gal-item"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800&q=80" alt="Plat coloré" /><div class="gal-caption"><p>Le potager dans l'assiette</p></div></div>
+      <div class="gal-item"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80" alt="Salle" style="height:280px" /><div class="gal-caption"><p>La grande table</p></div></div>
+      <div class="gal-item"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=600&q=80" alt="Dressage" style="height:280px" /><div class="gal-caption"><p>Le dressage</p></div></div>
+      <div class="gal-item"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80" alt="Cuisine" style="height:280px" /><div class="gal-caption"><p>La cuisine ouverte</p></div></div>
+      <div class="gal-item"><img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=600&q=80" alt="Dessert" style="height:280px" /><div class="gal-caption"><p>L'art sucré</p></div></div>
+    </div>
+  </section>
+
+  <!-- ═══ CHEF QUOTE ═══ -->
+  <section class="quote-section" id="sec4">
+    <div class="quote-bg-img"><img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80" alt="Chef" /></div>
     <span class="quote-bg-word">TERRA</span>
     <div class="quote-content" id="quoteContent">
       <blockquote>La cuisine n'est pas un spectacle. C'est un dialogue silencieux entre la terre, la main et la bouche.</blockquote>
@@ -709,8 +307,8 @@
     </div>
   </section>
 
-  <!-- ═══ 5. RESERVE — split ═══ -->
-  <section class="reserve-section" id="sec4">
+  <!-- ═══ RESERVE ═══ -->
+  <section class="reserve-section" id="sec5">
     <div class="reserve-left">
       <p class="kicker">Réservation</p>
       <h2>Venez<br><span class="italic">goûter</span></h2>
@@ -736,7 +334,6 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <span class="footer-left">Terra — Paris 3e</span>
     <span class="footer-copy">© 2026 Terra — Site par Gabin Goude</span>
@@ -746,11 +343,10 @@
     if('scrollRestoration' in history) history.scrollRestoration='manual';
     window.scrollTo(0,0);
     if(window.location.hash) history.replaceState(null,'',window.location.pathname);
-
-    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+    gsap.registerPlugin(ScrollTrigger,ScrollToPlugin);
 
     /* ── LOADER ── */
-    var ltl = gsap.timeline({onComplete:function(){
+    gsap.timeline({onComplete:function(){
       window.scrollTo(0,0);
       document.body.style.overflowY='auto';
       gsap.to('#loader',{yPercent:-100,duration:.9,ease:'power3.inOut',onComplete:function(){
@@ -758,111 +354,95 @@
         ScrollTrigger.refresh();
       }});
       introHero();
-    }});
-    ltl.to('#loaderText',{opacity:1,duration:.6,ease:'power2.out'})
-       .to('#loaderBar',{width:'100%',duration:1.8,ease:'power2.inOut'},.3)
-       .to({},.3);
+    }})
+    .to('#loaderText',{opacity:1,duration:.6,ease:'power2.out'})
+    .to('#loaderBar',{width:'100%',duration:1.8,ease:'power2.inOut'},.3)
+    .to({},.3);
 
     /* ── HERO INTRO ── */
     function introHero(){
-      var tl=gsap.timeline();
-      tl.fromTo('#heroWord',{opacity:0,scale:.85},{opacity:1,scale:1,duration:1.2,ease:'power3.out'})
+      gsap.timeline()
+        .fromTo('#heroWord',{opacity:0,scale:.85},{opacity:1,scale:1,duration:1.2,ease:'power3.out'})
         .to('#heroTag',{opacity:1,duration:.7,ease:'power2.out'},.5)
         .to('#heroHint',{opacity:1,duration:.5},.8);
     }
 
-    /* ── HERO — image reveals on scroll ── */
-    gsap.to('#heroBgImg',{
-      opacity:.35, scale:1, ease:'none',
-      scrollTrigger:{trigger:'.hero-panel',start:'top top',end:'bottom top',scrub:true}
-    });
-    gsap.to('#heroWord',{
-      scale:2.5, opacity:0, ease:'none',
-      scrollTrigger:{trigger:'.hero-panel',start:'20% top',end:'bottom top',scrub:true}
-    });
+    /* ── HERO SCROLL FX — image reveals + word zooms ── */
+    gsap.to('#heroBgImg',{opacity:.35,scale:1,ease:'none',
+      scrollTrigger:{trigger:'.hero-panel',start:'top top',end:'bottom top',scrub:true}});
+    gsap.to('#heroWord',{scale:3,opacity:0,ease:'none',
+      scrollTrigger:{trigger:'.hero-panel',start:'20% top',end:'bottom top',scrub:true}});
+    gsap.to('#heroTag',{y:-60,opacity:0,ease:'none',
+      scrollTrigger:{trigger:'.hero-panel',start:'30% top',end:'70% top',scrub:true}});
 
     /* ── CIRCLE REVEAL ── */
-    gsap.to('#revealCircle',{
-      scale:1.5, ease:'none',
-      scrollTrigger:{trigger:'.reveal-section',start:'top 80%',end:'center center',scrub:1}
+    gsap.to('#revealCircle',{scale:1.5,ease:'none',
+      scrollTrigger:{trigger:'.reveal-section',start:'top 80%',end:'center center',scrub:1}});
+    gsap.fromTo('#revealText',{opacity:0,x:-60},{opacity:1,x:0,duration:1,ease:'power3.out',
+      scrollTrigger:{trigger:'.reveal-section',start:'40% 80%',toggleActions:'play none none none'}});
+
+    /* ── IMAGE BREAKS — parallax ── */
+    document.querySelectorAll('.img-break img').forEach(function(img){
+      gsap.fromTo(img,{y:'-15%'},{y:'15%',ease:'none',
+        scrollTrigger:{trigger:img.parentElement,start:'top bottom',end:'bottom top',scrub:true}});
     });
-    gsap.fromTo('#revealText',{opacity:0,x:-60},{
-      opacity:1,x:0,duration:1,ease:'power3.out',
-      scrollTrigger:{trigger:'.reveal-section',start:'40% 80%',toggleActions:'play none none none'}
+    document.querySelectorAll('.img-break-text').forEach(function(el){
+      gsap.fromTo(el,{opacity:0,y:30},{opacity:1,y:0,duration:1,ease:'power3.out',
+        scrollTrigger:{trigger:el.parentElement,start:'top 60%',toggleActions:'play none none none'}});
     });
 
-    /* ── DISH PARADE — sticky slide change ── */
-    var slides=document.querySelectorAll('.dish-slide');
-    var dots=document.querySelectorAll('.dish-progress-dot .fill');
-    var dishPin=document.getElementById('dishContainer');
-
-    ScrollTrigger.create({
-      trigger:'.dish-parade-pin',
-      start:'top top',
-      end:'bottom bottom',
-      pin:dishPin,
-      onUpdate:function(self){
-        var p=self.progress;
-        var idx=Math.min(Math.floor(p*slides.length),slides.length-1);
-        slides.forEach(function(s,i){
-          s.style.opacity=i===idx?'1':'0';
-          s.classList.toggle('active',i===idx);
-        });
-        dots.forEach(function(d,i){
-          if(i<idx) d.style.width='100%';
-          else if(i===idx) d.style.width=((p*slides.length-idx)*100)+'%';
-          else d.style.width='0';
-        });
-      }
+    /* ── MENU REVEALS ── */
+    gsap.fromTo('.menu-header',{opacity:0,y:40},{opacity:1,y:0,duration:1,ease:'power3.out',
+      scrollTrigger:{trigger:'.menu-header',start:'top 85%',toggleActions:'play none none none'}});
+    gsap.utils.toArray('.menu-col-title').forEach(function(el){
+      gsap.fromTo(el,{opacity:0,x:-20},{opacity:1,x:0,duration:.7,ease:'power3.out',
+        scrollTrigger:{trigger:el,start:'top 88%',toggleActions:'play none none none'}});
+    });
+    gsap.utils.toArray('.menu-item').forEach(function(el,i){
+      gsap.fromTo(el,{opacity:0,y:24},{opacity:1,y:0,duration:.7,ease:'power3.out',delay:i*.04,
+        scrollTrigger:{trigger:el,start:'top 90%',toggleActions:'play none none none'}});
     });
 
-    /* ── QUOTE REVEAL ── */
-    gsap.fromTo('#quoteContent blockquote',{opacity:0,y:50},{
-      opacity:1,y:0,duration:1.2,ease:'power3.out',
-      scrollTrigger:{trigger:'.quote-section',start:'top 70%',toggleActions:'play none none none'}
-    });
-    gsap.fromTo('.quote-author',{opacity:0},{
-      opacity:1,duration:.6,delay:.3,
-      scrollTrigger:{trigger:'.quote-section',start:'top 60%',toggleActions:'play none none none'}
+    /* ── GALLERY — stagger ── */
+    gsap.fromTo('.gallery-header',{opacity:0,y:40},{opacity:1,y:0,duration:1,ease:'power3.out',
+      scrollTrigger:{trigger:'.gallery-header',start:'top 85%',toggleActions:'play none none none'}});
+    gsap.utils.toArray('.gal-item').forEach(function(el,i){
+      gsap.fromTo(el,{opacity:0,y:60,scale:.95},{opacity:1,y:0,scale:1,duration:1,ease:'power3.out',delay:i*.1,
+        scrollTrigger:{trigger:el,start:'top 90%',toggleActions:'play none none none'}});
     });
 
-    /* ── RESERVE REVEALS ── */
-    gsap.fromTo('.reserve-left > *',{opacity:0,y:30},{
-      opacity:1,y:0,stagger:.12,duration:.8,ease:'power3.out',
-      scrollTrigger:{trigger:'.reserve-section',start:'top 75%',toggleActions:'play none none none'}
-    });
-    gsap.fromTo('.reserve-right',{opacity:0,x:40},{
-      opacity:1,x:0,duration:1,ease:'power3.out',
-      scrollTrigger:{trigger:'.reserve-section',start:'top 70%',toggleActions:'play none none none'}
-    });
+    /* ── QUOTE ── */
+    gsap.fromTo('.quote-bg-img',{scale:.6,opacity:0},{scale:1,opacity:.15,ease:'none',
+      scrollTrigger:{trigger:'.quote-section',start:'top bottom',end:'center center',scrub:true}});
+    gsap.fromTo('#quoteContent blockquote',{opacity:0,y:50},{opacity:1,y:0,duration:1.2,ease:'power3.out',
+      scrollTrigger:{trigger:'.quote-section',start:'top 70%',toggleActions:'play none none none'}});
+    gsap.fromTo('.quote-author',{opacity:0},{opacity:1,duration:.6,delay:.3,
+      scrollTrigger:{trigger:'.quote-section',start:'top 60%',toggleActions:'play none none none'}});
+    gsap.fromTo('.quote-role',{opacity:0},{opacity:1,duration:.6,delay:.5,
+      scrollTrigger:{trigger:'.quote-section',start:'top 60%',toggleActions:'play none none none'}});
+
+    /* ── RESERVE ── */
+    gsap.fromTo('.reserve-left > *',{opacity:0,y:30},{opacity:1,y:0,stagger:.12,duration:.8,ease:'power3.out',
+      scrollTrigger:{trigger:'.reserve-section',start:'top 75%',toggleActions:'play none none none'}});
+    gsap.fromTo('.reserve-right',{opacity:0,x:40},{opacity:1,x:0,duration:1,ease:'power3.out',
+      scrollTrigger:{trigger:'.reserve-section',start:'top 70%',toggleActions:'play none none none'}});
 
     /* ── SIDE NAV ── */
     var sections=document.querySelectorAll('[id^="sec"]');
     var navDots=document.querySelectorAll('.side-nav-dot');
     sections.forEach(function(sec,i){
-      ScrollTrigger.create({
-        trigger:sec,
-        start:'top center',
-        end:'bottom center',
-        onEnter:function(){setDot(i)},
-        onEnterBack:function(){setDot(i)}
-      });
+      ScrollTrigger.create({trigger:sec,start:'top center',end:'bottom center',
+        onEnter:function(){setDot(i)},onEnterBack:function(){setDot(i)}});
     });
-    function setDot(i){
-      navDots.forEach(function(d,j){d.classList.toggle('active',j===i)});
-    }
+    function setDot(i){navDots.forEach(function(d,j){d.classList.toggle('active',j===i)})}
     navDots.forEach(function(d){
       d.addEventListener('click',function(){
-        var idx=parseInt(this.dataset.section);
-        var target=document.getElementById('sec'+idx);
-        if(target) gsap.to(window,{duration:1,scrollTo:target,ease:'power3.inOut'});
+        var t=document.getElementById('sec'+this.dataset.section);
+        if(t) gsap.to(window,{duration:1,scrollTo:t,ease:'power3.inOut'});
       });
     });
-
-    /* ── TOP RESERVE BUTTON ── */
     document.getElementById('topReserve').addEventListener('click',function(e){
-      e.preventDefault();
-      gsap.to(window,{duration:1.2,scrollTo:'#sec4',ease:'power3.inOut'});
+      e.preventDefault();gsap.to(window,{duration:1.2,scrollTo:'#sec5',ease:'power3.inOut'});
     });
   </script>
 </body>
