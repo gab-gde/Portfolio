@@ -94,26 +94,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  justify-content: flex-end;
   position: relative;
   overflow: hidden;
 }
 
 .ai-photo img {
   position: absolute;
-  inset: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top;
+  object-fit: contain;
+  object-position: bottom center;
 }
 
-.ai-photo .photo-icon { font-size: 48px; opacity: .18; position: relative; z-index:1; }
-.ai-photo .photo-hint {
-  font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
-  color: rgba(255,255,255,.3); position: relative; z-index:1;
-}
+.ai-photo .photo-icon { display: none; }
+.ai-photo .photo-hint { display: none; }
 
 .ai-photo-meta {
   padding: 24px 44px;
