@@ -1,8 +1,7 @@
 /**
- * preview-card.js
- * Dennis Snellenberg style: project color bg shows during slide transition
+ * preview-card.js — Dennis Snellenberg exact style
+ * Clean vertical slide between projects, beige frame, smooth lerp follow
  */
-
 const PreviewCard = (() => {
   const card = document.getElementById('previewCard');
   const pBg  = document.getElementById('pBg');
@@ -11,19 +10,15 @@ const PreviewCard = (() => {
   let mx = 0, my = 0;
   let pcx = 0, pcy = 0;
   let currentIndex = -1;
-  let isAnimating = false;
   let hideTimer = null;
 
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX;
-    my = e.clientY;
-  });
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
   (function tick() {
-    pcx += (mx - pcx) * 0.11;
-    pcy += (my - pcy) * 0.11;
+    pcx += (mx - pcx) * 0.09;
+    pcy += (my - pcy) * 0.09;
     card.style.left = (pcx - 240) + 'px';
-    card.style.top  = (pcy - 190) + 'px';
+    card.style.top  = (pcy - 180) + 'px';
     requestAnimationFrame(tick);
   })();
 
@@ -31,19 +26,18 @@ const PreviewCard = (() => {
 
   items.forEach((item, index) => {
     item.addEventListener('mouseenter', () => {
-      // Cancel any pending hide
       if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
 
       const newImg = item.dataset.img;
-      const bgColor = item.dataset.color || '#1a1a1a';
+      const bgColor = item.dataset.color || "#e8e5de";
       if (!newImg) return;
 
       card.classList.add('show');
+      pBg.style.background = bgColor;
       document.body.classList.add('c-proj');
 
-      // First hover or re-entering after full leave — just show
+      // First hover — just show
       if (currentIndex === -1) {
-        pBg.style.background = bgColor;
         pImg.style.transition = 'none';
         pImg.style.transform = 'translateY(0)';
         pImg.src = newImg;
@@ -54,46 +48,32 @@ const PreviewCard = (() => {
       // Same project
       if (index === currentIndex) return;
 
-      // Different project — SLIDE
-      if (isAnimating) return;
-      isAnimating = true;
-
-      var dir = index > currentIndex ? 1 : -1;
+      // Different project — clean vertical slide
+      var dir = index > currentIndex ? -1 : 1;
       currentIndex = index;
 
-      // Change bg color — visible during slide gap
-      pBg.style.background = bgColor;
+      // Slide OUT
+      pImg.style.transition = 'transform .45s cubic-bezier(.77,0,.175,1)';
+      pImg.style.transform = 'translateY(' + (dir * 100) + '%)';
 
-      // Slide OUT — organic, spring-like
-      pImg.style.transition = 'transform .7s cubic-bezier(.22,.68,0,1), opacity .5s ease-out';
-      pImg.style.transform = 'translateY(' + (dir * -50) + '%) scale(.95)';
-      pImg.style.opacity = '0';
-
+      // Swap and slide IN
       setTimeout(function() {
-        pImg.src = newImg;
         pImg.style.transition = 'none';
-        pImg.style.transform = 'translateY(' + (dir * 40) + '%) scale(.95)';
-        pImg.style.opacity = '0';
+        pImg.src = newImg;
+        pImg.style.transform = 'translateY(' + (dir * -100) + '%)';
         void pImg.offsetHeight;
-
-        // Slide IN — soft spring
-        pImg.style.transition = 'transform .75s cubic-bezier(.22,.68,0,1.02), opacity .5s ease-in';
-        pImg.style.transform = 'translateY(0) scale(1)';
-        pImg.style.opacity = '1';
-
-        setTimeout(function() { isAnimating = false; }, 750);
-      }, 300);
+        pImg.style.transition = 'transform .45s cubic-bezier(.77,0,.175,1)';
+        pImg.style.transform = 'translateY(0)';
+      }, 450);
     });
 
     item.addEventListener('mouseleave', () => {
-      // Delay the hide so moving between items keeps the card visible
       hideTimer = setTimeout(function() {
         card.classList.remove('show');
         document.body.classList.remove('c-proj');
         currentIndex = -1;
-        isAnimating = false;
         hideTimer = null;
-      }, 100);
+      }, 120);
     });
 
     item.addEventListener('click', () => {

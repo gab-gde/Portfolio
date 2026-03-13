@@ -532,31 +532,25 @@ body.c-proj  #curR { opacity: 0; }
   position: fixed;
   top: 0; left: 0;
   width: 480px;
-  height: 380px;
+  height: 360px;
   overflow: hidden;
   pointer-events: none;
   z-index: 600;
   opacity: 0;
-  transform: scale(.86) rotate(-2deg);
-  transition: opacity .25s ease, transform .3s cubic-bezier(.34,1.56,.64,1);
+  transition: opacity .35s ease;
 }
 
 #previewCard.show {
   opacity: 1;
-  transform: scale(1) rotate(0deg);
 }
 
 .preview-bg {
   width: 100%;
   height: 100%;
   position: relative;
-  background: #1a1a1a;
-  padding: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #e8e5de;
+  padding: 36px;
   overflow: hidden;
-  transition: background .3s;
 }
 
 .preview-img {
@@ -564,7 +558,6 @@ body.c-proj  #curR { opacity: 0; }
   height: 100%;
   object-fit: cover;
   display: block;
-  box-shadow: 0 8px 40px rgba(0,0,0,.12);
   will-change: transform;
 }
 
