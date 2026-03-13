@@ -1,7 +1,6 @@
 /**
  * preview-card.js
- * Image preview card — follows cursor on project hover (like Dennis Snellenberg)
- * Big visible slide up/down with beige background showing between transitions
+ * Like Dennis Snellenberg: project bg color shows during image slide transition
  */
 
 const PreviewCard = (() => {
@@ -32,13 +31,15 @@ const PreviewCard = (() => {
   items.forEach((item, index) => {
     item.addEventListener('mouseenter', () => {
       const newImg = item.dataset.img;
+      const bgColor = item.dataset.color || '#1a1a1a';
       if (!newImg) return;
 
       card.classList.add('show');
       document.body.classList.add('c-proj');
 
-      // First hover — no slide, just show
+      // First hover — just show, no slide
       if (currentIndex === -1) {
+        pBg.style.background = bgColor;
         pImg.style.transition = 'none';
         pImg.style.transform = 'translateY(0)';
         pImg.style.opacity = '1';
@@ -47,38 +48,35 @@ const PreviewCard = (() => {
         return;
       }
 
-      // Same project — no change
       if (index === currentIndex) return;
-
-      // Different project — slide animation
       if (isAnimating) return;
       isAnimating = true;
 
-      var dir = index > currentIndex ? 1 : -1; // 1=going down, -1=going up
+      var dir = index > currentIndex ? 1 : -1;
       currentIndex = index;
 
-      // Phase 1: slide current image OUT (100% of container height)
-      pImg.style.transition = 'transform .4s cubic-bezier(.76,0,.24,1), opacity .25s ease';
-      pImg.style.transform = 'translateY(' + (dir * -100) + '%)';
-      pImg.style.opacity = '0';
+      // Set new bg color immediately — it shows through as image slides out
+      pBg.style.transition = 'background .3s';
+      pBg.style.background = bgColor;
 
-      // Phase 2: after slide out, swap image, position off-screen, slide IN
+      // Slide current image out
+      pImg.style.transition = 'transform .45s cubic-bezier(.76,0,.24,1)';
+      pImg.style.transform = 'translateY(' + (dir * -100) + '%)';
+
       setTimeout(function() {
+        // Swap image, position offscreen
         pImg.src = newImg;
         pImg.style.transition = 'none';
         pImg.style.transform = 'translateY(' + (dir * 100) + '%)';
-        pImg.style.opacity = '0';
 
-        // Force reflow
         void pImg.offsetHeight;
 
-        // Slide in
-        pImg.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1), opacity .35s ease';
+        // Slide new image in
+        pImg.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1)';
         pImg.style.transform = 'translateY(0)';
-        pImg.style.opacity = '1';
 
         setTimeout(function() { isAnimating = false; }, 500);
-      }, 380);
+      }, 420);
     });
 
     item.addEventListener('mouseleave', () => {
