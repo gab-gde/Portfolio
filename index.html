@@ -127,11 +127,16 @@
       </h2>
     </div>
     <div class="about-strip-cta">
-      <a href="about.html" class="cta-circle"><span>Learn<br>more</span></a>
+      <a href="about.html" class="cta-circle magnetic-round" data-magnetic><span>Learn<br>more</span></a>
     </div>
   </section>
 
-  <section class="contact-strip" id="contact">
+  <!-- CURVE TRANSITION — white to dark -->
+  <div class="curve-transition">
+    <div class="curve-white"></div>
+  </div>
+
+  <section class="contact-strip dark-section" id="contact">
     <span class="contact-label">Get in touch</span>
     <div class="contact-email">
       <a href="contact.html">hello@gabingoude.fr</a>
@@ -146,7 +151,7 @@
     </div>
   </section>
 
-  <footer>
+  <footer class="dark-footer">
     <p>Gabin Goude — Full-Stack Developer, Paris</p>
     <p>SIREN 100 233 501</p>
   </footer>
@@ -159,5 +164,33 @@
   <script src="js/preview-card.js"></script>
   <script src="js/menu.js"></script>
   <script src="js/animations.js"></script>
+  <script>
+    // Magnetic buttons on homepage
+    document.querySelectorAll('[data-magnetic]').forEach(function(btn){
+      btn.addEventListener('mousemove',function(e){
+        var r=btn.getBoundingClientRect();
+        var x=e.clientX-r.left-r.width/2;
+        var y=e.clientY-r.top-r.height/2;
+        btn.style.transform='translate('+x*.35+'px,'+y*.35+'px)';
+      });
+      btn.addEventListener('mouseleave',function(){
+        btn.style.transform='translate(0,0)';
+      });
+    });
+    // Make aboutBubble and hamBtn magnetic too
+    ['aboutBubble','hamBtn'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(!el) return;
+      el.addEventListener('mousemove',function(e){
+        var r=el.getBoundingClientRect();
+        var x=e.clientX-r.left-r.width/2;
+        var y=e.clientY-r.top-r.height/2;
+        el.style.transform='translate('+x*.25+'px,'+y*.25+'px)';
+      });
+      el.addEventListener('mouseleave',function(){
+        el.style.transform='translate(0,0)';
+      });
+    });
+  </script>
 </body>
 </html>

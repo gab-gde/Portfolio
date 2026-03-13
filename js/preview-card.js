@@ -64,26 +64,25 @@ const PreviewCard = (() => {
       // Change bg color — visible during slide gap
       pBg.style.background = bgColor;
 
-      // Slide OUT — smoother, with slight scale
-      pImg.style.transition = 'transform .55s cubic-bezier(.4,0,.2,1), opacity .4s ease';
-      pImg.style.transform = 'translateY(' + (dir * -70) + '%) scale(.92)';
-      pImg.style.opacity = '0.3';
+      // Slide OUT — organic, spring-like
+      pImg.style.transition = 'transform .7s cubic-bezier(.22,.68,0,1), opacity .5s ease-out';
+      pImg.style.transform = 'translateY(' + (dir * -50) + '%) scale(.95)';
+      pImg.style.opacity = '0';
 
       setTimeout(function() {
-        // Swap & position offscreen
         pImg.src = newImg;
         pImg.style.transition = 'none';
-        pImg.style.transform = 'translateY(' + (dir * 60) + '%) scale(.92)';
-        pImg.style.opacity = '0.3';
+        pImg.style.transform = 'translateY(' + (dir * 40) + '%) scale(.95)';
+        pImg.style.opacity = '0';
         void pImg.offsetHeight;
 
-        // Slide IN — smooth deceleration
-        pImg.style.transition = 'transform .6s cubic-bezier(.16,1,.3,1), opacity .45s ease';
+        // Slide IN — soft spring
+        pImg.style.transition = 'transform .75s cubic-bezier(.22,.68,0,1.02), opacity .5s ease-in';
         pImg.style.transform = 'translateY(0) scale(1)';
         pImg.style.opacity = '1';
 
-        setTimeout(function() { isAnimating = false; }, 600);
-      }, 350);
+        setTimeout(function() { isAnimating = false; }, 750);
+      }, 300);
     });
 
     item.addEventListener('mouseleave', () => {
