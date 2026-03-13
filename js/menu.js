@@ -1,10 +1,65 @@
 /**
  * menu.js
  * Side panel menu — Dennis Snellenberg style
- * Right panel, dark bg, large nav links, socials at bottom
+ * Auto-injects #aboutBubble + #hamBtn on all pages if missing.
+ * Detects path depth for correct relative links.
  */
 
 const Menu = (() => {
+
+  // ── Detect path depth for relative links ──
+  const path = window.location.pathname;
+  let prefix = '';
+  if (path.includes('/projects/')) {
+    prefix = '../../';
+  }
+
+  // ── Inject aboutBubble if missing ──
+  let aboutBubble = document.getElementById('aboutBubble');
+  if (!aboutBubble) {
+    aboutBubble = document.createElement('a');
+    aboutBubble.id = 'aboutBubble';
+    aboutBubble.href = prefix + 'about.html';
+    aboutBubble.textContent = 'About me';
+    document.body.appendChild(aboutBubble);
+  }
+
+  // ── Inject hamBtn if missing ──
+  let hamBtn = document.getElementById('hamBtn');
+  if (!hamBtn) {
+    hamBtn = document.createElement('div');
+    hamBtn.id = 'hamBtn';
+    hamBtn.innerHTML = '<span></span><span></span>';
+    document.body.appendChild(hamBtn);
+  }
+
+  // ── On subpages, show them immediately ──
+  const isHome = (
+    path === '/' ||
+    path.endsWith('/index.html') ||
+    path.endsWith('/portfolio/') ||
+    path.endsWith('/Portfolio/')
+  );
+
+  if (!isHome) {
+    aboutBubble.style.opacity = '1';
+    aboutBubble.classList.add('vis');
+    hamBtn.style.opacity = '1';
+    hamBtn.classList.add('vis');
+  }
+
+  // ── Magnetic effect on floating buttons ──
+  [aboutBubble, hamBtn].forEach(function(el) {
+    el.addEventListener('mousemove', function(e) {
+      var r = el.getBoundingClientRect();
+      var x = e.clientX - r.left - r.width / 2;
+      var y = e.clientY - r.top - r.height / 2;
+      el.style.transform = 'translate(' + x * 0.35 + 'px,' + y * 0.35 + 'px)';
+    });
+    el.addEventListener('mouseleave', function() {
+      el.style.transform = 'translate(0,0)';
+    });
+  });
 
   // ── Inject panel HTML ──
   const panel = document.createElement('div');
@@ -14,10 +69,10 @@ const Menu = (() => {
       <div class="mp-top">
         <span class="mp-label">Navigation</span>
         <ul class="mp-links">
-          <li><a href="index.html"><span class="mpl-inner">Home</span></a></li>
-          <li><a href="index.html#work"><span class="mpl-inner">Work</span></a></li>
-          <li><a href="about.html"><span class="mpl-inner">About</span></a></li>
-          <li><a href="contact.html"><span class="mpl-inner">Contact</span></a></li>
+          <li><a href="${prefix}index.html"><span class="mpl-inner">Home</span></a></li>
+          <li><a href="${prefix}index.html#work"><span class="mpl-inner">Work</span></a></li>
+          <li><a href="${prefix}about.html"><span class="mpl-inner">About</span></a></li>
+          <li><a href="${prefix}contact.html"><span class="mpl-inner">Contact</span></a></li>
         </ul>
       </div>
       <div class="mp-bottom">
@@ -116,7 +171,6 @@ const Menu = (() => {
     }
     .mp-socials a:hover { color: #fff; }
 
-    /* Close button — blue circle like Dennis */
     #menuClose {
       position: fixed;
       top: 22px;
@@ -140,7 +194,6 @@ const Menu = (() => {
     }
     #menuClose:hover { background: #2a45d4; transform: scale(1.06) !important; }
 
-    /* Backdrop */
     #menuBackdrop {
       position: fixed;
       inset: 0;
@@ -150,8 +203,11 @@ const Menu = (() => {
       pointer-events: none;
     }
 
-    /* Ham morphs to hidden when panel open */
     #hamBtn.open { opacity: 0 !important; pointer-events: none !important; }
+
+    @media (max-width: 768px) {
+      #menuPanel { width: 100%; }
+    }
   `;
   document.head.appendChild(style);
 
@@ -166,70 +222,49 @@ const Menu = (() => {
   backdrop.id = 'menuBackdrop';
   document.body.appendChild(backdrop);
 
-  const hamBtn  = document.getElementById('hamBtn');
-  const items   = panel.querySelectorAll('.mpl-inner');
-  const bottom  = panel.querySelector('.mp-bottom');
+  const items  = panel.querySelectorAll('.mpl-inner');
+  const bottom = panel.querySelector('.mp-bottom');
 
   let isOpen = false;
 
-  // ── Open ──
   function open() {
     isOpen = true;
     hamBtn.classList.add('open');
-
     panel.style.visibility = 'visible';
     backdrop.style.pointerEvents = 'auto';
 
-    // Panel slides in
     gsap.to(panel, { x: 0, duration: .65, ease: 'power4.inOut' });
-
-    // Backdrop fades in
     gsap.to(backdrop, { opacity: 1, duration: .4 });
-
-    // Links slide up with stagger
     gsap.fromTo(items,
       { y: '110%' },
       { y: '0%', duration: .7, ease: 'power4.out', stagger: .07, delay: .3 }
     );
-
-    // Bottom fades in
     gsap.fromTo(bottom,
       { opacity: 0, y: 16 },
       { opacity: 1, y: 0, duration: .5, delay: .65, ease: 'power2.out' }
     );
-
-    // Close btn appears
     gsap.to(closeBtn, {
-      opacity: 1, scale: 1, duration: .35, delay: .3, ease: 'back.out(1.4)',
-      pointerEvents: 'auto'
+      opacity: 1, scale: 1, duration: .35, delay: .3, ease: 'back.out(1.4)'
     });
     closeBtn.style.pointerEvents = 'auto';
   }
 
-  // ── Close ──
   function close() {
     isOpen = false;
     hamBtn.classList.remove('open');
 
     gsap.to(items, { y: '110%', duration: .35, ease: 'power3.in', stagger: .04 });
     gsap.to(bottom, { opacity: 0, duration: .2 });
-    gsap.to(closeBtn, { opacity: 0, scale: .7, duration: .25, pointerEvents: 'none' });
+    gsap.to(closeBtn, { opacity: 0, scale: .7, duration: .25 });
     closeBtn.style.pointerEvents = 'none';
-
     gsap.to(backdrop, { opacity: 0, duration: .4 });
-
     gsap.to(panel, {
-      x: '100%',
-      duration: .6,
-      ease: 'power4.inOut',
-      delay: .1,
+      x: '100%', duration: .6, ease: 'power4.inOut', delay: .1,
       onComplete: () => { panel.style.visibility = 'hidden'; }
     });
-
     backdrop.style.pointerEvents = 'none';
   }
 
-  // ── Init ──
   gsap.set(panel, { x: '100%' });
   gsap.set(bottom, { opacity: 0 });
 
@@ -237,11 +272,6 @@ const Menu = (() => {
   closeBtn.addEventListener('click', close);
   backdrop.addEventListener('click', close);
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && isOpen) close(); });
-
-  // Close on link click
-  panel.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => { document.body.style.overflow = ''; });
-  });
 
   return { open, close };
 })();

@@ -93,6 +93,9 @@
 </head>
 <body>
 
+  <div id="cur"></div>
+  <div id="curR"></div>
+
 <nav>
     <a href="../../index.html" class="logo-wrap">
       <span class="logo-c">©</span>
@@ -146,6 +149,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="../../js/page-transition.js"></script>
+  <script src="../../js/cursor.js"></script>
+  <script src="../../js/menu.js"></script>
   <script>
     var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('vis');o.unobserve(x.target)}})},{threshold:.06,rootMargin:'0px 0px -40px 0px'});
     document.querySelectorAll('.rv').forEach(function(el){o.observe(el)});
