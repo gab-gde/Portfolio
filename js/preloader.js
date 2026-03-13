@@ -1,7 +1,5 @@
 /**
  * preloader.js — Homepage only, fresh visits only
- * page-transition.js sets window.__ptCameFromNav = true when returning to homepage.
- * If that flag is set, preloader hides instantly.
  */
 
 const Preloader = (() => {
@@ -12,13 +10,11 @@ const Preloader = (() => {
 
   if (!preEl || !preTxt || !preLine || !prePct) return { active: false };
 
-  // Came from internal navigation? Skip preloader.
   if (window.__ptCameFromNav) {
     preEl.style.display = 'none';
     return { active: false };
   }
 
-  // Fresh visit — run preloader
   gsap.fromTo(preTxt,
     { y: '110%' },
     { y: '0%', duration: 0.9, ease: 'power4.out', delay: 0.15 }
@@ -34,12 +30,14 @@ const Preloader = (() => {
       prePct.textContent  = v + '%';
     },
     onComplete() {
+      // Fire hero animations NOW, while preloader slides away
+      if (typeof Animations !== 'undefined' && Animations.runIntro) {
+        Animations.runIntro();
+      }
+
       var tl = gsap.timeline({
         onComplete: function() {
           preEl.style.display = 'none';
-          if (typeof Animations !== 'undefined' && Animations.runIntro) {
-            Animations.runIntro();
-          }
         }
       });
 
