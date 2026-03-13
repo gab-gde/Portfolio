@@ -550,7 +550,7 @@ body.c-proj  #curR { opacity: 0; }
   height: 100%;
   position: relative;
   background: #e8e5de;
-  padding: 28px;
+  padding: 10px;
   overflow: hidden;
   border-radius: 50%;
 }
