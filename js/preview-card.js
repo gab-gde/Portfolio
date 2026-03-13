@@ -64,23 +64,26 @@ const PreviewCard = (() => {
       // Change bg color — visible during slide gap
       pBg.style.background = bgColor;
 
-      // Slide OUT
-      pImg.style.transition = 'transform .4s cubic-bezier(.76,0,.24,1)';
-      pImg.style.transform = 'translateY(' + (dir * -100) + '%)';
+      // Slide OUT — smoother, with slight scale
+      pImg.style.transition = 'transform .55s cubic-bezier(.4,0,.2,1), opacity .4s ease';
+      pImg.style.transform = 'translateY(' + (dir * -70) + '%) scale(.92)';
+      pImg.style.opacity = '0.3';
 
       setTimeout(function() {
         // Swap & position offscreen
         pImg.src = newImg;
         pImg.style.transition = 'none';
-        pImg.style.transform = 'translateY(' + (dir * 100) + '%)';
+        pImg.style.transform = 'translateY(' + (dir * 60) + '%) scale(.92)';
+        pImg.style.opacity = '0.3';
         void pImg.offsetHeight;
 
-        // Slide IN
-        pImg.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1)';
-        pImg.style.transform = 'translateY(0)';
+        // Slide IN — smooth deceleration
+        pImg.style.transition = 'transform .6s cubic-bezier(.16,1,.3,1), opacity .45s ease';
+        pImg.style.transform = 'translateY(0) scale(1)';
+        pImg.style.opacity = '1';
 
-        setTimeout(function() { isAnimating = false; }, 500);
-      }, 400);
+        setTimeout(function() { isAnimating = false; }, 600);
+      }, 350);
     });
 
     item.addEventListener('mouseleave', () => {
