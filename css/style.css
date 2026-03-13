@@ -823,7 +823,7 @@ body.c-proj  #curR { opacity: 0; }
    DENNIS-STYLE CONTACT SECTION
 ═══════════════════════════════════════ */
 .ds-contact-wrap {
-  background: #111214;
+  background: #1c1d20;
   position: relative;
 }
 
@@ -840,7 +840,7 @@ body.c-proj  #curR { opacity: 0; }
   left: -10%;
   right: -10%;
   height: 100%;
-  background: #111214;
+  background: #1c1d20;
   border-radius: 50% 50% 0 0;
 }
 
@@ -900,12 +900,12 @@ body.c-proj  #curR { opacity: 0; }
   color: rgba(255,255,255,.3);
   flex-shrink: 0;
   opacity: 0;
+  margin: 0 32px 0 24px;
 }
 .ds-action-line {
   flex: 1;
   height: 1px;
   background: rgba(255,255,255,.1);
-  margin-left: 24px;
 }
 .ds-touch-btn {
   width: 180px;
@@ -926,7 +926,7 @@ body.c-proj  #curR { opacity: 0; }
   opacity: 0;
   transform: scale(.7);
   flex-shrink: 0;
-  margin-left: -20px;
+  margin-left: -60px;
 }
 .ds-touch-btn:hover { background: #5b50e6; }
 
@@ -961,7 +961,7 @@ body.c-proj  #curR { opacity: 0; }
   gap: 40px;
   padding: 44px 48px;
   border-top: 1px solid rgba(255,255,255,.06);
-  background: #111214;
+  background: #1c1d20;
   margin-top: 80px;
 }
 .ds-footer-label {
