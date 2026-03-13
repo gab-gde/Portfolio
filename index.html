@@ -14,7 +14,13 @@
 
   <div id="cur"></div>
   <div id="curR"></div>
-  <div class="page-cover" id="pageCover"></div>
+
+  <!-- Preloader — homepage only -->
+  <div id="preloader">
+    <div class="pre-word"><span id="preTxt">Gabin Goude</span></div>
+    <div class="pre-line-wrap"><div class="pre-line" id="preLine"></div></div>
+    <span class="pre-pct" id="prePct">0%</span>
+  </div>
 
   <a href="about.html" id="aboutBubble">About me</a>
   <div id="hamBtn"><span></span><span></span></div>
@@ -189,6 +195,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="js/page-transition.js"></script>
+  <script src="js/preloader.js"></script>
   <script src="js/cursor.js"></script>
   <script src="js/marquee.js"></script>
   <script src="js/preview-card.js"></script>
@@ -282,22 +289,6 @@
     }
     updateTime();
     setInterval(updateTime, 30000);
-
-    // === Page transitions ===
-    var cover=document.getElementById('pageCover');
-    function goTo(href){
-      cover.style.transform='translateY(0)';
-      setTimeout(function(){window.location.href=href},700);
-    }
-    // Exit transition on click
-    document.querySelectorAll('.cta-circle, #aboutBubble, .nav-links a[href]:not([href^="#"]), .ds-touch-btn').forEach(function(el){
-      el.addEventListener('click',function(e){
-        var href = el.getAttribute('href') || el.dataset.href;
-        if(!href||href.startsWith('#')||href.startsWith('http'))return;
-        e.preventDefault();
-        goTo(href);
-      });
-    });
   </script>
 </body>
 </html>

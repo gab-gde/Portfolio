@@ -79,7 +79,6 @@
     .next-allwork sup{font-size:10px;opacity:.5}
     .next-footer{background:#1c1d20;padding:40px 48px;display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.05);position:relative;z-index:5}
     .next-footer span{font-size:11px;color:rgba(255,255,255,.2)}
-    .page-cover{position:fixed;inset:0;background:#1c1d20;z-index:9999;pointer-events:none;transition:transform .7s cubic-bezier(.76,0,.24,1);transform:translateY(0)}
     @media(max-width:768px){
       nav,.title-wrap,.meta-wrap,.images,.next-dark{padding-left:24px;padding-right:24px}
       .meta{grid-template-columns:1fr}.img-row{grid-template-columns:1fr}
@@ -123,9 +122,7 @@
     <div class="img-row"><div class="mockup rv dl1"><img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80" alt="Chef"></div><div class="mockup rv dl2"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=800&q=80" alt="Plat"></div></div>
   </div>
 
-  <div class="page-cover" id="pageCover"></div>
-
-  <div class="next-wrap">
+<div class="next-wrap">
     <div class="next-curve"></div>
     <div class="next-dark">
       <p class="next-label rv">Next case</p>
@@ -139,27 +136,15 @@
     <footer class="next-footer"><span>© Code by Gabin Goude</span><span>2026</span></footer>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="../../js/page-transition.js"></script>
   <script>
     var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('vis');o.unobserve(x.target)}})},{threshold:.06,rootMargin:'0px 0px -40px 0px'});
     document.querySelectorAll('.rv').forEach(function(el){o.observe(el)});
     document.querySelectorAll('[data-magnetic]').forEach(function(btn){
       btn.addEventListener('mousemove',function(e){var r=btn.getBoundingClientRect();var x=e.clientX-r.left-r.width/2;var y=e.clientY-r.top-r.height/2;btn.style.transform='translate('+x*.45+'px,'+y*.45+'px)'});
       btn.addEventListener('mouseleave',function(){btn.style.transform='translate(0,0)'});
-    });
-    var cover=document.getElementById('pageCover');
-    setTimeout(function(){cover.style.transform='translateY(-100%)'},50);
-    function goTo(href){
-      cover.style.transition='transform .6s cubic-bezier(.76,0,.24,1)';
-      cover.style.transform='translateY(0)';
-      setTimeout(function(){window.location.href=href},650);
-    }
-    document.querySelectorAll('a.plink, nav a, .logo-wrap').forEach(function(a){
-      a.addEventListener('click',function(e){
-        var href=this.getAttribute('href');
-        if(!href||href.startsWith('#')||href.startsWith('http'))return;
-        e.preventDefault();
-        goTo(href);
-      });
     });
   </script>
 </body>
