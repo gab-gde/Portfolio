@@ -3,23 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maison Élysée — Gabin Goude</title>
+  <title>AURA Studio — Gabin Goude</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--font:'Hanken Grotesk',sans-serif;--dark:#1a1a1a;--mid:#8a8a8a;--border:#e4e4e4;--blue:#3d5af1;--beige:#e8e5de;--bg-dark:#1a1a1a}
+    :root{--font:'Hanken Grotesk',sans-serif;--dark:#1a1a1a;--mid:#8a8a8a;--border:#e4e4e4;--blue:#3d5af1;--beige:#e8e5de}
     html{scroll-behavior:smooth}
-    body{font-family:var(--font);background:#fff;color:var(--dark);overflow-x:hidden;cursor:default}
+    body{font-family:var(--font);background:#fff;color:var(--dark);overflow-x:hidden}
     a{color:inherit;text-decoration:none}
-
-    /* REVEAL */
-    .rv{opacity:0;transform:translateY(50px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
-    .rv.vis{opacity:1;transform:translateY(0)}
-    .dl1{transition-delay:.08s}.dl2{transition-delay:.16s}.dl3{transition-delay:.24s}
-
-    /* NAV */
+    .rv{opacity:0;transform:translateY(50px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}.rv.vis{opacity:1;transform:translateY(0)}.dl1{transition-delay:.08s}.dl2{transition-delay:.16s}.dl3{transition-delay:.24s}
     nav{display:flex;justify-content:space-between;align-items:center;padding:32px 48px}
     .logo-wrap{display:flex;align-items:center;gap:5px;cursor:pointer}
     .logo-c{font-size:14px;color:var(--dark);line-height:20px}
@@ -32,56 +26,39 @@
     .nav-right a::after{content:'';position:absolute;left:50%;bottom:-8px;width:5px;height:5px;border-radius:50%;background:var(--dark);transform:translateX(-50%);opacity:0;transition:opacity .3s}
     .nav-right a.active::after{opacity:1}
     .nav-right a:hover{opacity:.4}
-
-    /* TITLE — centered, clean */
     .title-wrap{padding:120px 48px 80px;text-align:center}
     .title-wrap h1{font-size:clamp(60px,9vw,140px);font-weight:400;letter-spacing:-.035em;line-height:.95}
-
-    /* META */
     .meta-wrap{max-width:900px;margin:0 auto;padding:0 48px}
     .meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
     .meta-col{padding:28px 0;border-top:1px solid var(--border)}
     .meta-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mid);margin-bottom:20px}
     .meta-value{font-size:15px;line-height:1.7}
-
-    /* LIVE SITE — magnetic */
     .live-area{position:relative;height:0;z-index:10}
-    .magnetic-btn{position:absolute;right:48px;top:-80px;width:170px;height:170px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;box-shadow:0 16px 50px rgba(61,90,241,.4);cursor:pointer;gap:6px;transition:transform .35s cubic-bezier(.16,1,.3,1);will-change:transform}
+    .magnetic-btn{position:absolute;right:48px;top:-80px;width:170px;height:170px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;box-shadow:0 16px 50px rgba(61,90,241,.4);cursor:pointer;gap:6px;transition:transform .4s cubic-bezier(.16,1,.3,1),background .3s;will-change:transform}
     .magnetic-btn .arrow{font-size:20px;transition:transform .3s}
-
-    /* IMAGES */
+    .magnetic-btn:hover{background:#5b50e6}
     .images{padding:120px 48px 0;max-width:1400px;margin:0 auto}
     .img-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
     .mockup{background:var(--beige);padding:48px;margin-bottom:24px;overflow:hidden}
     .mockup img{width:100%;display:block;box-shadow:0 4px 24px rgba(0,0,0,.08)}
-
-    /* MACBOOK — pure CSS realistic */
     .laptop-wrap{background:var(--beige);padding:60px 60px 0;margin-bottom:24px;overflow:hidden;display:flex;justify-content:center}
     .laptop{width:100%;max-width:1000px}
     .laptop-screen{background:#222;border-radius:12px 12px 0 0;padding:8px 8px 0;position:relative}
     .laptop-screen::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:#444}
     .laptop-screen-inner{border-radius:4px 4px 0 0;overflow:hidden;aspect-ratio:16/10}
     .laptop-screen-inner img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
-    .laptop-base{height:14px;background:linear-gradient(to bottom,#ccc,#b8b8b8);border-radius:0 0 4px 4px;position:relative}
-    .laptop-base::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:20%;height:4px;background:#a0a0a0;border-radius:0 0 4px 4px}
+    .laptop-base{height:14px;background:linear-gradient(to bottom,#ccc,#b8b8b8);border-radius:0 0 4px 4px}
     .laptop-shadow{height:8px;background:radial-gradient(ellipse at center,rgba(0,0,0,.12) 0%,transparent 70%);margin:0 10%}
-
-    /* PHONE */
+    .vid-ph{background:var(--beige);margin-bottom:24px;aspect-ratio:16/9;padding:48px;display:flex;align-items:center;justify-content:center}
+    .vid-ph-inner{width:100%;height:100%;background:#d5d0c6;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;cursor:pointer;transition:background .3s}
+    .vid-ph-inner:hover{background:#ccc8be}
+    .vid-icon{width:64px;height:64px;border-radius:50%;background:rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center}
+    .vid-icon svg{width:24px;height:24px;fill:none;stroke:#888;stroke-width:1.5}
+    .vid-label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#999}
     .phone-wrap{background:var(--beige);padding:60px;margin-bottom:24px;display:flex;justify-content:center;gap:48px}
     .phone{width:260px;background:#222;border-radius:36px;padding:10px;box-shadow:0 8px 30px rgba(0,0,0,.1)}
     .phone-inner{border-radius:28px;overflow:hidden;aspect-ratio:9/19.5;background:#000}
     .phone-inner img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
-
-    /* VIDEO PLACEHOLDER */
-    .vid-ph{background:var(--beige);margin-bottom:24px;aspect-ratio:16/9;padding:48px;display:flex;align-items:center;justify-content:center}
-    .vid-ph-inner{width:100%;height:100%;background:#d5d0c6;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;cursor:pointer;transition:background .3s}
-    .vid-ph-inner:hover{background:#ccc8be}
-    .vid-icon{width:64px;height:64px;border-radius:50%;background:rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center;transition:background .3s}
-    .vid-ph-inner:hover .vid-icon{background:rgba(0,0,0,.1)}
-    .vid-icon svg{width:24px;height:24px;fill:none;stroke:#888;stroke-width:1.5}
-    .vid-label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#999}
-
-    /* NEXT — Dennis style */
     .next-wrap{position:relative;margin-top:120px}
     .next-curve{position:relative;height:300px;background:#fff;overflow:hidden}
     .next-curve::after{content:'';position:absolute;bottom:-1px;left:-10%;right:-10%;height:100%;background:#1c1d20;border-radius:50% 50% 0 0}
@@ -93,7 +70,7 @@
     .next-dark:has(.next-peek-img:hover) .next-title{transform:translateY(-280px) scale(1.1);color:rgba(255,255,255,.7)}
     .next-peek{position:relative;max-width:800px;margin:80px auto 0;z-index:3}
     .next-peek-line{height:1px;background:rgba(255,255,255,.1);position:relative;z-index:1;margin:0 -80px}
-    .next-peek-img{height:80px;overflow:hidden;cursor:pointer;position:relative;z-index:2;margin-top:0;transition:height .7s cubic-bezier(.16,1,.3,1),margin-top .7s cubic-bezier(.16,1,.3,1)}
+    .next-peek-img{height:80px;overflow:hidden;cursor:pointer;position:relative;z-index:2;transition:height .7s cubic-bezier(.16,1,.3,1),margin-top .7s cubic-bezier(.16,1,.3,1)}
     .next-peek-img:hover{height:400px;margin-top:-320px}
     .next-peek-img img{width:100%;display:block}
     .next-peek-img a{display:block}
@@ -102,11 +79,9 @@
     .next-allwork sup{font-size:10px;opacity:.5}
     .next-footer{background:#1c1d20;padding:40px 48px;display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.05);position:relative;z-index:5}
     .next-footer span{font-size:11px;color:rgba(255,255,255,.2)}
-
     .page-cover{position:fixed;inset:0;background:#1c1d20;z-index:9999;pointer-events:none;transition:transform .7s cubic-bezier(.76,0,.24,1);transform:translateY(0)}
-
     @media(max-width:768px){
-      nav,.title-wrap,.meta-wrap,.images,.next-inner{padding-left:24px;padding-right:24px}
+      nav,.title-wrap,.meta-wrap,.images,.next-dark{padding-left:24px;padding-right:24px}
       .meta{grid-template-columns:1fr}.img-row{grid-template-columns:1fr}
       .laptop-wrap{padding:24px 24px 0}.phone-wrap{padding:32px;gap:20px}.phone{width:180px}
       .magnetic-btn{width:120px;height:120px;font-size:13px;right:24px;top:-60px}
@@ -115,6 +90,8 @@
   </style>
 </head>
 <body>
+
+  <div class="page-cover" id="pageCover"></div>
 
   <nav>
     <a href="../../index.html" class="logo-wrap">
@@ -128,118 +105,56 @@
     </div>
   </nav>
 
-  <div class="title-wrap">
-    <h1 class="rv">Maison Élysée</h1>
-  </div>
+  <div class="title-wrap"><h1 class="rv">AURA Studio</h1></div>
 
-  <div class="meta-wrap">
-    <div class="meta">
-      <div class="meta-col rv dl1"><p class="meta-label">Rôle / Services</p><p class="meta-value">Design & Development</p></div>
-      <div class="meta-col rv dl2"><p class="meta-label">Contexte</p><p class="meta-value">Restaurant gastronomique<br>2 étoiles Michelin — Paris 8ème</p></div>
-      <div class="meta-col rv dl3"><p class="meta-label">Année</p><p class="meta-value">Paris, France © 2026</p></div>
-    </div>
-  </div>
+  <div class="meta-wrap"><div class="meta">
+    <div class="meta-col rv dl1"><p class="meta-label">Rôle / Services</p><p class="meta-value">Design & Development</p></div>
+    <div class="meta-col rv dl2"><p class="meta-label">Contexte</p><p class="meta-value">Studio de direction artistique<br>Production visuelle — Paris</p></div>
+    <div class="meta-col rv dl3"><p class="meta-label">Année</p><p class="meta-value">Paris, France © 2026</p></div>
+  </div></div>
 
-  <div class="live-area">
-    <a href="index.html" target="_blank" class="magnetic-btn" data-magnetic>Live site <span class="arrow">↗</span></a>
-  </div>
+  <div class="live-area"><a href="index.html" target="_blank" class="magnetic-btn" data-magnetic>Live site <span class="arrow">↗</span></a></div>
 
   <div class="images">
-    <!-- MacBook -->
-    <div class="laptop-wrap rv">
-      <div class="laptop">
-        <div class="laptop-screen">
-          <div class="laptop-screen-inner"><img src="../../assets/images/projects/maison-elysee.png" alt="Maison Élysée"></div>
-        </div>
-        <div class="laptop-base"></div>
-        <div class="laptop-shadow"></div>
-      </div>
-    </div>
-
-    <!-- Video 1 -->
-    <div class="vid-ph rv">
-      <div class="vid-ph-inner">
-        <div class="vid-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-        <p class="vid-label">Vidéo de présentation — bientôt</p>
-      </div>
-    </div>
-
-    <!-- Two images -->
+    <div class="laptop-wrap rv"><div class="laptop"><div class="laptop-screen"><div class="laptop-screen-inner"><img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&q=80" alt="AURA"></div></div><div class="laptop-base"></div><div class="laptop-shadow"></div></div></div>
+    <div class="vid-ph rv"><div class="vid-ph-inner"><div class="vid-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><p class="vid-label">Vidéo de présentation — bientôt</p></div></div>
     <div class="img-row">
-      <div class="mockup rv dl1"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Ambiance"></div>
-      <div class="mockup rv dl2"><img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80" alt="Intérieur"></div>
+      <div class="mockup rv dl1"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&q=80" alt="Design"></div>
+      <div class="mockup rv dl2"><img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80" alt="Branding"></div>
     </div>
-
-    <!-- Phones -->
     <div class="phone-wrap rv">
-      <div class="phone"><div class="phone-inner"><img src="../../assets/images/projects/maison-elysee.png" alt="Mobile"></div></div>
-      <div class="phone"><div class="phone-inner"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=400&q=80" alt="Mobile 2"></div></div>
+      <div class="phone"><div class="phone-inner"><img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&q=80" alt="Mobile"></div></div>
+      <div class="phone"><div class="phone-inner"><img src="https://images.unsplash.com/photo-1550684376-efcbd6e3f031?w=400&q=80" alt="Mobile 2"></div></div>
     </div>
-
-    <!-- Video 2 -->
-    <div class="vid-ph rv">
-      <div class="vid-ph-inner">
-        <div class="vid-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-        <p class="vid-label">Scroll animation — bientôt</p>
-      </div>
-    </div>
-
-    <!-- Full -->
-    <div class="mockup rv"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=1400&q=80" alt="Cuisine"></div>
-
-    <div class="img-row">
-      <div class="mockup rv dl1"><img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80" alt="Chef"></div>
-      <div class="mockup rv dl2"><img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800&q=80" alt="Vin"></div>
-    </div>
+    <div class="mockup rv"><img src="https://images.unsplash.com/photo-1542744094-24638eff58bb?w=1400&q=80" alt="Gallery"></div>
   </div>
-
-  <div class="page-cover" id="pageCover"></div>
 
   <div class="next-wrap">
     <div class="next-curve"></div>
     <div class="next-dark">
       <p class="next-label rv">Next case</p>
-      <a href="../kami/details.html" class="next-title rv dl1 plink">TERRA</a>
+      <a href="../restaurant/details.html" class="next-title rv dl1 plink">Maison Élysée</a>
       <div class="next-peek">
         <div class="next-peek-line"></div>
-        <div class="next-peek-img rv dl2">
-          <a href="../kami/details.html" class="plink"><img src="../../assets/images/projects/terra.png" alt="TERRA"></a>
-        </div>
+        <div class="next-peek-img rv dl2"><a href="../restaurant/details.html" class="plink"><img src="../../assets/images/projects/maison-elysee.png" alt="Maison Élysée"></a></div>
       </div>
       <div class="rv dl3"><a href="../../index.html#work" class="next-allwork plink" data-magnetic><span>All work <sup>3</sup></span></a></div>
     </div>
-    <footer class="next-footer">
-      <span>© Code by Gabin Goude</span>
-      <span>2026</span>
-    </footer>
+    <footer class="next-footer"><span>© Code by Gabin Goude</span><span>2026</span></footer>
   </div>
 
   <script>
-    // Reveal
     var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('vis');o.unobserve(x.target)}})},{threshold:.06,rootMargin:'0px 0px -40px 0px'});
     document.querySelectorAll('.rv').forEach(function(el){o.observe(el)});
-    // Magnetic
     document.querySelectorAll('[data-magnetic]').forEach(function(btn){
       btn.addEventListener('mousemove',function(e){var r=btn.getBoundingClientRect();var x=e.clientX-r.left-r.width/2;var y=e.clientY-r.top-r.height/2;btn.style.transform='translate('+x*.45+'px,'+y*.45+'px)'});
       btn.addEventListener('mouseleave',function(){btn.style.transform='translate(0,0)'});
     });
-    // Page transition
     var cover=document.getElementById('pageCover');
-    // Entry: slide cover up after small delay
     setTimeout(function(){cover.style.transform='translateY(-100%)'},50);
-    // Exit: on link click
-    function goTo(href){
-      cover.style.transition='transform .6s cubic-bezier(.76,0,.24,1)';
-      cover.style.transform='translateY(0)';
-      setTimeout(function(){window.location.href=href},650);
-    }
+    function goTo(href){cover.style.transition='transform .6s cubic-bezier(.76,0,.24,1)';cover.style.transform='translateY(0)';setTimeout(function(){window.location.href=href},650)}
     document.querySelectorAll('a.plink, nav a, .logo-wrap').forEach(function(a){
-      a.addEventListener('click',function(e){
-        var href=this.getAttribute('href');
-        if(!href||href.startsWith('#')||href.startsWith('http'))return;
-        e.preventDefault();
-        goTo(href);
-      });
+      a.addEventListener('click',function(e){var href=this.getAttribute('href');if(!href||href.startsWith('#')||href.startsWith('http'))return;e.preventDefault();goTo(href)});
     });
   </script>
 </body>
