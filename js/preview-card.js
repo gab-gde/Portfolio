@@ -1,5 +1,5 @@
 /**
- * preview-card.js — Dennis style: instant swap with fast slide
+ * preview-card.js — Round bubble preview, smooth slide
  */
 const PreviewCard = (() => {
   const card = document.getElementById('previewCard');
@@ -14,16 +14,16 @@ const PreviewCard = (() => {
   document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
   (function tick() {
-    pcx += (mx - pcx) * 0.1;
-    pcy += (my - pcy) * 0.1;
-    card.style.left = (pcx - 240) + 'px';
-    card.style.top  = (pcy - 180) + 'px';
+    pcx += (mx - pcx) * 0.09;
+    pcy += (my - pcy) * 0.09;
+    card.style.left = (pcx - 210) + 'px';
+    card.style.top  = (pcy - 210) + 'px';
     requestAnimationFrame(tick);
   })();
 
   const items = document.querySelectorAll('.project-item');
 
-  // Preload all images so transitions are instant
+  // Preload
   items.forEach(item => {
     const src = item.dataset.img;
     if (src) { const i = new Image(); i.src = src; }
@@ -41,10 +41,9 @@ const PreviewCard = (() => {
       pBg.style.background = bgColor;
       document.body.classList.add('c-proj');
 
-      // First hover
       if (currentIndex === -1) {
         pImg.style.transition = 'none';
-        pImg.style.transform = 'translateY(0)';
+        pImg.style.transform = 'translateY(0) scale(1)';
         pImg.src = newImg;
         currentIndex = index;
         return;
@@ -52,19 +51,17 @@ const PreviewCard = (() => {
 
       if (index === currentIndex) return;
 
-      // Instant swap with fast slide — no waiting for slide-out
       var dir = index > currentIndex ? -1 : 1;
       currentIndex = index;
 
-      // Jump image off-screen instantly, swap src, slide in
+      // Instant jump + smooth slide in
       pImg.style.transition = 'none';
-      pImg.style.transform = 'translateY(' + (dir * -40) + '%)';
+      pImg.style.transform = 'translateY(' + (dir * -35) + '%) scale(.92)';
       pImg.src = newImg;
       void pImg.offsetHeight;
 
-      // Slide into place — fast, smooth
-      pImg.style.transition = 'transform .3s cubic-bezier(.25,.1,.25,1)';
-      pImg.style.transform = 'translateY(0)';
+      pImg.style.transition = 'transform .4s cubic-bezier(.25,.1,.25,1)';
+      pImg.style.transform = 'translateY(0) scale(1)';
     });
 
     item.addEventListener('mouseleave', () => {
