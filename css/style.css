@@ -1021,7 +1021,10 @@ body.c-proj  #curR { opacity: 0; }
 }
 .po-bg {
   position: absolute;
-  inset: 0;
+  left: 0;
+  right: 0;
+  top: -15%;
+  height: 130%;
   background: #1c1d20;
   will-change: transform, border-radius;
 }

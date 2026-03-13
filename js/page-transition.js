@@ -1,9 +1,6 @@
 /**
  * page-transition.js — Unified curved page transition system
- * Works on every page. On homepage: waits for preloader to finish first.
- *
- * ENTER: overlay covers screen → name appears → overlay slides UP with curved bottom → page revealed
- * LEAVE: overlay slides UP from bottom with curved top → name appears → navigate
+ * Works on every page. Homepage: preloader handles entry.
  */
 
 const PageTransition = (() => {
@@ -28,11 +25,6 @@ const PageTransition = (() => {
     if (h.includes('kami'))    return 'TERRA';
     if (h.includes('aura'))    return 'AURA Studio';
     if (h.includes('aurum'))   return 'Aurum Stays';
-    const parts = h.split('/').filter(Boolean);
-    if (parts.length) {
-      const last = parts[parts.length - 1].replace('.html', '').replace('details', '');
-      if (last) return last.charAt(0).toUpperCase() + last.slice(1);
-    }
     return '';
   }
 
@@ -45,24 +37,25 @@ const PageTransition = (() => {
     const tl = gsap.timeline({
       onComplete: () => {
         overlay.classList.remove('active');
+        gsap.set(bg, { borderRadius: '0' });
         if (onComplete) onComplete();
       }
     });
 
     tl
-      .to(textEl, { y: '0%', duration: 0.55, ease: 'power3.out' }, 0)
-      .to(textEl, { y: '-110%', duration: 0.45, ease: 'power3.in' }, 0.7)
+      .to(textEl, { y: '0%', duration: 0.5, ease: 'power3.out' }, 0)
+      .to(textEl, { y: '-110%', duration: 0.4, ease: 'power3.in' }, 0.65)
       .to(bg, {
-        yPercent: -100,
-        duration: 0.85,
-        ease: 'power4.inOut',
+        yPercent: -115,
+        duration: 0.9,
+        ease: 'power3.inOut',
         onUpdate: function() {
-          const p = this.progress();
-          const curve = Math.sin(p * Math.PI) * 80;
+          var p = this.progress();
+          // Gentle curve, peaks mid-animation
+          var curve = Math.sin(p * Math.PI) * 50;
           bg.style.borderRadius = '0 0 50% 50% / 0 0 ' + curve + 'px ' + curve + 'px';
         }
-      }, 0.75)
-      .set(bg, { borderRadius: '0' });
+      }, 0.7);
   }
 
   /* ── LEAVE — cover page (overlay slides up from bottom) ── */
@@ -70,7 +63,7 @@ const PageTransition = (() => {
     overlay.classList.add('active');
     textEl.textContent = getPageName(href);
 
-    gsap.set(bg, { yPercent: 100, borderRadius: '0' });
+    gsap.set(bg, { yPercent: 115, borderRadius: '0' });
     gsap.set(textEl, { y: '110%', opacity: 1 });
 
     const tl = gsap.timeline({
@@ -80,19 +73,19 @@ const PageTransition = (() => {
     tl
       .to(bg, {
         yPercent: 0,
-        duration: 0.75,
-        ease: 'power4.inOut',
+        duration: 0.8,
+        ease: 'power3.inOut',
         onUpdate: function() {
-          const p = this.progress();
-          const curve = Math.sin(p * Math.PI) * 80;
+          var p = this.progress();
+          var curve = Math.sin(p * Math.PI) * 50;
           bg.style.borderRadius = curve + 'px ' + curve + 'px 0 0 / 50% 50% 0 0';
         }
       }, 0)
-      .to(textEl, { y: '0%', duration: 0.5, ease: 'power3.out' }, 0.25)
-      .set(bg, { borderRadius: '0' }, 0.75);
+      .to(textEl, { y: '0%', duration: 0.45, ease: 'power3.out' }, 0.3)
+      .set(bg, { borderRadius: '0' }, 0.8);
   }
 
-  /* ── Intercept all internal links ── */
+  /* ── Intercept internal links ── */
   document.addEventListener('click', e => {
     const a = e.target.closest('a');
     if (!a) return;
@@ -103,7 +96,7 @@ const PageTransition = (() => {
     leave(href);
   });
 
-  /* ── Also intercept project items (data-href on homepage) ── */
+  /* ── Project items (data-href) ── */
   document.addEventListener('click', e => {
     const item = e.target.closest('.project-item[data-href]');
     if (!item) return;
@@ -123,11 +116,9 @@ const PageTransition = (() => {
   /* ── On page load ── */
   window.addEventListener('load', () => {
     if (isHome) {
-      // Homepage: preloader handles the reveal, overlay stays hidden
-      gsap.set(bg, { yPercent: -100 });
+      gsap.set(bg, { yPercent: -115 });
       overlay.classList.remove('active');
     } else {
-      // Subpages: overlay covers screen, run enter reveal
       gsap.set(bg, { yPercent: 0 });
       overlay.classList.add('active');
       requestAnimationFrame(() => enter());

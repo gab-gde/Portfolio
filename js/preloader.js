@@ -1,7 +1,6 @@
 /**
  * preloader.js — Homepage only
- * Shows "Gabin Goude" name + counting bar, then slides away
- * After preloader exits, triggers the GSAP intro animations
+ * Shows "Gabin Goude" + counting bar, then curved slide away
  */
 
 const Preloader = (() => {
@@ -29,25 +28,23 @@ const Preloader = (() => {
       prePct.textContent  = v + '%';
     },
     onComplete() {
-      // Exit preloader with curved slide-up
       const tl = gsap.timeline({
         onComplete: () => {
           preEl.style.display = 'none';
-          // Trigger homepage intro animations
           if (typeof Animations !== 'undefined' && Animations.runIntro) {
             Animations.runIntro();
           }
         }
       });
 
-      tl.to(preTxt, { y: '-110%', duration: 0.45, ease: 'power3.in' }, 0)
+      tl.to(preTxt, { y: '-110%', duration: 0.4, ease: 'power3.in' }, 0)
         .to(preEl, {
-          yPercent: -100,
+          yPercent: -115,
           duration: 0.9,
-          ease: 'power4.inOut',
+          ease: 'power3.inOut',
           onUpdate: function() {
-            const p = this.progress();
-            const curve = Math.sin(p * Math.PI) * 100;
+            var p = this.progress();
+            var curve = Math.sin(p * Math.PI) * 60;
             preEl.style.borderRadius = '0 0 50% 50% / 0 0 ' + curve + 'px ' + curve + 'px';
           }
         }, 0.15);
