@@ -1,6 +1,5 @@
 /**
- * preview-card.js — Dennis Snellenberg exact style
- * Clean vertical slide between projects, beige frame, smooth lerp follow
+ * preview-card.js — Dennis style: instant swap with fast slide
  */
 const PreviewCard = (() => {
   const card = document.getElementById('previewCard');
@@ -15,8 +14,8 @@ const PreviewCard = (() => {
   document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
   (function tick() {
-    pcx += (mx - pcx) * 0.09;
-    pcy += (my - pcy) * 0.09;
+    pcx += (mx - pcx) * 0.1;
+    pcy += (my - pcy) * 0.1;
     card.style.left = (pcx - 240) + 'px';
     card.style.top  = (pcy - 180) + 'px';
     requestAnimationFrame(tick);
@@ -24,19 +23,25 @@ const PreviewCard = (() => {
 
   const items = document.querySelectorAll('.project-item');
 
+  // Preload all images so transitions are instant
+  items.forEach(item => {
+    const src = item.dataset.img;
+    if (src) { const i = new Image(); i.src = src; }
+  });
+
   items.forEach((item, index) => {
     item.addEventListener('mouseenter', () => {
       if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
 
       const newImg = item.dataset.img;
-      const bgColor = item.dataset.color || "#e8e5de";
+      const bgColor = item.dataset.color || '#e8e5de';
       if (!newImg) return;
 
       card.classList.add('show');
       pBg.style.background = bgColor;
       document.body.classList.add('c-proj');
 
-      // First hover — just show
+      // First hover
       if (currentIndex === -1) {
         pImg.style.transition = 'none';
         pImg.style.transform = 'translateY(0)';
@@ -45,26 +50,21 @@ const PreviewCard = (() => {
         return;
       }
 
-      // Same project
       if (index === currentIndex) return;
 
-      // Different project — clean vertical slide
+      // Instant swap with fast slide — no waiting for slide-out
       var dir = index > currentIndex ? -1 : 1;
       currentIndex = index;
 
-      // Slide OUT
-      pImg.style.transition = 'transform .45s cubic-bezier(.77,0,.175,1)';
-      pImg.style.transform = 'translateY(' + (dir * 100) + '%)';
+      // Jump image off-screen instantly, swap src, slide in
+      pImg.style.transition = 'none';
+      pImg.style.transform = 'translateY(' + (dir * -40) + '%)';
+      pImg.src = newImg;
+      void pImg.offsetHeight;
 
-      // Swap and slide IN
-      setTimeout(function() {
-        pImg.style.transition = 'none';
-        pImg.src = newImg;
-        pImg.style.transform = 'translateY(' + (dir * -100) + '%)';
-        void pImg.offsetHeight;
-        pImg.style.transition = 'transform .45s cubic-bezier(.77,0,.175,1)';
-        pImg.style.transform = 'translateY(0)';
-      }, 450);
+      // Slide into place — fast, smooth
+      pImg.style.transition = 'transform .3s cubic-bezier(.25,.1,.25,1)';
+      pImg.style.transform = 'translateY(0)';
     });
 
     item.addEventListener('mouseleave', () => {
@@ -73,7 +73,7 @@ const PreviewCard = (() => {
         document.body.classList.remove('c-proj');
         currentIndex = -1;
         hideTimer = null;
-      }, 120);
+      }, 100);
     });
 
     item.addEventListener('click', () => {
