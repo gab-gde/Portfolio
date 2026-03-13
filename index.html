@@ -182,13 +182,13 @@
   <script src="js/menu.js"></script>
   <script src="js/animations.js"></script>
   <script>
-    // Magnetic buttons
+    // Magnetic buttons — stronger movement
     document.querySelectorAll('[data-magnetic]').forEach(function(btn){
       btn.addEventListener('mousemove',function(e){
         var r=btn.getBoundingClientRect();
         var x=e.clientX-r.left-r.width/2;
         var y=e.clientY-r.top-r.height/2;
-        btn.style.transform='translate('+x*.35+'px,'+y*.35+'px)';
+        btn.style.transform='translate('+x*.45+'px,'+y*.45+'px)';
       });
       btn.addEventListener('mouseleave',function(){
         btn.style.transform='translate(0,0)';
@@ -202,7 +202,7 @@
         var r=el.getBoundingClientRect();
         var x=e.clientX-r.left-r.width/2;
         var y=e.clientY-r.top-r.height/2;
-        el.style.transform='translate('+x*.25+'px,'+y*.25+'px)';
+        el.style.transform='translate('+x*.35+'px,'+y*.35+'px)';
       });
       el.addEventListener('mouseleave',function(){
         el.style.transform='translate(0,0)';
@@ -213,12 +213,12 @@
     var dsCurve = document.getElementById('dsCurve');
     if (dsCurve) {
       gsap.fromTo(dsCurve, { height: 0 }, {
-        height: 300,
+        height: 450,
         ease: 'none',
         scrollTrigger: {
           trigger: '.ds-contact-wrap',
           start: 'top bottom',
-          end: 'top 20%',
+          end: 'top 10%',
           scrub: true
         }
       });
