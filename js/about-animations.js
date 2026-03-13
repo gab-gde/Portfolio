@@ -1,66 +1,84 @@
 /**
  * about-animations.js
- * GSAP animations for about.html
+ * Text reveals + scroll animations for the About page
+ * Dennis Snellenberg style: clip-line reveals, staggered fades
  */
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Nav sticky
-const nav = document.getElementById('pageNav');
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 40);
+// Title text reveal — lines slide up
+document.querySelectorAll('.clip-line').forEach(function(line, i) {
+  gsap.to(line, {
+    y: '0%',
+    duration: 1.2,
+    delay: 0.15 + i * 0.08,
+    ease: 'power4.out',
+    scrollTrigger: {
+      trigger: '.ah-title',
+      start: 'top 85%',
+      toggleActions: 'play none none none'
+    },
+    onStart: function() { line.classList.add('vis'); }
+  });
 });
 
-// Header title clip reveal
-gsap.fromTo('.ah-title .clip-line',
-  { y: '110%' },
-  {
-    y: '0%', duration: 1.1, ease: 'power4.out', stagger: .1,
-    scrollTrigger: { trigger: '.about-header', start: 'top 80%', toggleActions: 'play none none none' }
-  }
-);
+// Photo reveal — clip-path slides up
+var photoImg = document.querySelector('.ai-photo img');
+if (photoImg) {
+  ScrollTrigger.create({
+    trigger: '.ai-photo',
+    start: 'top 75%',
+    onEnter: function() { photoImg.classList.add('vis'); }
+  });
+}
 
-// Intro photo
-gsap.fromTo('.ai-photo',
-  { opacity: 0, y: 40 },
-  { opacity: 1, y: 0, duration: 1, ease: 'power3.out',
-    scrollTrigger: { trigger: '.about-intro', start: 'top 80%', toggleActions: 'play none none none' }
-  }
-);
-
-// Intro text
-gsap.fromTo('.ai-body',
-  { opacity: 0, y: 30 },
-  { opacity: 1, y: 0, duration: .9, ease: 'power3.out', stagger: .15,
-    scrollTrigger: { trigger: '.ai-text', start: 'top 82%', toggleActions: 'play none none none' }
-  }
-);
-
-gsap.fromTo('.ai-cta',
-  { opacity: 0, y: 20 },
-  { opacity: 1, y: 0, duration: .7, ease: 'power3.out', delay: .3,
-    scrollTrigger: { trigger: '.ai-text', start: 'top 82%', toggleActions: 'play none none none' }
-  }
-);
-
-// Skills list items
-document.querySelectorAll('.ss-item').forEach((item, i) => {
-  gsap.fromTo(item,
-    { opacity: 0, x: -20 },
-    {
-      opacity: 1, x: 0, duration: .7, ease: 'power3.out', delay: i * .06,
-      scrollTrigger: { trigger: '.ss-list', start: 'top 85%', toggleActions: 'play none none none' }
+// Text paragraphs fade in
+document.querySelectorAll('.ai-body, .ai-cta').forEach(function(el, i) {
+  ScrollTrigger.create({
+    trigger: el,
+    start: 'top 85%',
+    onEnter: function() {
+      gsap.to(el, {
+        opacity: 1, y: 0,
+        duration: 1,
+        delay: i * 0.1,
+        ease: 'power3.out',
+        onStart: function() { el.classList.add('vis'); }
+      });
     }
-  );
+  });
 });
 
-// Experience items
-document.querySelectorAll('.xp-item').forEach((item, i) => {
-  gsap.fromTo(item,
-    { opacity: 0, y: 24 },
-    {
-      opacity: 1, y: 0, duration: .8, ease: 'power3.out', delay: i * .1,
-      scrollTrigger: { trigger: '.xp-list', start: 'top 85%', toggleActions: 'play none none none' }
+// Skills items — staggered reveal
+document.querySelectorAll('.ss-item').forEach(function(item, i) {
+  ScrollTrigger.create({
+    trigger: item,
+    start: 'top 90%',
+    onEnter: function() {
+      gsap.to(item, {
+        opacity: 1, y: 0,
+        duration: .8,
+        delay: i * 0.04,
+        ease: 'power3.out',
+        onStart: function() { item.classList.add('vis'); }
+      });
     }
-  );
+  });
+});
+
+// Experience items — staggered reveal
+document.querySelectorAll('.xp-item').forEach(function(item, i) {
+  ScrollTrigger.create({
+    trigger: item,
+    start: 'top 90%',
+    onEnter: function() {
+      gsap.to(item, {
+        opacity: 1, y: 0,
+        duration: .8,
+        delay: i * 0.06,
+        ease: 'power3.out',
+        onStart: function() { item.classList.add('vis'); }
+      });
+    }
+  });
 });
