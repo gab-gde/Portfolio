@@ -14,11 +14,36 @@
   background: #fff;
 }
 
-.nav-logo {
-  font-size: 15px; font-weight: 600; color: #1a1a1a;
-  text-decoration: none; letter-spacing: -.02em; transition: opacity .2s;
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  cursor: pointer;
 }
-.nav-logo:hover { opacity: .4; }
+.logo-copy {
+  font-size: 14px;
+  color: #1a1a1a;
+  line-height: 20px;
+}
+.logo-name {
+  overflow: hidden;
+  height: 20px;
+}
+.logo-name-inner {
+  transition: transform .5s cubic-bezier(.76, 0, .24, 1);
+}
+.logo:hover .logo-name-inner {
+  transform: translateY(-20px);
+}
+.logo-name-inner p {
+  font-size: 14px;
+  color: #1a1a1a;
+  line-height: 20px;
+  height: 20px;
+  margin: 0;
+  white-space: nowrap;
+}
 
 .nav-links {
   list-style: none;
