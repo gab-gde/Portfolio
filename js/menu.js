@@ -7,6 +7,11 @@
 
 const Menu = (() => {
 
+  // Ensure ScrollTrigger is registered
+  if (typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+  }
+
   // ── Detect path depth for relative links ──
   const path = window.location.pathname;
   let prefix = '';
@@ -33,19 +38,44 @@ const Menu = (() => {
     document.body.appendChild(hamBtn);
   }
 
-  // ── On subpages, show them immediately ──
-  const isHome = (
-    path === '/' ||
-    path.endsWith('/index.html') ||
-    path.endsWith('/portfolio/') ||
-    path.endsWith('/Portfolio/')
-  );
+  // ── Floating buttons: start hidden, appear on scroll ──
+  gsap.set([aboutBubble, hamBtn], { opacity: 0 });
+  aboutBubble.classList.remove('vis');
+  hamBtn.classList.remove('vis');
 
-  if (!isHome) {
-    aboutBubble.style.opacity = '1';
+  function showFloating() {
     aboutBubble.classList.add('vis');
-    hamBtn.style.opacity = '1';
     hamBtn.classList.add('vis');
+    gsap.to([aboutBubble, hamBtn], { opacity: 1, duration: .5, stagger: .07, ease: 'power2.out' });
+  }
+  function hideFloating() {
+    aboutBubble.classList.remove('vis');
+    hamBtn.classList.remove('vis');
+    gsap.to([aboutBubble, hamBtn], { opacity: 0, duration: .3 });
+  }
+
+  // On homepage: trigger on .work-section
+  var workSection = document.querySelector('.work-section');
+  if (workSection) {
+    ScrollTrigger.create({
+      trigger: workSection,
+      start: 'top 68%',
+      onEnter: showFloating,
+      onLeaveBack: hideFloating
+    });
+  } else {
+    // On subpages: show after scrolling 150px, hide when back at top
+    var floatingShown = false;
+    window.addEventListener('scroll', function() {
+      var scrollY = window.scrollY || window.pageYOffset;
+      if (scrollY > 150 && !floatingShown) {
+        floatingShown = true;
+        showFloating();
+      } else if (scrollY <= 150 && floatingShown) {
+        floatingShown = false;
+        hideFloating();
+      }
+    }, { passive: true });
   }
 
   // ── Magnetic effect on floating buttons ──
@@ -205,8 +235,48 @@ const Menu = (() => {
 
     #hamBtn.open { opacity: 0 !important; pointer-events: none !important; }
 
+    /* Base styles for floating buttons (injected for pages that don't load style.css) */
+    #aboutBubble {
+      position: fixed;
+      top: 50px; right: 108px;
+      width: 112px; height: 112px;
+      background: #1a1a1a;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 13.5px; font-weight: 400; color: #fff;
+      letter-spacing: .01em; cursor: pointer;
+      text-decoration: none;
+      opacity: 0; pointer-events: none;
+      transition: transform .4s cubic-bezier(.16,1,.3,1), background .3s;
+      z-index: 700; will-change: transform;
+    }
+    #aboutBubble:hover { background: #4338ca; }
+    #aboutBubble.vis { pointer-events: auto; }
+
+    #hamBtn {
+      position: fixed;
+      top: 26px; right: 40px;
+      width: 52px; height: 52px;
+      background: #1a1a1a;
+      border-radius: 50%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 5px; cursor: pointer;
+      opacity: 0; pointer-events: none;
+      transition: transform .35s cubic-bezier(.16,1,.3,1), background .3s;
+      z-index: 700; will-change: transform;
+    }
+    #hamBtn:hover { background: #4338ca; }
+    #hamBtn.vis { pointer-events: auto; }
+    #hamBtn span {
+      display: block; width: 18px; height: 1.5px;
+      background: #fff; border-radius: 2px;
+    }
+
     @media (max-width: 768px) {
       #menuPanel { width: 100%; }
+      #aboutBubble { width: 80px; height: 80px; font-size: 11px; top: 30px; right: 80px; }
+      #hamBtn { top: 16px; right: 20px; }
     }
   `;
   document.head.appendChild(style);

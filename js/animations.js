@@ -81,50 +81,28 @@ const Animations = (() => {
   });
 
   /* ──────────────────────────────────────
-     4. HERO ELEMENTS — fade out on scroll
+     4. HERO ELEMENTS — fade out on scroll (fromTo so scrub reverses correctly)
   ────────────────────────────────────── */
-  gsap.to('#heroRole', {
-    y: -68, opacity: 0, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: '36% top', scrub: true }
-  });
-  gsap.to('#heroArrow', {
-    y: -48, opacity: 0, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: '26% top', scrub: true }
-  });
-  gsap.to('#locBadge', {
-    y: 26, opacity: 0, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: '6% top', end: '33% top', scrub: true }
-  });
-  gsap.to('#heroNav', {
-    opacity: 0, y: -12, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: '16% top', end: '40% top', scrub: true }
-  });
+  gsap.fromTo('#heroRole',
+    { y: 0, opacity: 1 },
+    { y: -68, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: '36% top', scrub: true } }
+  );
+  gsap.fromTo('#heroArrow',
+    { y: 0, opacity: .6 },
+    { y: -48, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: '26% top', scrub: true } }
+  );
+  gsap.fromTo('#locBadge',
+    { y: 0, opacity: 1 },
+    { y: 26, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.hero', start: '6% top', end: '33% top', scrub: true } }
+  );
+  gsap.fromTo('#heroNav',
+    { y: 0, opacity: 1 },
+    { opacity: 0, y: -12, ease: 'none', scrollTrigger: { trigger: '.hero', start: '16% top', end: '40% top', scrub: true } }
+  );
 
   /* ──────────────────────────────────────
-     5. FLOATING UI
+     5. FLOATING UI — handled by menu.js on all pages
   ────────────────────────────────────── */
-  const aboutBubble = document.getElementById('aboutBubble');
-  const hamBtn      = document.getElementById('hamBtn');
-
-  // Force hidden on load
-  gsap.set([aboutBubble, hamBtn], { opacity: 0 });
-  aboutBubble.classList.remove('vis');
-  hamBtn.classList.remove('vis');
-
-  ScrollTrigger.create({
-    trigger: '.work-section',
-    start: 'top 68%',
-    onEnter() {
-      aboutBubble.classList.add('vis');
-      hamBtn.classList.add('vis');
-      gsap.to([aboutBubble, hamBtn], { opacity: 1, duration: .5, stagger: .07, ease: 'power2.out' });
-    },
-    onLeaveBack() {
-      aboutBubble.classList.remove('vis');
-      hamBtn.classList.remove('vis');
-      gsap.to([aboutBubble, hamBtn], { opacity: 0, duration: .3 });
-    }
-  });
 
   /* ──────────────────────────────────────
      6. WORK LABEL
