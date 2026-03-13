@@ -1,19 +1,16 @@
 /**
  * page-transition.js — Unified curved page transition
- * 
- * The overlay div is injected inline in each page's <head> so CSS covers
- * the screen BEFORE body renders. This script just animates it.
+ * On homepage first visit: preloader handles reveal, overlay stays hidden.
+ * On homepage return visit: overlay runs enter() like any subpage.
  */
 
 const PageTransition = (() => {
-  // Overlay was already created by inline <script> in <head>
   var overlay = document.getElementById('pageOverlay');
   if (!overlay) {
-    // Fallback: create it (shouldn't happen)
     overlay = document.createElement('div');
     overlay.id = 'pageOverlay';
     overlay.innerHTML = '<div class="po-bg"></div><span class="po-text"></span>';
-    document.body.appendChild(overlay);
+    document.documentElement.appendChild(overlay);
   }
 
   var bg     = overlay.querySelector('.po-bg');
@@ -32,7 +29,6 @@ const PageTransition = (() => {
     return '';
   }
 
-  /* ── ENTER — one fluid slide-up with curve ── */
   function enter(onComplete) {
     overlay.style.pointerEvents = 'all';
 
@@ -64,7 +60,6 @@ const PageTransition = (() => {
     0.45);
   }
 
-  /* ── LEAVE — one fluid slide-up from bottom ── */
   function leave(href) {
     overlay.style.pointerEvents = 'all';
     textEl.textContent = getPageName(href);
@@ -122,13 +117,21 @@ const PageTransition = (() => {
   );
 
   window.addEventListener('load', function() {
-    if (isHome) {
-      // Preloader covers everything, hide overlay
+    // Check if preloader is actively running
+    var preloaderActive = (typeof Preloader !== 'undefined' && Preloader.active === true);
+
+    if (isHome && preloaderActive) {
+      // First visit: preloader is on top handling everything, just hide overlay
       gsap.set(bg, { yPercent: -115 });
       overlay.style.pointerEvents = 'none';
     } else {
-      // bg is already at yPercent:0 (CSS default), run enter
-      enter();
+      // Return visit to homepage OR any subpage: run enter transition
+      enter(function() {
+        // On homepage return, also fire intro animations if they haven't run
+        if (isHome && typeof Animations !== 'undefined' && Animations.runIntro) {
+          Animations.runIntro();
+        }
+      });
     }
   });
 

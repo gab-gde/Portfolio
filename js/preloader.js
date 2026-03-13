@@ -1,35 +1,42 @@
 /**
- * preloader.js — Homepage only
- * Shows "Gabin Goude" + counting bar, then curved slide away
+ * preloader.js — Homepage first visit only
+ * If already visited this session, hides itself instantly.
  */
 
 const Preloader = (() => {
-  const preEl   = document.getElementById('preloader');
-  const preTxt  = document.getElementById('preTxt');
-  const preLine = document.getElementById('preLine');
-  const prePct  = document.getElementById('prePct');
+  var preEl   = document.getElementById('preloader');
+  var preTxt  = document.getElementById('preTxt');
+  var preLine = document.getElementById('preLine');
+  var prePct  = document.getElementById('prePct');
 
-  if (!preEl || !preTxt || !preLine || !prePct) return {};
+  if (!preEl || !preTxt || !preLine || !prePct) return { active: false };
 
-  // Name slides in
+  // Already visited? Skip preloader entirely.
+  if (sessionStorage.getItem('preloaderDone')) {
+    preEl.style.display = 'none';
+    return { active: false };
+  }
+
+  // First visit — run preloader
+  sessionStorage.setItem('preloaderDone', '1');
+
   gsap.fromTo(preTxt,
     { y: '110%' },
     { y: '0%', duration: 0.9, ease: 'power4.out', delay: 0.15 }
   );
 
-  // Count bar 0→100%
   gsap.to({ v: 0 }, {
     v: 100,
     duration: 1.8,
     ease: 'power2.inOut',
     onUpdate() {
-      const v = Math.round(this.targets()[0].v);
+      var v = Math.round(this.targets()[0].v);
       preLine.style.width = v + '%';
       prePct.textContent  = v + '%';
     },
     onComplete() {
-      const tl = gsap.timeline({
-        onComplete: () => {
+      var tl = gsap.timeline({
+        onComplete: function() {
           preEl.style.display = 'none';
           if (typeof Animations !== 'undefined' && Animations.runIntro) {
             Animations.runIntro();
@@ -51,5 +58,5 @@ const Preloader = (() => {
     }
   });
 
-  return { started: true };
+  return { active: true };
 })();
