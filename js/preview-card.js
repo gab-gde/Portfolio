@@ -101,8 +101,7 @@ const PreviewCard = (() => {
       if (href && href !== '#') {
         var cover = document.getElementById('pageCover');
         if (cover) {
-          cover.classList.remove('reveal');
-          cover.classList.add('entering');
+          cover.style.transform = 'translateY(0)';
           setTimeout(function(){ window.location.href = href; }, 700);
         } else {
           window.location.href = href;
