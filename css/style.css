@@ -76,24 +76,26 @@ body {
   position: fixed;
   width: 8px;
   height: 8px;
-  background: #1a1a1a;
+  background: #fff;
   border-radius: 50%;
   pointer-events: none;
   z-index: 8999;
   transform: translate(-50%, -50%);
   transition: width .18s, height .18s, opacity .18s;
+  mix-blend-mode: difference;
 }
 
 #curR {
   position: fixed;
   width: 32px;
   height: 32px;
-  border: 1.5px solid rgba(26,26,26,.25);
+  border: 1.5px solid rgba(255,255,255,.35);
   border-radius: 50%;
   pointer-events: none;
   z-index: 8998;
   transform: translate(-50%, -50%);
   transition: width .25s, height .25s;
+  mix-blend-mode: difference;
 }
 
 body.c-hover #curR { width: 50px; height: 50px; }
@@ -821,17 +823,16 @@ body.c-proj  #curR { opacity: 0; }
    DENNIS-STYLE CONTACT SECTION
 ═══════════════════════════════════════ */
 .ds-contact-wrap {
-  background: #1a1a1a;
+  background: #141516;
   position: relative;
 }
 
-/* Curve — white shape that rounds into dark */
+/* Curve — grows on scroll via GSAP */
 .ds-curve {
   position: relative;
   height: 0;
   background: #fff;
   overflow: hidden;
-  transition: height .01s;
 }
 .ds-curve::after {
   content: '';
@@ -840,30 +841,33 @@ body.c-proj  #curR { opacity: 0; }
   left: -5%;
   right: -5%;
   height: 100%;
-  background: #1a1a1a;
+  background: #141516;
   border-radius: 50% 50% 0 0;
 }
 
 .ds-contact-inner {
-  padding: 120px 44px 60px;
-  max-width: 1200px;
+  padding: 100px 44px 80px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
 /* Let's work together */
 .ds-letswork {
   display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 40px;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 20px;
 }
 .ds-avatar {
-  width: 80px;
-  height: 80px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
   background: #333;
+  margin-top: 12px;
+  opacity: 0;
+  transform: scale(.8);
 }
 .ds-avatar img {
   width: 100%;
@@ -872,10 +876,10 @@ body.c-proj  #curR { opacity: 0; }
   object-position: top;
 }
 .ds-letswork-title {
-  font-size: clamp(48px, 6vw, 88px);
+  font-size: clamp(52px, 7vw, 96px);
   font-weight: 400;
-  letter-spacing: -.03em;
-  line-height: 1;
+  letter-spacing: -.035em;
+  line-height: 1.05;
   color: #fff;
 }
 .ds-reveal-line {
@@ -885,24 +889,24 @@ body.c-proj  #curR { opacity: 0; }
 .ds-reveal-line span {
   display: block;
   transform: translateY(110%);
-  transition: transform .8s cubic-bezier(.16,1,.3,1);
 }
-.ds-reveal-line.vis span { transform: translateY(0); }
+
+.ds-mid-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 0;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  position: relative;
+}
 
 .ds-arrow {
-  font-size: 20px;
-  color: rgba(255,255,255,.3);
-  margin-bottom: 20px;
-  text-align: right;
-  padding-right: 180px;
+  font-size: 22px;
+  color: rgba(255,255,255,.25);
+  opacity: 0;
 }
 
-/* Get in touch — big magnetic blue btn */
-.ds-getintouch {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 0;
-}
+/* Get in touch — big magnetic violet btn */
 .ds-touch-btn {
   width: 160px;
   height: 160px;
@@ -912,39 +916,39 @@ body.c-proj  #curR { opacity: 0; }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   text-decoration: none;
-  box-shadow: 0 12px 40px rgba(67,56,202,.4);
+  box-shadow: 0 14px 50px rgba(67,56,202,.45);
   transition: transform .4s cubic-bezier(.16,1,.3,1), background .3s;
   will-change: transform;
   cursor: pointer;
+  opacity: 0;
+  transform: scale(.7);
 }
 .ds-touch-btn:hover { background: #5b50e6; }
-
-.ds-contact-line {
-  border-top: 1px solid rgba(255,255,255,.08);
-  margin: 60px 0 40px;
-}
 
 /* Contact pills */
 .ds-contact-pills {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+  padding-top: 48px;
 }
 .ds-pill {
-  padding: 16px 32px;
+  padding: 18px 36px;
   border: 1px solid rgba(255,255,255,.12);
   border-radius: 100px;
-  color: rgba(255,255,255,.6);
-  font-size: 14px;
+  color: rgba(255,255,255,.55);
+  font-size: 15px;
   text-decoration: none;
   transition: transform .4s cubic-bezier(.16,1,.3,1), border-color .3s, color .3s;
   will-change: transform;
+  opacity: 0;
+  transform: translateY(20px);
 }
 .ds-pill:hover {
-  border-color: rgba(255,255,255,.3);
+  border-color: rgba(255,255,255,.35);
   color: #fff;
 }
 
@@ -953,31 +957,32 @@ body.c-proj  #curR { opacity: 0; }
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 40px;
-  padding: 40px 44px;
+  padding: 44px;
   border-top: 1px solid rgba(255,255,255,.06);
-  background: #1a1a1a;
+  background: #141516;
+  margin-top: 60px;
 }
 .ds-footer-label {
   font-size: 10px;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: rgba(255,255,255,.25);
+  color: rgba(255,255,255,.2);
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .ds-footer-value {
   font-size: 14px;
-  color: rgba(255,255,255,.5);
+  color: rgba(255,255,255,.45);
 }
 .ds-footer-right { text-align: right; }
 .ds-footer-socials {
   display: flex;
-  gap: 24px;
+  gap: 28px;
   justify-content: flex-end;
 }
 .ds-footer-socials a {
   font-size: 14px;
-  color: rgba(255,255,255,.5);
+  color: rgba(255,255,255,.45);
   text-decoration: none;
   transition: color .3s, transform .4s cubic-bezier(.16,1,.3,1);
   will-change: transform;
@@ -987,10 +992,12 @@ body.c-proj  #curR { opacity: 0; }
 @media (max-width: 768px) {
   .ds-contact-inner { padding: 80px 24px 40px; }
   .ds-letswork { flex-direction: column; align-items: flex-start; gap: 16px; }
-  .ds-avatar { width: 60px; height: 60px; }
+  .ds-avatar { width: 56px; height: 56px; margin-top: 0; }
+  .ds-mid-row { flex-direction: column; gap: 40px; align-items: flex-end; }
   .ds-arrow { display: none; }
-  .ds-touch-btn { width: 130px; height: 130px; font-size: 13px; }
+  .ds-touch-btn { width: 130px; height: 130px; font-size: 14px; }
   .ds-contact-pills { flex-direction: column; }
+  .ds-pill { text-align: center; }
   .ds-footer { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
   .ds-footer-right { text-align: left; }
   .ds-footer-socials { justify-content: flex-start; }

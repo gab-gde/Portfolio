@@ -143,12 +143,11 @@
             <span class="ds-reveal-line"><span>together</span></span>
           </h2>
         </div>
-        <div class="ds-arrow">↙</div>
-        <div class="ds-getintouch">
+        <div class="ds-mid-row">
+          <div class="ds-arrow">↙</div>
           <a href="contact.html" class="ds-touch-btn" data-magnetic><span>Get in touch</span></a>
         </div>
       </div>
-      <div class="ds-contact-line"></div>
       <div class="ds-contact-pills">
         <a href="mailto:contact@gabingoude.fr" class="ds-pill" data-magnetic><span>contact@gabingoude.fr</span></a>
         <a href="tel:+33600000000" class="ds-pill" data-magnetic><span>+33 6 00 00 00 00</span></a>
@@ -225,38 +224,48 @@
       });
     }
 
-    // === Reveal "Let's work together" lines on scroll ===
-    document.querySelectorAll('.ds-reveal-line').forEach(function(line, i) {
-      ScrollTrigger.create({
-        trigger: line,
-        start: 'top 85%',
-        onEnter: function() {
-          setTimeout(function() { line.classList.add('vis'); }, i * 120);
-        }
+    // === Reveal "Let's work together" — text lines slide up ===
+    var dsLines = document.querySelectorAll('.ds-reveal-line span');
+    dsLines.forEach(function(span, i) {
+      gsap.to(span, {
+        y: '0%',
+        duration: 1,
+        delay: i * .12,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.ds-letswork', start: 'top 80%', toggleActions: 'play none none none' }
       });
     });
 
-    // === Reveal contact pills + touch btn ===
-    gsap.fromTo('.ds-touch-btn', { opacity: 0, scale: .7 }, {
-      opacity: 1, scale: 1, duration: .8, ease: 'back.out(1.5)',
-      scrollTrigger: { trigger: '.ds-getintouch', start: 'top 85%', toggleActions: 'play none none none' }
+    // === Avatar pop in ===
+    gsap.to('.ds-avatar', {
+      opacity: 1, scale: 1, duration: .7, ease: 'back.out(1.4)',
+      scrollTrigger: { trigger: '.ds-letswork', start: 'top 80%', toggleActions: 'play none none none' }
     });
-    gsap.fromTo('.ds-pill', { opacity: 0, y: 20 }, {
+
+    // === Arrow fade in ===
+    gsap.to('.ds-arrow', {
+      opacity: 1, duration: .5, delay: .3,
+      scrollTrigger: { trigger: '.ds-mid-row', start: 'top 85%', toggleActions: 'play none none none' }
+    });
+
+    // === Get in touch btn — scale bounce ===
+    gsap.to('.ds-touch-btn', {
+      opacity: 1, scale: 1, duration: .9, ease: 'back.out(1.7)',
+      scrollTrigger: { trigger: '.ds-mid-row', start: 'top 80%', toggleActions: 'play none none none' }
+    });
+
+    // === Contact pills stagger ===
+    gsap.to('.ds-pill', {
       opacity: 1, y: 0, duration: .6, stagger: .12, ease: 'power3.out',
       scrollTrigger: { trigger: '.ds-contact-pills', start: 'top 90%', toggleActions: 'play none none none' }
-    });
-    gsap.fromTo('.ds-arrow', { opacity: 0 }, {
-      opacity: 1, duration: .5,
-      scrollTrigger: { trigger: '.ds-arrow', start: 'top 85%', toggleActions: 'play none none none' }
     });
 
     // === Local time clock ===
     function updateTime() {
       var now = new Date();
-      var h = now.getHours().toString().padStart(2,'0');
-      var m = now.getMinutes().toString().padStart(2,'0');
+      var h = now.toLocaleString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Europe/Paris' });
       var el = document.getElementById('dsTime');
-      if (el) el.textContent = h + ':' + m + ' CET';
+      if (el) el.textContent = h + ' CET';
     }
     updateTime();
     setInterval(updateTime, 30000);
