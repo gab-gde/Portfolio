@@ -10,7 +10,7 @@
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--font:'Hanken Grotesk',sans-serif;--dark:#1a1a1a;--mid:#8a8a8a;--border:#e4e4e4;--blue:#3d5af1;--beige:#e8e5de}
-    html{scroll-behavior:smooth}
+    html{scroll-behavior:smooth;background:#1c1d20}
     body{font-family:var(--font);background:#fff;color:var(--dark);overflow-x:hidden}
     a{color:inherit;text-decoration:none}
     .rv{opacity:0;transform:translateY(50px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}.rv.vis{opacity:1;transform:translateY(0)}.dl1{transition-delay:.08s}.dl2{transition-delay:.16s}.dl3{transition-delay:.24s}
@@ -87,6 +87,9 @@
       .mockup{padding:24px}.next-dark{padding:60px 24px 40px}.next-footer{padding:24px;flex-direction:column;gap:8px}
     }
   </style>
+  <!-- Instant overlay: prevents white flash between pages -->
+  <style>#pageOverlay{position:fixed;inset:0;z-index:9998;pointer-events:all;overflow:hidden}.po-bg{position:absolute;left:0;right:0;top:-15%;height:130%;background:#1c1d20;will-change:transform}.po-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:"Hanken Grotesk",sans-serif;font-size:clamp(28px,5vw,64px);font-weight:600;letter-spacing:-.04em;color:#fff;white-space:nowrap;overflow:hidden;z-index:2}</style>
+  <script>var _po=document.createElement("div");_po.id="pageOverlay";_po.innerHTML='<div class="po-bg"></div><span class="po-text"></span>';document.documentElement.appendChild(_po);</script>
 </head>
 <body>
 

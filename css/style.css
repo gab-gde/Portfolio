@@ -10,6 +10,7 @@
 html {
   overflow-y: scroll;
   scroll-behavior: smooth;
+  background: #1c1d20;
 }
 
 body {
@@ -1027,6 +1028,8 @@ body.c-proj  #curR { opacity: 0; }
   height: 130%;
   background: #1c1d20;
   will-change: transform, border-radius;
+  /* DEFAULT: covers screen. JS moves it away after enter animation. */
+  transform: translateY(0%);
 }
 .po-text {
   position: absolute;
