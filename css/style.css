@@ -531,8 +531,8 @@ body.c-proj  #curR { opacity: 0; }
 #previewCard {
   position: fixed;
   top: 0; left: 0;
-  width: 420px;
-  height: 420px;
+  width: 520px;
+  height: 520px;
   overflow: hidden;
   pointer-events: none;
   z-index: 600;
