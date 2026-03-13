@@ -90,15 +90,18 @@
     .next-title{font-size:clamp(56px,9vw,140px);font-weight:400;letter-spacing:-.035em;color:rgba(255,255,255,.15);display:inline-block;transition:color .4s}
     .next-title:hover{color:#fff}
     .next-img-wrap{position:relative;margin:60px auto 0;max-width:700px}
-    .next-line{position:absolute;top:50%;left:-60px;right:-60px;height:1px;background:rgba(255,255,255,.1)}
-    .next-img{overflow:hidden;position:relative;z-index:2}
-    .next-img img{width:100%;display:block;transition:transform .8s cubic-bezier(.16,1,.3,1)}
-    .next-img:hover img{transform:scale(1.04)}
+    .next-line{position:absolute;top:0;left:-60px;right:-60px;height:1px;background:rgba(255,255,255,.1);z-index:3}
+    .next-img{height:220px;overflow:hidden;position:relative;z-index:2;cursor:pointer}
+    .next-img img{width:100%;display:block;transition:transform 1s cubic-bezier(.16,1,.3,1)}
+    .next-img:hover img{transform:translateY(-15%)}
     .next-allwork{display:inline-flex;align-items:center;gap:8px;margin-top:60px;padding:16px 36px;border:1px solid rgba(255,255,255,.15);border-radius:100px;color:rgba(255,255,255,.5);font-size:13px;transition:all .4s cubic-bezier(.16,1,.3,1);will-change:transform}
     .next-allwork:hover{border-color:rgba(255,255,255,.4);color:#fff}
     .next-allwork sup{font-size:10px;opacity:.5}
     .next-footer{background:#1c1d20;padding:36px 48px;display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.05)}
     .next-footer span{font-size:11px;color:rgba(255,255,255,.2)}
+
+    /* PAGE TRANSITION */
+    .page-cover{position:fixed;inset:0;background:#1c1d20;z-index:9999;transform:translateY(100%);transition:transform .6s cubic-bezier(.76,0,.24,1)}
 
     @media(max-width:768px){
       nav,.title-wrap,.meta-wrap,.images,.next-inner{padding-left:24px;padding-right:24px}
@@ -188,19 +191,21 @@
     </div>
   </div>
 
+  <div class="page-cover" id="pageCover"></div>
+
   <!-- NEXT — Dennis style -->
   <div class="next-wrap">
     <div class="next-curve"></div>
     <div class="next-dark">
       <p class="next-label rv">Next case</p>
-      <a href="../kami/details.html" class="next-title rv dl1">TERRA</a>
+      <a href="../kami/details.html" class="next-title rv dl1 page-link">TERRA</a>
       <div class="next-img-wrap">
         <div class="next-line"></div>
         <div class="next-img rv dl2">
-          <a href="../kami/details.html"><img src="../../assets/images/projects/terra.png" alt="TERRA"></a>
+          <a href="../kami/details.html" class="page-link"><img src="../../assets/images/projects/terra.png" alt="TERRA"></a>
         </div>
       </div>
-      <div class="rv dl3"><a href="../../index.html#work" class="next-allwork" data-magnetic><span>All work <sup>2</sup></span></a></div>
+      <div class="rv dl3"><a href="../../index.html#work" class="next-allwork page-link" data-magnetic><span>All work <sup>2</sup></span></a></div>
     </div>
     <footer class="next-footer">
       <span>© Code by Gabin Goude</span>
@@ -214,6 +219,21 @@
     document.querySelectorAll('[data-magnetic]').forEach(function(btn){
       btn.addEventListener('mousemove',function(e){var r=btn.getBoundingClientRect();var x=e.clientX-r.left-r.width/2;var y=e.clientY-r.top-r.height/2;btn.style.transform='translate('+x*.45+'px,'+y*.45+'px)'});
       btn.addEventListener('mouseleave',function(){btn.style.transform='translate(0,0)'});
+    });
+    // Page transitions
+    var cover=document.getElementById('pageCover');
+    document.querySelectorAll('a.page-link, nav a, .logo-wrap').forEach(function(a){
+      a.addEventListener('click',function(e){
+        var href=this.getAttribute('href');
+        if(!href||href.startsWith('#')||href.startsWith('http'))return;
+        e.preventDefault();
+        cover.style.transform='translateY(0)';
+        setTimeout(function(){window.location.href=href},650);
+      });
+    });
+    // Reveal on load — cover slides away
+    window.addEventListener('load',function(){
+      cover.style.transform='translateY(-100%)';
     });
   </script>
 </body>

@@ -14,6 +14,7 @@
 
   <div id="cur"></div>
   <div id="curR"></div>
+  <div class="page-cover" id="pageCover"></div>
 
   <a href="about.html" id="aboutBubble">About me</a>
   <div id="hamBtn"><span></span><span></span></div>
@@ -273,6 +274,18 @@
     }
     updateTime();
     setInterval(updateTime, 30000);
+
+    // === Page transitions ===
+    var cover=document.getElementById('pageCover');
+    document.querySelectorAll('.project-item, .cta-circle, .next-allwork, #aboutBubble, .nav-links a[href]:not([href^="#"]), .ds-touch-btn').forEach(function(el){
+      el.addEventListener('click',function(e){
+        var href = el.getAttribute('href') || el.dataset.href;
+        if(!href||href.startsWith('#')||href.startsWith('http'))return;
+        e.preventDefault();
+        cover.style.transform='translateY(0)';
+        setTimeout(function(){window.location.href=href},650);
+      });
+    });
   </script>
 </body>
 </html>
