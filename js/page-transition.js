@@ -124,14 +124,15 @@ const PageTransition = (() => {
       // First visit: preloader is on top handling everything, just hide overlay
       gsap.set(bg, { yPercent: -115 });
       overlay.style.pointerEvents = 'none';
+    } else if (isHome) {
+      // Return visit to homepage: show elements instantly, then reveal with transition
+      if (typeof Animations !== 'undefined' && Animations.showInstant) {
+        Animations.showInstant();
+      }
+      enter();
     } else {
-      // Return visit to homepage OR any subpage: run enter transition
-      enter(function() {
-        // On homepage return, also fire intro animations if they haven't run
-        if (isHome && typeof Animations !== 'undefined' && Animations.runIntro) {
-          Animations.runIntro();
-        }
-      });
+      // Subpage: run enter transition
+      enter();
     }
   });
 

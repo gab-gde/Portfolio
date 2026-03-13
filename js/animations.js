@@ -33,6 +33,9 @@ const Animations = (() => {
      1. HERO INTRO — called after preloader
   ────────────────────────────────────── */
   function runIntro() {
+    if (runIntro._done) return;
+    runIntro._done = true;
+
     // Refresh all trigger positions now that preloader is gone
     ScrollTrigger.refresh();
 
@@ -43,6 +46,19 @@ const Animations = (() => {
       .fromTo('#heroRole',  { opacity: 0, x: 28  }, { opacity: 1, x: 0, duration: .9  }, 0.56)
       .fromTo('#locBadge',  { opacity: 0, x: -22 }, { opacity: 1, x: 0, duration: .85 }, 0.64)
       .fromTo('#heroArrow', { opacity: 0         }, { opacity: .6,       duration: .6  }, 0.85);
+  }
+
+  /* Instant show — for return visits (no re-animation) */
+  function showInstant() {
+    if (runIntro._done) return;
+    runIntro._done = true;
+    ScrollTrigger.refresh();
+    gsap.set('#heroNav',    { opacity: 1, y: 0 });
+    gsap.set('#nameSlider', { opacity: 1, y: 0 });
+    gsap.set('#heroPhoto',  { opacity: 1, y: 0 });
+    gsap.set('#heroRole',   { opacity: 1, x: 0 });
+    gsap.set('#locBadge',   { opacity: 1, x: 0 });
+    gsap.set('#heroArrow',  { opacity: .6 });
   }
 
   /* ──────────────────────────────────────
@@ -209,7 +225,7 @@ const Animations = (() => {
     }
   );
 
-  return { runIntro };
+  return { runIntro, showInstant };
 
 })();
 
