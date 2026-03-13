@@ -1,6 +1,7 @@
 /**
- * preloader.js — Homepage first visit only
- * If already visited this session, hides itself instantly.
+ * preloader.js — Homepage only, fresh visits only
+ * page-transition.js sets window.__ptCameFromNav = true when returning to homepage.
+ * If that flag is set, preloader hides instantly.
  */
 
 const Preloader = (() => {
@@ -11,15 +12,13 @@ const Preloader = (() => {
 
   if (!preEl || !preTxt || !preLine || !prePct) return { active: false };
 
-  // Already visited? Skip preloader entirely.
-  if (sessionStorage.getItem('preloaderDone')) {
+  // Came from internal navigation? Skip preloader.
+  if (window.__ptCameFromNav) {
     preEl.style.display = 'none';
     return { active: false };
   }
 
-  // First visit — run preloader
-  sessionStorage.setItem('preloaderDone', '1');
-
+  // Fresh visit — run preloader
   gsap.fromTo(preTxt,
     { y: '110%' },
     { y: '0%', duration: 0.9, ease: 'power4.out', delay: 0.15 }
@@ -46,7 +45,7 @@ const Preloader = (() => {
 
       tl.to(preTxt, { y: '-110%', duration: 0.4, ease: 'power3.in' }, 0)
         .to(preEl, {
-          yPercent: -115,
+          yPercent: -110,
           duration: 0.9,
           ease: 'power3.inOut',
           onUpdate: function() {

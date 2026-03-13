@@ -1,20 +1,21 @@
 /**
  * page-transition.js — Unified curved page transition
- * On homepage first visit: preloader handles reveal, overlay stays hidden.
- * On homepage return visit: overlay runs enter() like any subpage.
+ *
+ * Overlay structure (injected in <head> of every page):
+ *   #pageOverlay
+ *     .po-bg          — dark background that slides
+ *     .po-text-wrap   — centered container, overflow:hidden
+ *       .po-text      — the page name that slides in/out
+ *
+ * On leave(): sets sessionStorage flag so destination page knows
+ * it came from an internal navigation (preloader should skip).
  */
 
 const PageTransition = (() => {
-  var overlay = document.getElementById('pageOverlay');
-  if (!overlay) {
-    overlay = document.createElement('div');
-    overlay.id = 'pageOverlay';
-    overlay.innerHTML = '<div class="po-bg"></div><span class="po-text"></span>';
-    document.documentElement.appendChild(overlay);
-  }
-
-  var bg     = overlay.querySelector('.po-bg');
-  var textEl = overlay.querySelector('.po-text');
+  var overlay  = document.getElementById('pageOverlay');
+  var bg       = overlay.querySelector('.po-bg');
+  var textWrap = overlay.querySelector('.po-text-wrap');
+  var textEl   = overlay.querySelector('.po-text');
 
   function getPageName(href) {
     if (!href) return '';
@@ -29,8 +30,11 @@ const PageTransition = (() => {
     return '';
   }
 
+  /* ── ENTER — bg slides up with curve, text slides in then out ── */
   function enter(onComplete) {
     overlay.style.pointerEvents = 'all';
+    gsap.set(bg, { yPercent: 0, borderRadius: '0' });
+    gsap.set(textEl, { yPercent: 110 });
 
     var tl = gsap.timeline({
       onComplete: function() {
@@ -40,53 +44,53 @@ const PageTransition = (() => {
       }
     });
 
+    // Text in
+    tl.to(textEl, { yPercent: 0, duration: 0.45, ease: 'power3.out' }, 0);
+    // Text out
+    tl.to(textEl, { yPercent: -110, duration: 0.35, ease: 'power3.in' }, 0.55);
+    // BG slides up with curve — single fluid motion
     tl.to(bg, {
-      yPercent: -115,
+      yPercent: -110,
       duration: 1.0,
       ease: 'power4.inOut',
       onUpdate: function() {
         var p = this.progress();
-        var curve = Math.sin(p * Math.PI) * 50;
+        var curve = Math.sin(p * Math.PI) * 55;
         bg.style.borderRadius = '0 0 50% 50% / 0 0 ' + curve + 'px ' + curve + 'px';
       }
-    }, 0.25);
-
-    tl.fromTo(textEl,
-      { y: '110%', opacity: 1 },
-      { y: '0%', duration: 0.4, ease: 'power3.out' },
-    0);
-    tl.to(textEl,
-      { y: '-110%', duration: 0.3, ease: 'power3.in' },
-    0.45);
+    }, 0.3);
   }
 
+  /* ── LEAVE — bg slides up from bottom with curve, text slides in ── */
   function leave(href) {
+    // Flag for destination page: "I came from internal navigation"
+    try { sessionStorage.setItem('ptNav', '1'); } catch(e) {}
+
     overlay.style.pointerEvents = 'all';
     textEl.textContent = getPageName(href);
-    gsap.set(bg, { yPercent: 115, borderRadius: '0' });
-    gsap.set(textEl, { y: '110%', opacity: 1 });
+    gsap.set(bg, { yPercent: 110, borderRadius: '0' });
+    gsap.set(textEl, { yPercent: 110 });
 
     var tl = gsap.timeline({
-      onComplete: function() { window.location.href = href; }
+      onComplete: function() {
+        gsap.set(bg, { borderRadius: '0', yPercent: 0 });
+        window.location.href = href;
+      }
     });
 
+    // BG slides up
     tl.to(bg, {
       yPercent: 0,
       duration: 0.85,
       ease: 'power4.inOut',
       onUpdate: function() {
         var p = this.progress();
-        var curve = Math.sin(p * Math.PI) * 50;
+        var curve = Math.sin(p * Math.PI) * 55;
         bg.style.borderRadius = curve + 'px ' + curve + 'px 0 0 / 50% 50% 0 0';
       }
     }, 0);
-
-    tl.fromTo(textEl,
-      { y: '110%' },
-      { y: '0%', duration: 0.4, ease: 'power3.out' },
-    0.2);
-
-    tl.set(bg, { borderRadius: '0', yPercent: 0 });
+    // Text in
+    tl.to(textEl, { yPercent: 0, duration: 0.45, ease: 'power3.out' }, 0.2);
   }
 
   /* ── Intercept links ── */
@@ -116,22 +120,31 @@ const PageTransition = (() => {
     path.endsWith('/Portfolio/')
   );
 
-  window.addEventListener('load', function() {
-    // Check if preloader is actively running
-    var preloaderActive = (typeof Preloader !== 'undefined' && Preloader.active === true);
+  // Did we arrive from internal navigation?
+  var cameFromNav = false;
+  try {
+    cameFromNav = sessionStorage.getItem('ptNav') === '1';
+    sessionStorage.removeItem('ptNav');
+  } catch(e) {}
 
-    if (isHome && preloaderActive) {
-      // First visit: preloader is on top handling everything, just hide overlay
-      gsap.set(bg, { yPercent: -115 });
+  // Set immediately so preloader.js (loaded next) can check this
+  if (cameFromNav) {
+    window.__ptCameFromNav = true;
+  }
+
+  window.addEventListener('load', function() {
+    if (isHome && !cameFromNav) {
+      // Fresh visit / refresh: preloader handles reveal, hide overlay
+      gsap.set(bg, { yPercent: -110 });
       overlay.style.pointerEvents = 'none';
-    } else if (isHome) {
-      // Return visit to homepage: show elements instantly, then reveal with transition
+    } else if (isHome && cameFromNav) {
+      // Return to homepage: preloader already skipped (flag set at module scope)
       if (typeof Animations !== 'undefined' && Animations.showInstant) {
         Animations.showInstant();
       }
       enter();
     } else {
-      // Subpage: run enter transition
+      // Subpage
       enter();
     }
   });

@@ -88,8 +88,8 @@
     }
   </style>
   <!-- Instant overlay: prevents white flash between pages -->
-  <style>#pageOverlay{position:fixed;inset:0;z-index:9998;pointer-events:all;overflow:hidden}.po-bg{position:absolute;left:0;right:0;top:-15%;height:130%;background:#1c1d20;will-change:transform}.po-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:"Hanken Grotesk",sans-serif;font-size:clamp(28px,5vw,64px);font-weight:600;letter-spacing:-.04em;color:#fff;white-space:nowrap;overflow:hidden;z-index:2}</style>
-  <script>var _po=document.createElement("div");_po.id="pageOverlay";_po.innerHTML='<div class="po-bg"></div><span class="po-text"></span>';document.documentElement.appendChild(_po);</script>
+  <style>#pageOverlay{position:fixed;inset:0;z-index:9998;pointer-events:all;overflow:hidden}.po-bg{position:absolute;left:0;right:0;top:-15%;height:130%;background:#1c1d20;will-change:transform}.po-text-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;overflow:hidden}.po-text{font-family:"Hanken Grotesk",sans-serif;font-size:clamp(28px,5vw,64px);font-weight:600;letter-spacing:-.04em;color:#fff;white-space:nowrap;will-change:transform}</style>
+  <script>var _po=document.createElement("div");_po.id="pageOverlay";_po.innerHTML='<div class="po-bg"></div><div class="po-text-wrap"><span class="po-text"></span></div>';document.documentElement.appendChild(_po);</script>
 </head>
 <body>
 

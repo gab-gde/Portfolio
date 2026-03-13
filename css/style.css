@@ -1028,20 +1028,24 @@ body.c-proj  #curR { opacity: 0; }
   height: 130%;
   background: #1c1d20;
   will-change: transform, border-radius;
-  /* DEFAULT: covers screen. JS moves it away after enter animation. */
+  /* CSS default: covers screen */
   transform: translateY(0%);
 }
-.po-text {
+.po-text-wrap {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  overflow: hidden;
+}
+.po-text {
   font-family: 'Hanken Grotesk', sans-serif;
   font-size: clamp(28px, 5vw, 64px);
   font-weight: 600;
   letter-spacing: -.04em;
   color: #fff;
   white-space: nowrap;
-  overflow: hidden;
-  z-index: 2;
+  will-change: transform;
 }
