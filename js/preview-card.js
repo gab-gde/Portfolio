@@ -1,18 +1,18 @@
 /**
  * preview-card.js
  * Image preview card — follows cursor on project hover (like Dennis Snellenberg)
- * Slides image up/down when switching between projects
+ * Big visible slide up/down with beige background showing between transitions
  */
 
 const PreviewCard = (() => {
   const card = document.getElementById('previewCard');
   const pBg  = document.getElementById('pBg');
-  const pLbl = document.getElementById('pLbl');
   const pImg = document.getElementById('pImg');
 
   let mx = 0, my = 0;
   let pcx = 0, pcy = 0;
   let currentIndex = -1;
+  let isAnimating = false;
 
   document.addEventListener('mousemove', e => {
     mx = e.clientX;
@@ -32,47 +32,60 @@ const PreviewCard = (() => {
   items.forEach((item, index) => {
     item.addEventListener('mouseenter', () => {
       const newImg = item.dataset.img;
-      const direction = index > currentIndex ? 1 : -1; // 1 = down, -1 = up
+      if (!newImg) return;
 
-      if (currentIndex !== -1 && newImg && pImg.src !== newImg) {
-        // Slide out current image
-        pImg.style.transition = 'transform .35s cubic-bezier(.76,0,.24,1), opacity .2s';
-        pImg.style.transform = 'translateY(' + (direction * -40) + 'px)';
-        pImg.style.opacity = '0';
+      card.classList.add('show');
+      document.body.classList.add('c-proj');
 
-        setTimeout(() => {
-          pImg.src = newImg;
-          // Start from opposite direction
-          pImg.style.transition = 'none';
-          pImg.style.transform = 'translateY(' + (direction * 40) + 'px)';
-          pImg.style.opacity = '0';
-
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              pImg.style.transition = 'transform .4s cubic-bezier(.16,1,.3,1), opacity .3s';
-              pImg.style.transform = 'translateY(0)';
-              pImg.style.opacity = '1';
-            });
-          });
-        }, 250);
-      } else if (newImg) {
-        pImg.src = newImg;
+      // First hover — no slide, just show
+      if (currentIndex === -1) {
         pImg.style.transition = 'none';
         pImg.style.transform = 'translateY(0)';
         pImg.style.opacity = '1';
+        pImg.src = newImg;
+        currentIndex = index;
+        return;
       }
 
+      // Same project — no change
+      if (index === currentIndex) return;
+
+      // Different project — slide animation
+      if (isAnimating) return;
+      isAnimating = true;
+
+      var dir = index > currentIndex ? 1 : -1; // 1=going down, -1=going up
       currentIndex = index;
-      pBg.style.background = item.dataset.color || '#e8e5de';
-      if (pLbl) pLbl.textContent = item.dataset.label || '';
-      card.classList.add('show');
-      document.body.classList.add('c-proj');
+
+      // Phase 1: slide current image OUT (100% of container height)
+      pImg.style.transition = 'transform .4s cubic-bezier(.76,0,.24,1), opacity .25s ease';
+      pImg.style.transform = 'translateY(' + (dir * -100) + '%)';
+      pImg.style.opacity = '0';
+
+      // Phase 2: after slide out, swap image, position off-screen, slide IN
+      setTimeout(function() {
+        pImg.src = newImg;
+        pImg.style.transition = 'none';
+        pImg.style.transform = 'translateY(' + (dir * 100) + '%)';
+        pImg.style.opacity = '0';
+
+        // Force reflow
+        void pImg.offsetHeight;
+
+        // Slide in
+        pImg.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1), opacity .35s ease';
+        pImg.style.transform = 'translateY(0)';
+        pImg.style.opacity = '1';
+
+        setTimeout(function() { isAnimating = false; }, 500);
+      }, 380);
     });
 
     item.addEventListener('mouseleave', () => {
       card.classList.remove('show');
       document.body.classList.remove('c-proj');
       currentIndex = -1;
+      isAnimating = false;
     });
 
     item.addEventListener('click', () => {
