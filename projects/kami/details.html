@@ -63,20 +63,22 @@
     .next-curve{position:relative;height:300px;background:#fff;overflow:hidden}
     .next-curve::after{content:'';position:absolute;bottom:-1px;left:-10%;right:-10%;height:100%;background:#1c1d20;border-radius:50% 50% 0 0}
     .next-dark{background:#1c1d20;padding:80px 48px 60px;text-align:center}
-    .next-label{font-size:13px;letter-spacing:.08em;color:rgba(255,255,255,.4);margin-bottom:28px}
-    .next-title{font-size:clamp(56px,9vw,140px);font-weight:400;letter-spacing:-.035em;color:rgba(255,255,255,.15);display:inline-block;transition:color .4s}
-    .next-title:hover{color:#fff}
-    .next-img-wrap{position:relative;margin:60px auto 0;max-width:700px}
-    .next-line{position:absolute;top:0;left:-60px;right:-60px;height:1px;background:rgba(255,255,255,.1);z-index:3}
-    .next-img{height:220px;overflow:hidden;position:relative;z-index:2;cursor:pointer}
-    .next-img img{width:100%;display:block;transition:transform 1s cubic-bezier(.16,1,.3,1)}
-    .next-img:hover img{transform:translateY(-15%)}
-    .next-allwork{display:inline-flex;align-items:center;gap:8px;margin-top:60px;padding:16px 36px;border:1px solid rgba(255,255,255,.15);border-radius:100px;color:rgba(255,255,255,.5);font-size:13px;transition:all .4s cubic-bezier(.16,1,.3,1);will-change:transform}
-    .next-allwork:hover{border-color:rgba(255,255,255,.4);color:#fff}
+    .next-label{font-size:14px;letter-spacing:.06em;color:rgba(255,255,255,.45);margin-bottom:24px}
+    .next-title{font-size:clamp(56px,9vw,140px);font-weight:400;letter-spacing:-.035em;color:rgba(255,255,255,.12);display:inline-block;transition:color .5s}
+    .next-title:hover{color:rgba(255,255,255,.6)}
+    .next-peek{position:relative;max-width:800px;margin:80px auto 0}
+    .next-peek-line{height:1px;background:rgba(255,255,255,.1);position:relative;z-index:3;margin:0 -80px}
+    .next-peek-img{height:180px;overflow:hidden;cursor:pointer;position:relative}
+    .next-peek-img img{width:100%;display:block;position:absolute;bottom:0;left:0;transition:transform .8s cubic-bezier(.16,1,.3,1)}
+    .next-peek-img:hover img{transform:translateY(-30%)}
+    .next-allwork{display:inline-flex;align-items:center;gap:8px;margin-top:60px;padding:16px 36px;border:1px solid rgba(255,255,255,.12);border-radius:100px;color:rgba(255,255,255,.4);font-size:14px;transition:all .4s cubic-bezier(.16,1,.3,1);will-change:transform}
+    .next-allwork:hover{border-color:rgba(255,255,255,.35);color:#fff}
     .next-allwork sup{font-size:10px;opacity:.5}
-    .next-footer{background:#1c1d20;padding:36px 48px;display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.05)}
+    .next-footer{background:#1c1d20;padding:40px 48px;display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.05)}
     .next-footer span{font-size:11px;color:rgba(255,255,255,.2)}
-    .page-cover{position:fixed;inset:0;background:#1c1d20;z-index:9999;transform:translateY(100%);transition:transform .6s cubic-bezier(.76,0,.24,1)}
+    .page-cover{position:fixed;inset:0;background:#1c1d20;z-index:9999;transform:translateY(0);pointer-events:none}
+    .page-cover.reveal{transition:transform .8s cubic-bezier(.76,0,.24,1);transform:translateY(-100%)}
+    .page-cover.entering{transition:transform .6s cubic-bezier(.76,0,.24,1);transform:translateY(0)}
     @media(max-width:768px){
       nav,.title-wrap,.meta-wrap,.images,.next-dark{padding-left:24px;padding-right:24px}
       .meta{grid-template-columns:1fr}.img-row{grid-template-columns:1fr}
@@ -126,12 +128,12 @@
     <div class="next-curve"></div>
     <div class="next-dark">
       <p class="next-label rv">Next case</p>
-      <a href="../restaurant/details.html" class="next-title rv dl1 page-link">Maison Élysée</a>
-      <div class="next-img-wrap">
-        <div class="next-line"></div>
-        <div class="next-img rv dl2"><a href="../restaurant/details.html" class="page-link"><img src="../../assets/images/projects/maison-elysee.png" alt="Maison Élysée"></a></div>
+      <a href="../restaurant/details.html" class="next-title rv dl1 plink">Maison Élysée</a>
+      <div class="next-peek">
+        <div class="next-peek-line"></div>
+        <div class="next-peek-img rv dl2"><a href="../restaurant/details.html" class="plink"><img src="../../assets/images/projects/maison-elysee.png" alt="Maison Élysée"></a></div>
       </div>
-      <div class="rv dl3"><a href="../../index.html#work" class="next-allwork page-link" data-magnetic><span>All work <sup>2</sup></span></a></div>
+      <div class="rv dl3"><a href="../../index.html#work" class="next-allwork plink" data-magnetic><span>All work <sup>2</sup></span></a></div>
     </div>
     <footer class="next-footer"><span>© Code by Gabin Goude</span><span>2026</span></footer>
   </div>
@@ -143,19 +145,17 @@
       btn.addEventListener('mousemove',function(e){var r=btn.getBoundingClientRect();var x=e.clientX-r.left-r.width/2;var y=e.clientY-r.top-r.height/2;btn.style.transform='translate('+x*.45+'px,'+y*.45+'px)'});
       btn.addEventListener('mouseleave',function(){btn.style.transform='translate(0,0)'});
     });
-    // Page transitions
     var cover=document.getElementById('pageCover');
-    document.querySelectorAll('a.page-link, nav a, .logo-wrap').forEach(function(a){
+    requestAnimationFrame(function(){requestAnimationFrame(function(){cover.classList.add('reveal')})});
+    document.querySelectorAll('a.plink, nav a, .logo-wrap').forEach(function(a){
       a.addEventListener('click',function(e){
         var href=this.getAttribute('href');
         if(!href||href.startsWith('#')||href.startsWith('http'))return;
         e.preventDefault();
-        cover.style.transform='translateY(0)';
-        setTimeout(function(){window.location.href=href},650);
+        cover.classList.remove('reveal');
+        cover.classList.add('entering');
+        setTimeout(function(){window.location.href=href},700);
       });
-    });
-    window.addEventListener('load',function(){
-      cover.style.transform='translateY(-100%)';
     });
   </script>
 </body>

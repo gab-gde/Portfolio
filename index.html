@@ -14,7 +14,7 @@
 
   <div id="cur"></div>
   <div id="curR"></div>
-  <div class="page-cover" id="pageCover"></div>
+  <div class="page-cover reveal" id="pageCover"></div>
 
   <a href="about.html" id="aboutBubble">About me</a>
   <div id="hamBtn"><span></span><span></span></div>
@@ -277,13 +277,15 @@
 
     // === Page transitions ===
     var cover=document.getElementById('pageCover');
-    document.querySelectorAll('.project-item, .cta-circle, .next-allwork, #aboutBubble, .nav-links a[href]:not([href^="#"]), .ds-touch-btn').forEach(function(el){
+    // Exit transition on click
+    document.querySelectorAll('.project-item, .cta-circle, .next-allwork, #aboutBubble, .nav-links a[href]:not([href^="#"]), .ds-touch-btn, .ds-footer-socials a').forEach(function(el){
       el.addEventListener('click',function(e){
         var href = el.getAttribute('href') || el.dataset.href;
         if(!href||href.startsWith('#')||href.startsWith('http'))return;
         e.preventDefault();
-        cover.style.transform='translateY(0)';
-        setTimeout(function(){window.location.href=href},650);
+        cover.classList.remove('reveal');
+        cover.classList.add('entering');
+        setTimeout(function(){window.location.href=href},700);
       });
     });
   </script>
