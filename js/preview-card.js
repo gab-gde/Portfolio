@@ -1,6 +1,6 @@
 /**
  * preview-card.js
- * Like Dennis Snellenberg: project bg color shows during image slide transition
+ * Dennis Snellenberg style: project color bg shows during slide transition
  */
 
 const PreviewCard = (() => {
@@ -12,6 +12,7 @@ const PreviewCard = (() => {
   let pcx = 0, pcy = 0;
   let currentIndex = -1;
   let isAnimating = false;
+  let hideTimer = null;
 
   document.addEventListener('mousemove', e => {
     mx = e.clientX;
@@ -30,6 +31,9 @@ const PreviewCard = (() => {
 
   items.forEach((item, index) => {
     item.addEventListener('mouseenter', () => {
+      // Cancel any pending hide
+      if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+
       const newImg = item.dataset.img;
       const bgColor = item.dataset.color || '#1a1a1a';
       if (!newImg) return;
@@ -37,53 +41,57 @@ const PreviewCard = (() => {
       card.classList.add('show');
       document.body.classList.add('c-proj');
 
-      // First hover — just show, no slide
+      // First hover or re-entering after full leave — just show
       if (currentIndex === -1) {
         pBg.style.background = bgColor;
         pImg.style.transition = 'none';
         pImg.style.transform = 'translateY(0)';
-        pImg.style.opacity = '1';
         pImg.src = newImg;
         currentIndex = index;
         return;
       }
 
+      // Same project
       if (index === currentIndex) return;
+
+      // Different project — SLIDE
       if (isAnimating) return;
       isAnimating = true;
 
       var dir = index > currentIndex ? 1 : -1;
       currentIndex = index;
 
-      // Set new bg color immediately — it shows through as image slides out
-      pBg.style.transition = 'background .3s';
+      // Change bg color — visible during slide gap
       pBg.style.background = bgColor;
 
-      // Slide current image out
-      pImg.style.transition = 'transform .45s cubic-bezier(.76,0,.24,1)';
+      // Slide OUT
+      pImg.style.transition = 'transform .4s cubic-bezier(.76,0,.24,1)';
       pImg.style.transform = 'translateY(' + (dir * -100) + '%)';
 
       setTimeout(function() {
-        // Swap image, position offscreen
+        // Swap & position offscreen
         pImg.src = newImg;
         pImg.style.transition = 'none';
         pImg.style.transform = 'translateY(' + (dir * 100) + '%)';
-
         void pImg.offsetHeight;
 
-        // Slide new image in
+        // Slide IN
         pImg.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1)';
         pImg.style.transform = 'translateY(0)';
 
         setTimeout(function() { isAnimating = false; }, 500);
-      }, 420);
+      }, 400);
     });
 
     item.addEventListener('mouseleave', () => {
-      card.classList.remove('show');
-      document.body.classList.remove('c-proj');
-      currentIndex = -1;
-      isAnimating = false;
+      // Delay the hide so moving between items keeps the card visible
+      hideTimer = setTimeout(function() {
+        card.classList.remove('show');
+        document.body.classList.remove('c-proj');
+        currentIndex = -1;
+        isAnimating = false;
+        hideTimer = null;
+      }, 100);
     });
 
     item.addEventListener('click', () => {
