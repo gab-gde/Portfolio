@@ -56,15 +56,10 @@
     .mockup img{width:100%;display:block;box-shadow:0 4px 24px rgba(0,0,0,.08)}
 
     /* MACBOOK — pure CSS realistic */
-    .laptop-wrap{background:var(--beige);padding:60px 60px 0;margin-bottom:24px;overflow:hidden;display:flex;justify-content:center}
-    .laptop{width:100%;max-width:1000px}
-    .laptop-screen{background:#222;border-radius:12px 12px 0 0;padding:8px 8px 0;position:relative}
-    .laptop-screen::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:#444}
-    .laptop-screen-inner{border-radius:4px 4px 0 0;overflow:hidden;aspect-ratio:16/10}
-    .laptop-screen-inner img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
-    .laptop-base{height:14px;background:linear-gradient(to bottom,#ccc,#b8b8b8);border-radius:0 0 4px 4px;position:relative}
-    .laptop-base::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:20%;height:4px;background:#a0a0a0;border-radius:0 0 4px 4px}
-    .laptop-shadow{height:8px;background:radial-gradient(ellipse at center,rgba(0,0,0,.12) 0%,transparent 70%);margin:0 10%}
+    .laptop-wrap{background:#000;margin-bottom:24px;overflow:hidden;display:flex;justify-content:center}
+    .laptop{position:relative;width:100%;max-width:1200px}
+    .laptop-frame{width:100%;display:block;position:relative;z-index:1}
+    .laptop-screen-img{position:absolute;top:14%;left:16.9%;width:66.3%;height:70.1%;object-fit:cover;object-position:top;z-index:0;border-radius:4px}
 
     /* PHONE */
     .phone-wrap{background:var(--beige);padding:60px;margin-bottom:24px;display:flex;justify-content:center;gap:48px}
@@ -106,7 +101,7 @@
     @media(max-width:768px){
       nav,.title-wrap,.meta-wrap,.images,.next-inner{padding-left:24px;padding-right:24px}
       .meta{grid-template-columns:1fr}.img-row{grid-template-columns:1fr}
-      .laptop-wrap{padding:24px 24px 0}.phone-wrap{padding:32px;gap:20px}.phone{width:180px}
+      .laptop-wrap{padding:0}.phone-wrap{padding:32px;gap:20px}.phone{width:180px}
       .magnetic-btn{width:120px;height:120px;font-size:13px;right:24px;top:-60px}
       .mockup{padding:24px}.next-dark{padding:60px 24px 40px}.next-footer{padding:24px;flex-direction:column;gap:8px}
     }
@@ -152,11 +147,8 @@
     <!-- MacBook -->
     <div class="laptop-wrap rv">
       <div class="laptop">
-        <div class="laptop-screen">
-          <div class="laptop-screen-inner"><img src="../../assets/images/projects/maison-elysee.png" alt="Maison Élysée"></div>
-        </div>
-        <div class="laptop-base"></div>
-        <div class="laptop-shadow"></div>
+        <img class="laptop-screen-img" src="../../assets/images/projects/maison-elysee.png" alt="Maison Élysée">
+        <img class="laptop-frame" src="../../assets/images/macbook.png" alt="MacBook">
       </div>
     </div>
 

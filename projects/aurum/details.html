@@ -41,14 +41,10 @@
     .img-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
     .mockup{background:var(--beige);padding:48px;margin-bottom:24px;overflow:hidden}
     .mockup img{width:100%;display:block;box-shadow:0 4px 24px rgba(0,0,0,.08)}
-    .laptop-wrap{background:var(--beige);padding:60px 60px 0;margin-bottom:24px;overflow:hidden;display:flex;justify-content:center}
-    .laptop{width:100%;max-width:1000px}
-    .laptop-screen{background:#222;border-radius:12px 12px 0 0;padding:8px 8px 0;position:relative}
-    .laptop-screen::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:#444}
-    .laptop-screen-inner{border-radius:4px 4px 0 0;overflow:hidden;aspect-ratio:16/10}
-    .laptop-screen-inner img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
-    .laptop-base{height:14px;background:linear-gradient(to bottom,#ccc,#b8b8b8);border-radius:0 0 4px 4px}
-    .laptop-shadow{height:8px;background:radial-gradient(ellipse at center,rgba(0,0,0,.12) 0%,transparent 70%);margin:0 10%}
+    .laptop-wrap{background:#000;margin-bottom:24px;overflow:hidden;display:flex;justify-content:center}
+    .laptop{position:relative;width:100%;max-width:1200px}
+    .laptop-frame{width:100%;display:block;position:relative;z-index:1}
+    .laptop-screen-img{position:absolute;top:14%;left:16.9%;width:66.3%;height:70.1%;object-fit:cover;object-position:top;z-index:0;border-radius:4px}
     .vid-ph{background:var(--beige);margin-bottom:24px;aspect-ratio:16/9;padding:48px;display:flex;align-items:center;justify-content:center}
     .vid-ph-inner{width:100%;height:100%;background:#d5d0c6;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;cursor:pointer;transition:background .3s}
     .vid-ph-inner:hover{background:#ccc8be}
@@ -82,7 +78,7 @@
     @media(max-width:768px){
       nav,.title-wrap,.meta-wrap,.images,.next-dark{padding-left:24px;padding-right:24px}
       .meta{grid-template-columns:1fr}.img-row{grid-template-columns:1fr}
-      .laptop-wrap{padding:24px 24px 0}.phone-wrap{padding:32px;gap:20px}.phone{width:180px}
+      .laptop-wrap{padding:0}.phone-wrap{padding:32px;gap:20px}.phone{width:180px}
       .magnetic-btn{width:120px;height:120px;font-size:13px;right:24px;top:-60px}
       .mockup{padding:24px}.next-dark{padding:60px 24px 40px}.next-footer{padding:24px;flex-direction:column;gap:8px}
     }
@@ -119,7 +115,7 @@
   <div class="live-area"><a href="https://aurum-stays.vercel.app" target="_blank" class="magnetic-btn" data-magnetic>Live site <span class="arrow">↗</span></a></div>
 
   <div class="images">
-    <div class="laptop-wrap rv"><div class="laptop"><div class="laptop-screen"><div class="laptop-screen-inner"><img src="../../assets/images/projects/aurum-stays.png" alt="Aurum Stays"></div></div><div class="laptop-base"></div><div class="laptop-shadow"></div></div></div>
+    <div class="laptop-wrap rv"><div class="laptop"><img class="laptop-screen-img" src="../../assets/images/projects/aurum-stays.png" alt="Screenshot"><img class="laptop-frame" src="../../assets/images/macbook.png" alt="MacBook"></div></div>
 
     <div class="vid-ph rv"><div class="vid-ph-inner"><div class="vid-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><p class="vid-label">Vidéo de présentation — bientôt</p></div></div>
 
