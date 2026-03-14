@@ -1,6 +1,5 @@
 /**
- * marquee.js
- * Build and inject the scrolling tech-stack band
+ * marquee.js — scrolling tech-stack band
  */
 
 const Marquee = (() => {
@@ -20,15 +19,11 @@ const Marquee = (() => {
   const track = document.getElementById('mqTrack');
   if (!track) return;
 
-  // Duplicate for seamless loop
+  // 4x duplication for seamless looping
   let html = '';
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 4; i++) {
     TAGS.forEach(tag => {
-      html += `
-        <div class="marquee-item">
-          <span>${tag}</span>
-          <div class="marquee-sep"></div>
-        </div>`;
+      html += '<div class="marquee-item"><span>' + tag + '</span><div class="marquee-sep"></div></div>';
     });
   }
   track.innerHTML = html;

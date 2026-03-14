@@ -418,7 +418,8 @@ body.c-proj  #curR { opacity: 0; }
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: mq 24s linear infinite;
+  animation: mq 30s linear infinite;
+  will-change: transform;
 }
 
 .marquee-track:hover { animation-play-state: paused; }

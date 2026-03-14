@@ -154,14 +154,14 @@ const Animations = (() => {
     ScrollTrigger.create({
       trigger: el,
       start: 'top 86%',
-      once: true,
-      onEnter() {
-        gsap.fromTo({ v: 0 }, {
+      onEnter: function(self) {
+        gsap.to({ v: 0 }, {
           v: +el.dataset.t,
           duration: 1.6,
           ease: 'power2.out',
-          onUpdate() { el.textContent = Math.round(this.targets()[0].v); }
+          onUpdate: function() { el.textContent = Math.round(this.targets()[0].v); }
         });
+        self.kill();
       }
     });
   });
