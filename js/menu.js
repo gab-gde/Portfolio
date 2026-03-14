@@ -54,29 +54,21 @@ const Menu = (() => {
     gsap.to([aboutBubble, hamBtn], { opacity: 0, duration: .3 });
   }
 
-  // On homepage: trigger on .work-section
+  // On homepage: show when past work section, on subpages: after 150px
   var workSection = document.querySelector('.work-section');
-  if (workSection) {
-    ScrollTrigger.create({
-      trigger: workSection,
-      start: 'top 68%',
-      onEnter: showFloating,
-      onLeaveBack: hideFloating
-    });
-  } else {
-    // On subpages: show after scrolling 150px, hide when back at top
-    var floatingShown = false;
-    window.addEventListener('scroll', function() {
-      var scrollY = window.scrollY || window.pageYOffset;
-      if (scrollY > 150 && !floatingShown) {
-        floatingShown = true;
-        showFloating();
-      } else if (scrollY <= 150 && floatingShown) {
-        floatingShown = false;
-        hideFloating();
-      }
-    }, { passive: true });
-  }
+  var threshold = workSection ? workSection.offsetTop - window.innerHeight * 0.5 : 150;
+  var floatingShown = false;
+
+  window.addEventListener('scroll', function() {
+    var scrollY = window.scrollY || window.pageYOffset;
+    if (scrollY > threshold && !floatingShown) {
+      floatingShown = true;
+      showFloating();
+    } else if (scrollY <= threshold && floatingShown) {
+      floatingShown = false;
+      hideFloating();
+    }
+  }, { passive: true });
 
   // ── Magnetic effect on floating buttons ──
   [aboutBubble, hamBtn].forEach(function(el) {
