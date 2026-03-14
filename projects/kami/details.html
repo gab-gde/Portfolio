@@ -9,80 +9,82 @@
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--font:'Hanken Grotesk',sans-serif;--dark:#1a1a1a;--mid:#8a8a8a;--border:#e4e4e4;--blue:#3d5af1;--beige:#e8e5de;--bg-dark:#1a1a1a}
+    :root{--font:'Hanken Grotesk',sans-serif;--dark:#1a1a1a;--mid:#8a8a8a;--light:#c8c8c8;--border:#e4e4e4;--blue:#3d5af1;--grey-bg:#d2d0cc}
     html{scroll-behavior:smooth;background:#1c1d20}
-    body{font-family:var(--font);background:#fff;color:var(--dark);overflow-x:hidden}
+    body{font-family:var(--font);background:#fff;color:var(--dark);overflow-x:hidden;cursor:none}
     a{color:inherit;text-decoration:none}
-    .rv{opacity:0;transform:translateY(50px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}.rv.vis{opacity:1;transform:translateY(0)}.dl1{transition-delay:.08s}.dl2{transition-delay:.16s}.dl3{transition-delay:.24s}
-    nav{display:flex;justify-content:space-between;align-items:center;padding:32px 48px}
-    .logo-wrap{display:flex;align-items:center;gap:5px;cursor:pointer}
-    .logo-c{font-size:14px;color:var(--dark);line-height:20px}
-    .logo-clip{overflow:hidden;height:20px}
-    .logo-slide{transition:transform .5s cubic-bezier(.76,0,.24,1)}
-    .logo-wrap:hover .logo-slide{transform:translateY(-20px)}
-    .logo-slide p{font-size:14px;color:var(--dark);line-height:20px;height:20px;margin:0;white-space:nowrap}
-    .nav-right{display:flex;gap:44px}
-    .nav-right a{font-size:14px;transition:opacity .3s;position:relative}
-    .nav-right a::after{content:'';position:absolute;left:50%;bottom:-8px;width:5px;height:5px;border-radius:50%;background:var(--dark);transform:translateX(-50%);opacity:0;transition:opacity .3s}
-    .nav-right a.active::after{opacity:1}
-    .nav-right a:hover{opacity:.4}
-    .title-wrap{padding:120px 48px 80px;text-align:center}
-    .title-wrap h1{font-size:clamp(60px,9vw,140px);font-weight:400;letter-spacing:-.035em;line-height:.95}
-    .meta-wrap{max-width:900px;margin:0 auto;padding:0 48px}
-    .meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
-    .meta-col{padding:28px 0;border-top:1px solid var(--border)}
-    .meta-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mid);margin-bottom:20px}
-    .meta-value{font-size:15px;line-height:1.7}
-    .live-area{position:relative;height:0;z-index:10}
-    .magnetic-btn{position:absolute;right:48px;top:-80px;width:170px;height:170px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;box-shadow:0 16px 50px rgba(61,90,241,.4);cursor:pointer;gap:6px;transition:transform .35s cubic-bezier(.16,1,.3,1);will-change:transform}
-    .magnetic-btn .arrow{font-size:20px;transition:transform .3s}
-    .images{padding:120px 48px 0;max-width:1400px;margin:0 auto}
-    .img-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
-    .mockup{background:var(--beige);padding:48px;margin-bottom:24px;overflow:hidden}
-    .mockup img{width:100%;display:block;box-shadow:0 4px 24px rgba(0,0,0,.08)}
-    .laptop-wrap{background:var(--beige);padding:48px 48px 0;margin-bottom:24px;overflow:hidden;display:flex;justify-content:center}
-    .laptop{position:relative;width:100%;max-width:1200px}
-    .laptop-frame{width:100%;display:block;position:relative;z-index:2;pointer-events:none}
-    .laptop-media{position:absolute;top:14.8%;left:16.4%;width:67.2%;height:65.2%;object-fit:cover;object-position:top;z-index:1;border-radius:2px}
-    .phone-wrap{background:var(--beige);padding:60px;margin-bottom:24px;display:flex;justify-content:center;gap:48px}
-    .phone{width:260px;background:#222;border-radius:36px;padding:10px;box-shadow:0 8px 30px rgba(0,0,0,.1)}
-    .phone-inner{border-radius:28px;overflow:hidden;aspect-ratio:9/19.5;background:#000}
-    .phone-inner img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
-    .vid-ph{background:var(--beige);margin-bottom:24px;aspect-ratio:16/9;padding:48px;display:flex;align-items:center;justify-content:center}
-    .vid-ph-inner{width:100%;height:100%;background:#d5d0c6;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;cursor:pointer;transition:background .3s}
-    .vid-ph-inner:hover{background:#ccc8be}
-    .vid-icon{width:64px;height:64px;border-radius:50%;background:rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center}
-    .vid-icon svg{width:24px;height:24px;fill:none;stroke:#888;stroke-width:1.5}
-    .vid-label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#999}
-    .next-wrap{position:relative;margin-top:120px}
-    .next-curve{position:relative;height:300px;background:#fff;overflow:hidden}
+
+    /* ── Hero: full viewport image with project name overlay ── */
+    .hero{position:relative;width:100%;height:100vh;min-height:600px;overflow:hidden}
+    .hero-img{width:100%;height:100%;object-fit:cover;display:block}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 50%)}
+    .hero-title{
+      position:absolute;bottom:60px;left:50%;transform:translateX(-50%);
+      font-size:clamp(80px,14vw,220px);font-weight:700;letter-spacing:-.04em;
+      color:#fff;white-space:nowrap;line-height:.9;
+      opacity:0;
+    }
+    .hero-title sup{font-size:.25em;vertical-align:super;font-weight:400;opacity:.5;margin-left:4px}
+
+    /* ── Blue "Live site" circle — Dennis style ── */
+    .live-btn{
+      position:absolute;top:40px;right:140px;
+      width:160px;height:160px;border-radius:50%;
+      background:var(--blue);color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-size:15px;font-weight:500;gap:6px;
+      box-shadow:0 16px 50px rgba(61,90,241,.4);
+      cursor:pointer;z-index:50;
+      transition:transform .35s cubic-bezier(.16,1,.3,1);
+      will-change:transform;opacity:0;
+    }
+    .live-btn .arrow{font-size:18px;transition:transform .3s}
+    .live-btn:hover .arrow{transform:translate(3px,-3px)}
+
+    /* ── MacBook section — grey bg like Dennis ── */
+    .mac-section{
+      background:var(--grey-bg);
+      padding:120px 80px 0;
+      display:flex;justify-content:center;
+      overflow:hidden;
+    }
+    .mac-wrap{position:relative;width:100%;max-width:1300px}
+    .mac-frame{width:100%;display:block;position:relative;z-index:2;pointer-events:none}
+    .mac-media{position:absolute;top:14.8%;left:16.4%;width:67.2%;height:65.2%;object-fit:cover;object-position:top;z-index:1;border-radius:2px}
+
+    /* ── Next project — Dennis dark footer ── */
+    .next-wrap{margin-top:0}
+    .next-curve{position:relative;height:300px;background:var(--grey-bg);overflow:hidden}
     .next-curve::after{content:'';position:absolute;bottom:-1px;left:-10%;right:-10%;height:100%;background:#1c1d20;border-radius:50% 50% 0 0}
-    .next-dark{background:#1c1d20;padding:80px 48px 60px;text-align:center;position:relative}
-    .next-label{font-size:14px;letter-spacing:.06em;color:rgba(255,255,255,.45);margin-bottom:24px;position:relative;z-index:5;transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .5s}
-    .next-title{font-size:clamp(56px,9vw,140px);font-weight:400;letter-spacing:-.035em;color:rgba(255,255,255,.12);display:inline-block;transition:color .5s,transform .7s cubic-bezier(.16,1,.3,1);position:relative;z-index:5}
+    .next-dark{background:#1c1d20;padding:80px 48px 60px;text-align:center}
+    .next-label{font-size:14px;letter-spacing:.06em;color:rgba(255,255,255,.45);margin-bottom:24px}
+    .next-title{font-size:clamp(56px,9vw,140px);font-weight:400;letter-spacing:-.035em;color:rgba(255,255,255,.12);display:inline-block;transition:color .5s,transform .7s cubic-bezier(.16,1,.3,1)}
     .next-title:hover{color:rgba(255,255,255,.6)}
-    .next-dark:has(.next-peek-img:hover) .next-label{transform:translateY(-300px);opacity:0}
-    .next-dark:has(.next-peek-img:hover) .next-title{transform:translateY(-280px) scale(1.1);color:rgba(255,255,255,.7)}
-    .next-peek{position:relative;max-width:800px;margin:80px auto 0;z-index:3}
-    .next-peek-line{height:1px;background:rgba(255,255,255,.1);position:relative;z-index:1;margin:0 -80px}
-    .next-peek-img{height:80px;overflow:hidden;cursor:pointer;position:relative;z-index:2;margin-top:0;transition:height .7s cubic-bezier(.16,1,.3,1),margin-top .7s cubic-bezier(.16,1,.3,1)}
+    .next-peek{position:relative;max-width:800px;margin:80px auto 0}
+    .next-peek-line{height:1px;background:rgba(255,255,255,.1);margin:0 -80px}
+    .next-peek-img{height:80px;overflow:hidden;cursor:pointer;transition:height .7s cubic-bezier(.16,1,.3,1),margin-top .7s cubic-bezier(.16,1,.3,1)}
     .next-peek-img:hover{height:400px;margin-top:-320px}
     .next-peek-img img{width:100%;display:block}
     .next-peek-img a{display:block}
-    .next-allwork{display:inline-flex;align-items:center;gap:8px;margin-top:60px;padding:16px 36px;border:1px solid rgba(255,255,255,.12);border-radius:100px;color:rgba(255,255,255,.4);font-size:14px;transition:all .4s cubic-bezier(.16,1,.3,1);will-change:transform;position:relative;z-index:5}
+    .next-allwork{display:inline-flex;align-items:center;gap:8px;margin-top:60px;padding:16px 36px;border:1px solid rgba(255,255,255,.12);border-radius:100px;color:rgba(255,255,255,.4);font-size:14px;transition:all .4s cubic-bezier(.16,1,.3,1)}
     .next-allwork:hover{border-color:rgba(255,255,255,.35);color:#fff}
     .next-allwork sup{font-size:10px;opacity:.5}
-    .next-footer{background:#1c1d20;padding:40px 48px;display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.05);position:relative;z-index:5}
+    .next-footer{background:#1c1d20;padding:40px 48px;display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.05)}
     .next-footer span{font-size:11px;color:rgba(255,255,255,.2)}
+
+    /* ── Reveal ── */
+    .rv{opacity:0;transform:translateY(50px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+    .rv.vis{opacity:1;transform:translateY(0)}.dl1{transition-delay:.08s}.dl2{transition-delay:.16s}.dl3{transition-delay:.24s}
+
     @media(max-width:768px){
-      nav,.title-wrap,.meta-wrap,.images,.next-dark{padding-left:24px;padding-right:24px}
-      .meta{grid-template-columns:1fr}.img-row{grid-template-columns:1fr}
-      .laptop-wrap{padding:24px 24px 0}.phone-wrap{padding:32px;gap:20px}.phone{width:180px}
-      .magnetic-btn{width:120px;height:120px;font-size:13px;right:24px;top:-60px}
-      .mockup{padding:24px}.next-footer{padding:24px;flex-direction:column;gap:8px}
+      .hero-title{font-size:clamp(48px,12vw,120px);bottom:32px}
+      .live-btn{width:110px;height:110px;font-size:13px;top:24px;right:90px}
+      .mac-section{padding:60px 24px 0}
+      .next-dark{padding:60px 24px 40px}
+      .next-footer{padding:24px;flex-direction:column;gap:8px}
     }
   </style>
-  <!-- Instant overlay: prevents white flash between pages -->
+  <!-- Instant overlay -->
   <style>#pageOverlay{position:fixed;inset:0;z-index:9998;pointer-events:all;overflow:hidden}.po-bg{position:absolute;left:0;right:0;top:-15%;height:130%;background:#1c1d20;will-change:transform}.po-text-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;overflow:hidden}.po-text{font-family:"Hanken Grotesk",sans-serif;font-size:clamp(28px,5vw,64px);font-weight:600;letter-spacing:-.04em;color:#fff;white-space:nowrap;will-change:transform}</style>
   <script>var _po=document.createElement("div");_po.id="pageOverlay";_po.innerHTML='<div class="po-bg"></div><div class="po-text-wrap"><span class="po-text"></span></div>';document.documentElement.appendChild(_po);</script>
 </head>
@@ -91,50 +93,33 @@
   <div id="cur"></div>
   <div id="curR"></div>
 
-  <nav>
-    <a href="../../index.html" class="logo-wrap">
-      <span class="logo-c">©</span>
-      <div class="logo-clip"><div class="logo-slide"><p>Code by Gabin</p><p>Gabin Goude</p></div></div>
-    </a>
-    <div class="nav-right">
-      <a href="../../index.html#work" class="active">Work</a>
-      <a href="../../about.html">About</a>
-      <a href="../../contact.html">Contact</a>
+  <!-- Hero — full screen image + title overlay like Dennis/TWICE -->
+  <section class="hero">
+    <img class="hero-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=85" alt="TERRA">
+    <div class="hero-overlay"></div>
+    <h1 class="hero-title">TERRA<sup>©</sup></h1>
+    <a href="index.html" target="_blank" class="live-btn" data-magnetic>Live site <span class="arrow">↗</span></a>
+  </section>
+
+  <!-- MacBook on grey background — Dennis style -->
+  <section class="mac-section rv">
+    <div class="mac-wrap">
+      <video class="mac-media" src="terra-preview.mp4" autoplay loop muted playsinline></video>
+      <img class="mac-frame" src="../../assets/images/macbook.png" alt="MacBook">
     </div>
-  </nav>
+  </section>
 
-  <div class="title-wrap"><h1 class="rv">TERRA</h1></div>
-
-  <div class="meta-wrap"><div class="meta">
-    <div class="meta-col rv dl1"><p class="meta-label">Rôle / Services</p><p class="meta-value">Design & Development</p></div>
-    <div class="meta-col rv dl2"><p class="meta-label">Contexte</p><p class="meta-value">Cuisine vivante<br>Farm-to-table — Paris 3ème</p></div>
-    <div class="meta-col rv dl3"><p class="meta-label">Année</p><p class="meta-value">Paris, France © 2026</p></div>
-  </div></div>
-
-  <div class="live-area"><a href="index.html" target="_blank" class="magnetic-btn" data-magnetic>Live site <span class="arrow">↗</span></a></div>
-
-  <div class="images">
-    <div class="laptop-wrap rv"><div class="laptop"><video class="laptop-media" src="terra-preview.mp4" autoplay loop muted playsinline></video><img class="laptop-frame" src="../../assets/images/macbook.png" alt="MacBook"></div></div>
-        <div class="laptop-hinge"></div>
-        <div class="laptop-base"></div>
-      </div>
-    </div>
-    <div class="img-row"><div class="mockup rv dl1"><img src="https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=800&q=80" alt="Ingrédients"></div><div class="mockup rv dl2"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80" alt="Plat"></div></div>
-    <div class="phone-wrap rv"><div class="phone"><div class="phone-inner"><img src="../../assets/images/projects/terra.png" alt="Mobile"></div></div><div class="phone"><div class="phone-inner"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&q=80" alt="Mobile 2"></div></div></div>
-    <div class="mockup rv"><img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1400&q=80" alt="Intérieur"></div>
-    <div class="img-row"><div class="mockup rv dl1"><img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=800&q=80" alt="Chef"></div><div class="mockup rv dl2"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=800&q=80" alt="Plat"></div></div>
-  </div>
-
-<div class="next-wrap">
+  <!-- Next project -->
+  <div class="next-wrap">
     <div class="next-curve"></div>
     <div class="next-dark">
       <p class="next-label rv">Next case</p>
-      <a href="../aura/details.html" class="next-title rv dl1 plink">AURA Studio</a>
+      <a href="../aura/details.html" class="next-title rv dl1">AURA Studio</a>
       <div class="next-peek">
         <div class="next-peek-line"></div>
-        <div class="next-peek-img rv dl2"><a href="../aura/details.html" class="plink"><img src="../../assets/images/projects/aura-studio.png" alt="AURA Studio"></a></div>
+        <div class="next-peek-img rv dl2"><a href="../aura/details.html"><img src="../../assets/images/projects/aura-studio.png" alt="AURA Studio"></a></div>
       </div>
-      <div class="rv dl3"><a href="../../index.html#work" class="next-allwork plink" data-magnetic><span>All work <sup>4</sup></span></a></div>
+      <div class="rv dl3"><a href="../../index.html#work" class="next-allwork" data-magnetic><span>All work <sup>4</sup></span></a></div>
     </div>
     <footer class="next-footer"><span>© Code by Gabin Goude</span><span>2026</span></footer>
   </div>
@@ -145,8 +130,41 @@
   <script src="../../js/cursor.js"></script>
   <script src="../../js/menu.js"></script>
   <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Reveal observer
     var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('vis');o.unobserve(x.target)}})},{threshold:.06,rootMargin:'0px 0px -40px 0px'});
     document.querySelectorAll('.rv').forEach(function(el){o.observe(el)});
+
+    // Hero title reveal — slide up from bottom
+    gsap.to('.hero-title', {
+      opacity: 1,
+      duration: 1.2,
+      delay: 0.4,
+      ease: 'power3.out'
+    });
+
+    // Live site button — fade in
+    gsap.to('.live-btn', {
+      opacity: 1,
+      duration: 0.8,
+      delay: 0.7,
+      ease: 'power2.out'
+    });
+
+    // Hero image parallax — subtle zoom on scroll
+    gsap.to('.hero-img', {
+      scale: 1.08,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true
+      }
+    });
+
+    // Magnetic buttons
     document.querySelectorAll('[data-magnetic]').forEach(function(btn){
       btn.addEventListener('mousemove',function(e){var r=btn.getBoundingClientRect();var x=e.clientX-r.left-r.width/2;var y=e.clientY-r.top-r.height/2;btn.style.transform='translate('+x*.45+'px,'+y*.45+'px)'});
       btn.addEventListener('mouseleave',function(){btn.style.transform='translate(0,0)'});
