@@ -9,34 +9,52 @@
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--font:'Hanken Grotesk',sans-serif;--dark:#1a1a1a;--mid:#8a8a8a;--light:#c8c8c8;--border:#e4e4e4;--blue:#3d5af1;--grey-bg:#d2d0cc}
+    :root{--font:'Hanken Grotesk',sans-serif;--dark:#1a1a1a;--mid:#8a8a8a;--border:#e4e4e4;--blue:#3d5af1;--grey-bg:#d2d0cc}
     html{scroll-behavior:smooth;background:#1c1d20}
     body{font-family:var(--font);background:#fff;color:var(--dark);overflow-x:hidden;cursor:none}
     a{color:inherit;text-decoration:none}
 
-    /* ── Hero: full viewport image with project name overlay ── */
-    .hero{position:relative;width:100%;height:100vh;min-height:600px;overflow:hidden}
-    .hero-img{width:100%;height:100%;object-fit:cover;display:block}
-    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 50%)}
-    .hero-title{
-      position:absolute;bottom:60px;left:50%;transform:translateX(-50%);
-      font-size:clamp(80px,14vw,220px);font-weight:700;letter-spacing:-.04em;
-      color:#fff;white-space:nowrap;line-height:.9;
-      opacity:0;
-    }
-    .hero-title sup{font-size:.25em;vertical-align:super;font-weight:400;opacity:.5;margin-left:4px}
+    /* ── Reveal ── */
+    .rv{opacity:0;transform:translateY(50px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+    .rv.vis{opacity:1;transform:translateY(0)}.dl1{transition-delay:.08s}.dl2{transition-delay:.16s}.dl3{transition-delay:.24s}
 
-    /* ── Blue "Live site" circle — Dennis style ── */
+    /* ── Nav — Dennis style ── */
+    nav{display:flex;justify-content:space-between;align-items:center;padding:32px 48px}
+    .logo-wrap{display:flex;align-items:center;gap:5px;cursor:pointer}
+    .logo-c{font-size:14px;color:var(--dark);line-height:20px}
+    .logo-clip{overflow:hidden;height:20px}
+    .logo-slide{transition:transform .5s cubic-bezier(.76,0,.24,1)}
+    .logo-wrap:hover .logo-slide{transform:translateY(-20px)}
+    .logo-slide p{font-size:14px;color:var(--dark);line-height:20px;height:20px;margin:0;white-space:nowrap}
+    .nav-right{display:flex;gap:44px}
+    .nav-right a{font-size:14px;transition:opacity .3s;position:relative}
+    .nav-right a::after{content:'';position:absolute;left:50%;bottom:-8px;width:5px;height:5px;border-radius:50%;background:var(--dark);transform:translateX(-50%);opacity:0;transition:opacity .3s}
+    .nav-right a.active::after{opacity:1}
+    .nav-right a:hover{opacity:.4}
+
+    /* ── Title ── */
+    .title-wrap{padding:120px 48px 80px;text-align:center}
+    .title-wrap h1{font-size:clamp(60px,9vw,140px);font-weight:400;letter-spacing:-.035em;line-height:.95}
+
+    /* ── Meta ── */
+    .meta-wrap{max-width:900px;margin:0 auto;padding:0 48px}
+    .meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+    .meta-col{padding:28px 0;border-top:1px solid var(--border)}
+    .meta-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mid);margin-bottom:20px}
+    .meta-value{font-size:15px;line-height:1.7}
+
+    /* ── Hero image — full width with Live site button ── */
+    .hero-img-wrap{position:relative;margin-top:80px;overflow:hidden}
+    .hero-img{width:100%;display:block;max-height:85vh;object-fit:cover}
     .live-btn{
-      position:absolute;top:40px;right:140px;
+      position:absolute;top:40px;right:48px;
       width:160px;height:160px;border-radius:50%;
       background:var(--blue);color:#fff;
       display:flex;align-items:center;justify-content:center;
       font-size:15px;font-weight:500;gap:6px;
       box-shadow:0 16px 50px rgba(61,90,241,.4);
-      cursor:pointer;z-index:50;
-      transition:transform .35s cubic-bezier(.16,1,.3,1);
-      will-change:transform;opacity:0;
+      cursor:pointer;z-index:10;
+      transition:transform .35s cubic-bezier(.16,1,.3,1);will-change:transform;
     }
     .live-btn .arrow{font-size:18px;transition:transform .3s}
     .live-btn:hover .arrow{transform:translate(3px,-3px)}
@@ -52,7 +70,7 @@
     .mac-frame{width:100%;display:block;position:relative;z-index:2;pointer-events:none}
     .mac-media{position:absolute;top:14.8%;left:16.4%;width:67.2%;height:65.2%;object-fit:cover;object-position:top;z-index:1;border-radius:2px}
 
-    /* ── Next project — Dennis dark footer ── */
+    /* ── Next project ── */
     .next-wrap{margin-top:0}
     .next-curve{position:relative;height:300px;background:var(--grey-bg);overflow:hidden}
     .next-curve::after{content:'';position:absolute;bottom:-1px;left:-10%;right:-10%;height:100%;background:#1c1d20;border-radius:50% 50% 0 0}
@@ -72,13 +90,10 @@
     .next-footer{background:#1c1d20;padding:40px 48px;display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.05)}
     .next-footer span{font-size:11px;color:rgba(255,255,255,.2)}
 
-    /* ── Reveal ── */
-    .rv{opacity:0;transform:translateY(50px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
-    .rv.vis{opacity:1;transform:translateY(0)}.dl1{transition-delay:.08s}.dl2{transition-delay:.16s}.dl3{transition-delay:.24s}
-
     @media(max-width:768px){
-      .hero-title{font-size:clamp(48px,12vw,120px);bottom:32px}
-      .live-btn{width:110px;height:110px;font-size:13px;top:24px;right:90px}
+      nav,.title-wrap,.meta-wrap{padding-left:24px;padding-right:24px}
+      .meta{grid-template-columns:1fr}
+      .live-btn{width:110px;height:110px;font-size:13px;right:24px}
       .mac-section{padding:60px 24px 0}
       .next-dark{padding:60px 24px 40px}
       .next-footer{padding:24px;flex-direction:column;gap:8px}
@@ -93,15 +108,36 @@
   <div id="cur"></div>
   <div id="curR"></div>
 
-  <!-- Hero — full screen image + title overlay like Dennis/TWICE -->
-  <section class="hero">
-    <img class="hero-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=85" alt="TERRA">
-    <div class="hero-overlay"></div>
-    <h1 class="hero-title">TERRA<sup>©</sup></h1>
-    <a href="index.html" target="_blank" class="live-btn" data-magnetic>Live site <span class="arrow">↗</span></a>
-  </section>
+  <!-- Nav -->
+  <nav>
+    <a href="../../index.html" class="logo-wrap">
+      <span class="logo-c">©</span>
+      <div class="logo-clip"><div class="logo-slide"><p>Code by Gabin</p><p>Gabin Goude</p></div></div>
+    </a>
+    <div class="nav-right">
+      <a href="../../index.html#work" class="active">Work</a>
+      <a href="../../about.html">About</a>
+      <a href="../../contact.html">Contact</a>
+    </div>
+  </nav>
 
-  <!-- MacBook on grey background — Dennis style -->
+  <!-- Title -->
+  <div class="title-wrap"><h1 class="rv">TERRA</h1></div>
+
+  <!-- Meta -->
+  <div class="meta-wrap"><div class="meta">
+    <div class="meta-col rv dl1"><p class="meta-label">Rôle / Services</p><p class="meta-value">Design & Development</p></div>
+    <div class="meta-col rv dl2"><p class="meta-label">Contexte</p><p class="meta-value">Cuisine vivante<br>Farm-to-table — Paris 3ème</p></div>
+    <div class="meta-col rv dl3"><p class="meta-label">Année</p><p class="meta-value">Paris, France © 2026</p></div>
+  </div></div>
+
+  <!-- Hero image with Live site button -->
+  <div class="hero-img-wrap rv">
+    <img class="hero-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=85" alt="TERRA">
+    <a href="index.html" target="_blank" class="live-btn" data-magnetic>Live site <span class="arrow">↗</span></a>
+  </div>
+
+  <!-- MacBook on grey background -->
   <section class="mac-section rv">
     <div class="mac-wrap">
       <video class="mac-media" src="terra-preview.mp4" autoplay loop muted playsinline></video>
@@ -131,40 +167,8 @@
   <script src="../../js/menu.js"></script>
   <script>
     gsap.registerPlugin(ScrollTrigger);
-
-    // Reveal observer
     var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('vis');o.unobserve(x.target)}})},{threshold:.06,rootMargin:'0px 0px -40px 0px'});
     document.querySelectorAll('.rv').forEach(function(el){o.observe(el)});
-
-    // Hero title reveal — slide up from bottom
-    gsap.to('.hero-title', {
-      opacity: 1,
-      duration: 1.2,
-      delay: 0.4,
-      ease: 'power3.out'
-    });
-
-    // Live site button — fade in
-    gsap.to('.live-btn', {
-      opacity: 1,
-      duration: 0.8,
-      delay: 0.7,
-      ease: 'power2.out'
-    });
-
-    // Hero image parallax — subtle zoom on scroll
-    gsap.to('.hero-img', {
-      scale: 1.08,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '.hero',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true
-      }
-    });
-
-    // Magnetic buttons
     document.querySelectorAll('[data-magnetic]').forEach(function(btn){
       btn.addEventListener('mousemove',function(e){var r=btn.getBoundingClientRect();var x=e.clientX-r.left-r.width/2;var y=e.clientY-r.top-r.height/2;btn.style.transform='translate('+x*.45+'px,'+y*.45+'px)'});
       btn.addEventListener('mouseleave',function(){btn.style.transform='translate(0,0)'});
