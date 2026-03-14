@@ -82,3 +82,18 @@ document.querySelectorAll('.xp-item').forEach(function(item, i) {
     }
   });
 });
+
+// Photo parallax — subtle float
+gsap.fromTo('.ai-photo img',
+  { yPercent: -8 },
+  {
+    yPercent: 8,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.ai-photo',
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: true
+    }
+  }
+);

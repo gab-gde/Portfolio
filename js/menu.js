@@ -84,10 +84,10 @@ const Menu = (() => {
       var r = el.getBoundingClientRect();
       var x = e.clientX - r.left - r.width / 2;
       var y = e.clientY - r.top - r.height / 2;
-      el.style.transform = 'translate(' + x * 0.35 + 'px,' + y * 0.35 + 'px)';
+      gsap.to(el, { x: x * 0.35, y: y * 0.35, duration: 0.4, ease: 'power3.out' });
     });
     el.addEventListener('mouseleave', function() {
-      el.style.transform = 'translate(0,0)';
+      gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.3)' });
     });
   });
 
